@@ -7,7 +7,12 @@ namespace Ex01_01
     {
         public static void Main()
         {
-
+            Console.WriteLine("123 is : " + IsDigitsStrictlyDecrease(123));
+            Console.WriteLine("423 is : " + IsDigitsStrictlyDecrease(423));
+            Console.WriteLine("422 is : " + IsDigitsStrictlyDecrease(422));
+            Console.WriteLine("421 is : " + IsDigitsStrictlyDecrease(421));
+            Console.WriteLine("0 is : " + IsDigitsStrictlyDecrease(0));
+            Console.WriteLine("1 is : " + IsDigitsStrictlyDecrease(1));
         }
 
         public static void GetInput(string i_DialogMessage, Func<string, bool> i_InputValidator, string i_InvalidInputMessage, out string o_UserInput)
@@ -63,6 +68,20 @@ namespace Ex01_01
                 digitPosition++;
             }
             return decimalRepresentation;
+        }
+
+        static bool IsDigitsStrictlyDecrease(int i_Number)
+        {
+            string numberAsString = string.Format("{0}", i_Number);
+            int numberOfDigits = numberAsString.Length;
+            bool isStriclyDecrease = true;
+
+            for (int i = 1; i < numberOfDigits; i++)
+            {
+                isStriclyDecrease &= (numberAsString[i - 1] > numberAsString[i]);
+            }
+
+            return isStriclyDecrease;
         }
     }
 }
