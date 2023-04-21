@@ -47,5 +47,22 @@ namespace Ex01_01
         {
             return (i_String.Length == 8) && i_String.All(digit => digit == '0' || digit == '1');
         }
+
+        static int BinaryToDecimal(string i_BinaryNumberString)
+        {
+            int decimalRepresentation = 0;
+            int digitPosition = 0;
+            int numberOfDigits = i_BinaryNumberString.Length;
+            
+            for (int i = numberOfDigits - 1; i >= 0; i--)
+            {
+                if (i_BinaryNumberString[i] == '1')
+                {
+                    decimalRepresentation += (int)Math.Pow(2, digitPosition);
+                }
+                digitPosition++;
+            }
+            return decimalRepresentation;
+        }
     }
 }
