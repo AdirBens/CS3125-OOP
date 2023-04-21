@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Ex01_01
 {
@@ -40,6 +41,11 @@ namespace Ex01_01
         public static bool IsDivisible(int i_Dividend, int i_Divisor)
         {
             return (i_Divisor != 0) && (i_Dividend % i_Divisor == 0);
+        }
+
+        static bool Is8DigitsBinaryNumber(string i_String)
+        {
+            return (i_String.Length == 8) && i_String.All(digit => digit == '0' || digit == '1');
         }
     }
 }
