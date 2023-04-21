@@ -1,5 +1,5 @@
 ﻿//TODO: import Ex01_01.GetInput(string i_DialogMessage, Func i_InputValidator, out o_UserInput)
-
+using static Ex01_01.Program;
 using System;
 
 namespace Ex01_05
@@ -13,7 +13,7 @@ namespace Ex01_05
 
         static void RunProgram()
         {
-            Ex01_01.GetInput(string i_DialogMessage, Func IsNDigitsNumber, out o_UserInput)
+            GetInput(string i_DialogMessage, Func IsNDigitsNumber, out o_UserInput)
 
         }
 
