@@ -39,15 +39,7 @@ namespace Ex01_04
         
         static bool StringIsNumber(string i_InputString)
         {
-            bool stringIsNumber = true;
-            foreach (char c in i_InputString)
-            {
-                if (!char.IsDigit(c))
-                {
-                    stringIsNumber = false;
-                }
-            }
-            return stringIsNumber;
+            return int.TryParse(i_InputString, out _);
         }
 
         static int CountUppercase(string i_InputString)
