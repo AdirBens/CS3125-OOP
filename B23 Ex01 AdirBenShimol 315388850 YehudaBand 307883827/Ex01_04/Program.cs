@@ -14,8 +14,7 @@ namespace Ex01_04
         {
             const string v_DialogMessage = "Please enter a 6 charectar word or a 6 digit number :";
             const string v_InvalidInputMessage = "Invalid input! Please enter an 'only digit' or 'only lettters' sequence of exactly 6 characters";
-            string UserInput;
-            GetInput(v_DialogMessage, CheckConditionsOnString, v_InvalidInputMessage, out UserInput);
+            GetInput(v_DialogMessage, CheckConditionsOnString, v_InvalidInputMessage, out string UserInput);
             PrintStatistics(UserInput);
         }
 
