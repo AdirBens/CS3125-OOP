@@ -8,18 +8,17 @@ namespace Ex01_05
     {
         public static void Main()
         {
-
+            RunProgram();
         }
 
         static void RunProgram()
         {
-            GetInput(string i_DialogMessage, Func IsNDigitsNumber, out o_UserInput)
+            const string v_DialogMessage = "Please enter a 6 digit number and hit enter :";
+            string string v_InvalidInputMessage = "Invalid input! Please enter a 6 digit number with no letters or symbols."
+            string userInput;
 
-        }
-
-        static void UserInterface()
-        {
-
+            GetInput(v_DialogMessage, IsNDigitsNumber, v_InvalidInputMessage, out userInput);
+            PrintStatistics(userInput);
         }
 
         static bool IsNDigitsNumber(string i_InputNumber, int i_NumberOfDigits)
