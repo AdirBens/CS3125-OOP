@@ -5,12 +5,14 @@ using System.Text;
 
 namespace Ex01_01
 {
+    // TODO: Linting and CleanCode checks - stick to conventions guidelines.
     class Program
     {
         public static void Main()
         {
             runProgram();
         }
+
         public static void GetInputLine(string i_DialogMessage, Func<string, bool> i_InputValidator, string i_InvalidInputMessage, out string o_UserInput)
         {
             bool isValid = false;
@@ -32,6 +34,7 @@ namespace Ex01_01
                 }
             }
         }
+
         public static bool IsPalindrome(string i_String)
         {
             bool isVacuouslyPalindrome = i_String.Length < 2;
@@ -39,14 +42,17 @@ namespace Ex01_01
 
             return isVacuouslyPalindrome || isFirstAndLastCharEquals && IsPalindrome(i_String.Substring(1, i_String.Length - 2));
         }
+
         public static bool IsPalindrome(int i_Number)
         {
             return IsPalindrome(i_Number.ToString());
         }
+
         public static bool IsDivisible(int i_Dividend, int i_Divisor)
         {
             return (i_Divisor != 0) && (i_Dividend % i_Divisor == 0);
         }
+
         private static void runProgram()
         {
             string[] binaryNumbers = getUserInput();
@@ -57,6 +63,7 @@ namespace Ex01_01
             printDescendingOrder(decimalNumbers);
             Console.WriteLine(buildStatisticsReport(binaryNumbers, decimalNumbers, binaryStatisticCheckers, decimalStatisticCheckers));
         }
+
         private static Dictionary<string, Func<string[], float>> loadBinaryStatisticsCheckers()
         {
             Dictionary<string, Func<string[], float>> statisticsCheckers = new Dictionary<string, Func<string[], float>>();
@@ -65,6 +72,7 @@ namespace Ex01_01
 
             return statisticsCheckers;
         }
+
         private static Dictionary<string, Func<int, bool>> loadDecimalStatisticsCheckers()
         {
             Dictionary<string, Func<int, bool>> statisticsCheckers = new Dictionary<string, Func<int, bool>>();
@@ -76,6 +84,7 @@ namespace Ex01_01
 
             return statisticsCheckers;
         }
+
         private static string[] getUserInput()
         {
             const int k_NumbersToRead = 3;
@@ -90,14 +99,17 @@ namespace Ex01_01
 
             return stringBinaryNumbers;
         }
+
         private static bool isDivisibleBy4(int i_Dividend)
         {
             return IsDivisible(i_Dividend, 4);
         }
+
         private static bool isPowerOfTwo(int i_Number)
         {
             return (i_Number & (i_Number - 1)) == 0;
         }
+
         private static bool isDigitsStrictlyDecrease(int i_Number)
         {
             string stringNumber = i_Number.ToString();
@@ -111,10 +123,12 @@ namespace Ex01_01
 
             return isStrictlyDecrease;
         }
+
         private static bool is8DigitsBinaryNumber(string i_String)
         {
             return (i_String.Length == 8) && i_String.All(digit => digit == '0' || digit == '1');
         }
+
         private static int binaryToDecimal(string i_BinaryNumber)
         {
             int decimalRepresentation = 0;
@@ -131,6 +145,7 @@ namespace Ex01_01
             }
             return decimalRepresentation;
         }
+
         private static int[] binaryToDecimal(string[] i_BinaryNumbers)
         {
             int[] decimalNumbers = new int[i_BinaryNumbers.Length];
@@ -142,6 +157,7 @@ namespace Ex01_01
 
             return decimalNumbers;
         }
+
         private static void printDescendingOrder(int[] i_DecimalNumbers)
         {
             Array.Sort(i_DecimalNumbers, (x, y) => y.CompareTo(x));
@@ -151,6 +167,7 @@ namespace Ex01_01
                 Console.WriteLine(number);
             }
         }
+
         private static float calculateOnesFrequency(string[] i_BinaryNumbers)
         {
             string concatenatedBinaryNumbers = String.Join("", i_BinaryNumbers);
@@ -159,6 +176,7 @@ namespace Ex01_01
             
             return (float)numberOfOnes / totalNumberOfDigits;
         }
+
         private static string buildStatisticsReport(string[] i_BinaryNumbers, 
                                                     int[] i_DecimalNumbers, 
                                                     Dictionary<string, Func<string[], float>> i_BinaryStatisticsCheckers, 
