@@ -6,17 +6,51 @@ using System.Text;
 namespace Ex01_01
 {
     // TODO: Linting and CleanCode checks - stick to conventions guidelines.
-    class Program
+    public class Program
     {
         public static void Main()
         {
             runProgram();
+            //runTests();
         }
 
-        public static void GetInputLine(string i_DialogMessage, Func<string, bool> i_InputValidator, string i_InvalidInputMessage, out string o_UserInput)
+        private static void runProgram()
+        {
+            string[] binaryNumbers = getUserInput();
+            int[] decimalNumbers = binaryToDecimal(binaryNumbers);
+            Dictionary<string, Func<string[], float>> binaryStatisticCheckers = loadBinaryStatisticsCheckers();
+            Dictionary<string, Func<int, bool>> decimalStatisticCheckers = loadDecimalStatisticsCheckers();
+
+            printDescendingOrder(decimalNumbers);
+            Console.WriteLine(buildStatisticsReport(binaryNumbers, decimalNumbers, binaryStatisticCheckers, decimalStatisticCheckers));
+        }
+
+        private static void runTests()
+        {
+            Dictionary<string, Func<string[], float>> binaryStatisticCheckers = loadBinaryStatisticsCheckers();
+            Dictionary<string, Func<int, bool>> decimalStatisticCheckers = loadDecimalStatisticsCheckers();
+            string[][] binarySeriesTestSet = { new string[] { "01000000", "01111011", "01111001" }, 
+                                               new string[] { "01010101", "11110000", "11111111" },
+                                               new string[] { "00000100", "00010000", "00001111" } };
+
+            foreach(string[] testSet in binarySeriesTestSet)
+            {
+                Console.WriteLine("-----------------------------------------------------------------------------------");
+                Console.WriteLine("Tested Binary Series: {0}  {1}  {2} ", testSet);
+                string[] binaryNumbers = testSet;
+                int[] decimalNumbers = binaryToDecimal(binaryNumbers);
+
+                printDescendingOrder(decimalNumbers);
+                Console.WriteLine(buildStatisticsReport(binaryNumbers, decimalNumbers, binaryStatisticCheckers, decimalStatisticCheckers));
+            }
+            Console.WriteLine("-----------------------------------------------------------------------------------");
+
+        }
+
+        public static string GetInputLine(string i_DialogMessage, Func<string, bool> i_InputValidator, string i_InvalidInputMessage)
         {
             bool isValid = false;
-            o_UserInput = null;
+            string userInput = "";
 
             while (!isValid)
             {
@@ -25,7 +59,7 @@ namespace Ex01_01
 
                 if (i_InputValidator(receivedInput))
                 {
-                    o_UserInput = receivedInput;
+                    userInput = receivedInput;
                     isValid = true;
                 }
                 else
@@ -33,6 +67,8 @@ namespace Ex01_01
                     Console.WriteLine(i_InvalidInputMessage);
                 }
             }
+
+            return userInput;
         }
 
         public static bool IsPalindrome(string i_String)
@@ -51,17 +87,6 @@ namespace Ex01_01
         public static bool IsDivisible(int i_Dividend, int i_Divisor)
         {
             return (i_Divisor != 0) && (i_Dividend % i_Divisor == 0);
-        }
-
-        private static void runProgram()
-        {
-            string[] binaryNumbers = getUserInput();
-            int[] decimalNumbers = binaryToDecimal(binaryNumbers);
-            Dictionary<string, Func<string[], float>> binaryStatisticCheckers = loadBinaryStatisticsCheckers();
-            Dictionary<string, Func<int, bool>> decimalStatisticCheckers = loadDecimalStatisticsCheckers();
-
-            printDescendingOrder(decimalNumbers);
-            Console.WriteLine(buildStatisticsReport(binaryNumbers, decimalNumbers, binaryStatisticCheckers, decimalStatisticCheckers));
         }
 
         private static Dictionary<string, Func<string[], float>> loadBinaryStatisticsCheckers()
@@ -94,7 +119,7 @@ namespace Ex01_01
 
             for (int i = 0; i < k_NumbersToRead; i++)
             {
-                GetInputLine(k_DialogMessage, is8DigitsBinaryNumber, k_InvalidInputMessage, out stringBinaryNumbers[i]);
+                stringBinaryNumbers[i] = GetInputLine(k_DialogMessage, is8DigitsBinaryNumber, k_InvalidInputMessage);
             }
 
             return stringBinaryNumbers;
@@ -160,7 +185,7 @@ namespace Ex01_01
 
         private static void printDescendingOrder(int[] i_DecimalNumbers)
         {
-            Array.Sort(i_DecimalNumbers, (x, y) => y.CompareTo(x));
+            Array.Sort(i_DecimalNumbers, (firstNumber, secondNumber) => secondNumber.CompareTo(firstNumber));
 
             foreach(int number in i_DecimalNumbers)
             {
