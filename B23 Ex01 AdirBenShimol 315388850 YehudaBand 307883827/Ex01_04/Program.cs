@@ -3,7 +3,7 @@ using static Ex01_01.Program;
 
 namespace Ex01_04
 {
-    class Program
+    public class Program
     {
         static void Main()
         {
