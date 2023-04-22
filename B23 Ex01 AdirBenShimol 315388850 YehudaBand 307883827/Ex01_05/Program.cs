@@ -1,4 +1,5 @@
-﻿//TODO: 
+﻿//TODO: Decide if we want to use the 'using static...' or not?
+//TODO: Decide if we want to manipulate chars or turn digits in to ints?
 using static Ex01_01.Program;
 using static Ex01_04.Program;
 using System;
