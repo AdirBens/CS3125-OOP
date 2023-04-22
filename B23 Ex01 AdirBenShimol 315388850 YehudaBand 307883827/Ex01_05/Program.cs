@@ -1,5 +1,6 @@
 ﻿//TODO: import Ex01_01.GetInput(string i_DialogMessage, Func i_InputValidator, out o_UserInput)
 using static Ex01_01.Program;
+using static Ex01_04.Program;
 using System;
 
 namespace Ex01_05
