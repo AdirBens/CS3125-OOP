@@ -15,16 +15,16 @@ namespace Ex01_05
         static void RunProgram()
         {
             const string v_DialogMessage = "Please enter a 6 digit number and hit enter :";
-            string string v_InvalidInputMessage = "Invalid input! Please enter a 6 digit number with no letters or symbols."
+            const string v_InvalidInputMessage = "Invalid input! Please enter a 6 digit number with no letters or symbols.";
             string userInput;
 
-            GetInput(v_DialogMessage, IsNDigitsNumber, v_InvalidInputMessage, out userInput);
+            GetInput(v_DialogMessage, IsSixDigitsNumber, v_InvalidInputMessage, out userInput);
             PrintStatistics(userInput);
         }
 
-        static bool IsNDigitsNumber(string i_InputNumber, int i_NumberOfDigits)
+        static bool IsSixDigitsNumber(string i_UserInput)
         {
-            //Use int.TryParse
+            return (StringIsLengthSix(using) && 
         }
 
         static int GetRightmostDigit(int[] i_InputNumberArray)
