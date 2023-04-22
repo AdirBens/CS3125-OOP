@@ -32,12 +32,12 @@ namespace Ex01_04
             return isLetterString;
         }
 
-        static bool StringIsLengthSix(string i_InputString)
+        public static bool StringIsLengthSix(string i_InputString)
         {
             return i_InputString.Length == 6;
         }
         
-        static bool StringIsNumber(string i_InputString)
+        public static bool StringIsNumber(string i_InputString)
         {
             return int.TryParse(i_InputString, out _);
         }
