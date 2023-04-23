@@ -4,7 +4,7 @@ namespace Ex01_04
 {
     public class Program
     {
-        static void Main()
+        public static void Main()
         {
             runProgram();
         }
