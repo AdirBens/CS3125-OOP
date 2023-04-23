@@ -1,5 +1,4 @@
 ﻿using System;
-using static Ex01_01.Program;
 
 namespace Ex01_04
 {
@@ -14,7 +13,8 @@ namespace Ex01_04
         {
             const string k_DialogMessage = "Please enter a 6 charectar word or a 6 digit number :";
             const string k_InvalidInputMessage = "Invalid input! Please enter an 'only digit' or 'only lettters' sequence of exactly 6 characters";
-            GetInput(k_DialogMessage, checkConditionsOnString, k_InvalidInputMessage, out string UserInput);
+
+            Ex01_01.Program.GetInput(k_DialogMessage, checkConditionsOnString, k_InvalidInputMessage, out string UserInput);
             printStatistics(UserInput);
         }
 
