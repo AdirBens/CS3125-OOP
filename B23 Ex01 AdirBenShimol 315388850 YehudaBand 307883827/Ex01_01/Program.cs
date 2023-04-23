@@ -1,50 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Ex01_01
 {
-    // TODO: Linting and CleanCode checks - stick to conventions guidelines.
     public class Program
     {
         public static void Main()
         {
             runProgram();
-            //runTests();
-        }
-
-        private static void runProgram()
-        {
-            string[] binaryNumbers = getUserInput();
-            int[] decimalNumbers = binaryToDecimal(binaryNumbers);
-            Dictionary<string, Func<string[], float>> binaryStatisticCheckers = loadBinaryStatisticsCheckers();
-            Dictionary<string, Func<int, bool>> decimalStatisticCheckers = loadDecimalStatisticsCheckers();
-
-            printDescendingOrder(decimalNumbers);
-            Console.WriteLine(buildStatisticsReport(binaryNumbers, decimalNumbers, binaryStatisticCheckers, decimalStatisticCheckers));
-        }
-
-        private static void runTests()
-        {
-            Dictionary<string, Func<string[], float>> binaryStatisticCheckers = loadBinaryStatisticsCheckers();
-            Dictionary<string, Func<int, bool>> decimalStatisticCheckers = loadDecimalStatisticsCheckers();
-            string[][] binarySeriesTestSet = { new string[] { "01000000", "01111011", "01111001" }, 
-                                               new string[] { "01010101", "11110000", "11111111" },
-                                               new string[] { "00000100", "00010000", "00001111" } };
-
-            foreach(string[] testSet in binarySeriesTestSet)
-            {
-                Console.WriteLine("-----------------------------------------------------------------------------------");
-                Console.WriteLine("Tested Binary Series: {0}  {1}  {2} ", testSet);
-                string[] binaryNumbers = testSet;
-                int[] decimalNumbers = binaryToDecimal(binaryNumbers);
-
-                printDescendingOrder(decimalNumbers);
-                Console.WriteLine(buildStatisticsReport(binaryNumbers, decimalNumbers, binaryStatisticCheckers, decimalStatisticCheckers));
-            }
-            Console.WriteLine("-----------------------------------------------------------------------------------");
-
+            Console.WriteLine("Press ENTER to exit ...");
+            Console.ReadLine();
         }
 
         public static string GetInputLine(string i_DialogMessage, Func<string, bool> i_InputValidator, string i_InvalidInputMessage)
@@ -70,7 +35,7 @@ namespace Ex01_01
 
             return userInput;
         }
-
+        
         public static bool IsPalindrome(string i_String)
         {
             bool isVacuouslyPalindrome = i_String.Length < 2;
@@ -89,27 +54,15 @@ namespace Ex01_01
             return (i_Divisor != 0) && (i_Dividend % i_Divisor == 0);
         }
 
-        private static Dictionary<string, Func<string[], float>> loadBinaryStatisticsCheckers()
+        private static void runProgram()
         {
-            Dictionary<string, Func<string[], float>> statisticsCheckers = new Dictionary<string, Func<string[], float>>();
-
-            statisticsCheckers.Add("Average frequency of '1' digit among the given binary numbers", calculateOnesFrequency);
-
-            return statisticsCheckers;
-        }
-
-        private static Dictionary<string, Func<int, bool>> loadDecimalStatisticsCheckers()
-        {
-            Dictionary<string, Func<int, bool>> statisticsCheckers = new Dictionary<string, Func<int, bool>>();
+            string[] binaryNumbers = getUserInput();
+            int[] decimalNumbers = binaryToDecimal(binaryNumbers);
             
-            statisticsCheckers.Add("Numbers that are a power of 2", isPowerOfTwo);
-            statisticsCheckers.Add("Numbers that are a dived by 4", isDivisibleBy4);
-            statisticsCheckers.Add("Numbers that their decimal digits constitutes a strictly-decreasing series", isDigitsStrictlyDecrease);
-            statisticsCheckers.Add("Numbers that their decimal digits constitutes a Palindrome", IsPalindrome);
-
-            return statisticsCheckers;
+            printDescendingOrder(decimalNumbers);
+            Console.WriteLine(buildStatisticsReport(binaryNumbers, decimalNumbers));
         }
-
+   
         private static string[] getUserInput()
         {
             const int k_NumbersToRead = 3;
@@ -123,6 +76,11 @@ namespace Ex01_01
             }
 
             return stringBinaryNumbers;
+        }
+
+        private static bool is8DigitsBinaryNumber(string i_String)
+        {
+            return (i_String.Length == 8) && i_String.All(digit => digit == '0' || digit == '1');
         }
 
         private static bool isDivisibleBy4(int i_Dividend)
@@ -149,11 +107,6 @@ namespace Ex01_01
             return isStrictlyDecrease;
         }
 
-        private static bool is8DigitsBinaryNumber(string i_String)
-        {
-            return (i_String.Length == 8) && i_String.All(digit => digit == '0' || digit == '1');
-        }
-
         private static int binaryToDecimal(string i_BinaryNumber)
         {
             int decimalRepresentation = 0;
@@ -168,6 +121,7 @@ namespace Ex01_01
                 }
                 digitPosition++;
             }
+
             return decimalRepresentation;
         }
 
@@ -186,7 +140,6 @@ namespace Ex01_01
         private static void printDescendingOrder(int[] i_DecimalNumbers)
         {
             Array.Sort(i_DecimalNumbers, (firstNumber, secondNumber) => secondNumber.CompareTo(firstNumber));
-
             foreach(int number in i_DecimalNumbers)
             {
                 Console.WriteLine(number);
@@ -202,26 +155,21 @@ namespace Ex01_01
             return (float)numberOfOnes / totalNumberOfDigits;
         }
 
-        private static string buildStatisticsReport(string[] i_BinaryNumbers, 
-                                                    int[] i_DecimalNumbers, 
-                                                    Dictionary<string, Func<string[], float>> i_BinaryStatisticsCheckers, 
-                                                    Dictionary<string, Func<int, bool>> i_DecimalStatisticsCheckers)
+        private static string buildStatisticsReport(string[] i_BinaryNumbers, int[] i_DecimalNumbers)
         {
-            StringBuilder statistics = new StringBuilder();
+            string statisticsReport = string.Format(
+@"[+] Average frequency of '1' digit among the given binary numbers : {0:F2}
+[+] Numbers that are a power of 2 : {1}  
+[+] Numbers that are a dived by 4 : {2}
+[+] Numbers that their decimal digits constitutes a strictly-decreasing series : {3}
+[+] Numbers that their decimal digits constitutes a Palindrome : {4}", 
+                calculateOnesFrequency(i_BinaryNumbers),
+                i_DecimalNumbers.Count(isPowerOfTwo),
+                i_DecimalNumbers.Count(isDivisibleBy4),
+                i_DecimalNumbers.Count(isDigitsStrictlyDecrease),
+                i_DecimalNumbers.Count(IsPalindrome));
 
-            foreach(KeyValuePair<string, Func<string[], float>> checker in i_BinaryStatisticsCheckers)
-            {
-                statistics.AppendFormat("[+] {0} : {1}", checker.Key, checker.Value(i_BinaryNumbers));
-                statistics.AppendLine();
-            }
-            
-            foreach (KeyValuePair<string, Func<int, bool>> checker in i_DecimalStatisticsCheckers)
-            {
-                statistics.AppendFormat("[+] {0} : {1}", checker.Key, i_DecimalNumbers.Count(checker.Value));
-                statistics.AppendLine();
-            }
-
-            return statistics.ToString();
+            return statisticsReport;
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using System;
-using UserInput = Ex01_01.Program;
+﻿using UserInput = Ex01_01.Program;
 using Diamond = Ex01_02.Program;
+using System;
 
 namespace Ex01_03
 {
@@ -8,15 +8,18 @@ namespace Ex01_03
     {
         public static void Main()
         {
-            //int[] height = { 4, 5, 7, 8 };
-            //displayDiamondTest(height);
             runProgram();
+            Console.WriteLine("Press ENTER to exit ...");
+            Console.ReadLine();
         }
 
         private static void runProgram()
         {
             int diamondHeight = getDiamondHeight();
-            Diamond.DisplayDiamond(diamondHeight);
+            const char k_Symbol = '*';
+            const char k_Delimiter = ' ';
+
+            Diamond.DisplayDiamond(diamondHeight, k_Symbol, k_Delimiter);
         }
 
         private static int getDiamondHeight()
@@ -33,17 +36,6 @@ namespace Ex01_03
             bool isInteger = int.TryParse(i_String, out int parsedInt);
             
             return isInteger && parsedInt > 0;
-        }
-
-        private static void displayDiamondTest(int[] i_HeightToTest, char i_Symbol = '*', char i_Delimiter = ' ')
-        {
-            foreach(int height in i_HeightToTest)
-            {
-                Console.WriteLine("Display Diamond for Height " + height);
-                Diamond.DisplayDiamond(height, i_Symbol, i_Delimiter);
-                Console.WriteLine();
-            }
-
         }
     }
 }
