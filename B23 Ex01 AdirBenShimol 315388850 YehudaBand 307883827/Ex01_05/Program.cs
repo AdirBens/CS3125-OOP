@@ -16,6 +16,8 @@ namespace Ex01_05
 
             Ex01_01.Program.GetInputLine(k_DialogMessage, stringIsSixDigitsNumber, k_InvalidInputMessage, out string userInput);
             printStatistics(userInput);
+            Console.WriteLine("Hit ENTER to end the program...");
+            Console.ReadLine();
         }
 
         static bool stringIsSixDigitsNumber(string i_UserInput)
@@ -27,14 +29,12 @@ namespace Ex01_05
         { 
             Console.WriteLine(string.Format("The number you chose is: {0}", i_UserInput));
             Console.WriteLine(string.Format("{0} digits from the number are greater than the rightmost digit.", 
-                getNumberOfDigitsLargerThanRightmostDigit(i_UserInput)));
+                getNumberOfDigitsStrictlyLargerThanRightmostDigit(i_UserInput)));
             Console.WriteLine(string.Format("The smallest digit in the number is: {0}", getLowestDigit(i_UserInput)));
             Console.WriteLine(string.Format("The average of all digits is: {0}", getDigitAverage(i_UserInput)));   
-            Console.WriteLine("Hit ENTER to end the program...");
-            Console.ReadLine();
         }
 
-        static int getNumberOfDigitsLargerThanRightmostDigit(string i_UserInput)
+        static int getNumberOfDigitsStrictlyLargerThanRightmostDigit(string i_UserInput)
         {
             int rightmostDigit = i_UserInput[i_UserInput.Length - 1];
             int numberOfLargerThanRightmostDigit = 0;
@@ -45,6 +45,7 @@ namespace Ex01_05
                     numberOfLargerThanRightmostDigit++;
                 }
             }
+
             return numberOfLargerThanRightmostDigit;
         }
 
@@ -58,6 +59,7 @@ namespace Ex01_05
                     smallestDigit = c;
                 }
             }
+
             return smallestDigit;
         }
 
@@ -69,6 +71,7 @@ namespace Ex01_05
                 int digitValue = c - '0';
                 sumOfDigits += digitValue;
             }
+
             float averageOfDigits = sumOfDigits / i_userInput.Length;
             return averageOfDigits; 
         }
