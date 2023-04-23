@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Ex01_01;
 
 namespace Ex01_04
 {
