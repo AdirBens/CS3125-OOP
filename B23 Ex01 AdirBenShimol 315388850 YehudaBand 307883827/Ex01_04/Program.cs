@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Ex01_01;
 
 namespace Ex01_04
 {
@@ -14,8 +16,10 @@ namespace Ex01_04
             const string k_DialogMessage = "Please enter a 6 charectar word or a 6 digit number :";
             const string k_InvalidInputMessage = "Invalid input! Please enter an 'only digit' or 'only lettters' sequence of exactly 6 characters";
 
-            Ex01_01.Program.GetInput(k_DialogMessage, checkConditionsOnString, k_InvalidInputMessage, out string UserInput);
-            printStatistics(UserInput);
+            string inputString = Ex01_01.Program.GetInputLine(k_DialogMessage, checkConditionsOnString, k_InvalidInputMessage);
+            printStatistics(inputString);
+            Console.WriteLine("Hit ENTER to end the program...");
+            Console.ReadLine();
         }
 
         static bool stringIsWord(string i_InputString)
@@ -23,10 +27,7 @@ namespace Ex01_04
             bool isLetterString = true;
             foreach (char c in i_InputString)
             {
-                if (!char.IsUpper(c) && !char.IsLower(c))
-                {
-                    isLetterString = false;
-                }
+                isLetterString &= char.IsUpper(c) || char.IsLower(c);
             }
             return isLetterString;
         }
@@ -61,35 +62,25 @@ namespace Ex01_04
 
         static void printStatistics(string i_InputString)
         {
-            bool isPalyndrome = IsPalindrome(i_InputString);
-            bool isDivisibleByThree;
-            int numberOfUppercaseLetters;
-            Console.WriteLine(string.Format("The sequence you chose is: {0}", i_InputString));
-            Console.WriteLine(string.Format("The sequence {0} a palyndrome.", messageConditionBuilder(isPalyndrome)));
+            bool isPalyndrome = Ex01_01.Program.IsPalindrome(i_InputString);
+
+            Console.WriteLine("The sequence you chose is: {0}", i_InputString);
+            Console.WriteLine("The sequence {0} a palyndrome.", messageConditionBuilder(isPalyndrome));
             if (StringIsNumber(i_InputString))
             {
-                isDivisibleByThree = IsDivisible(int.Parse(i_InputString), 3);
-                Console.WriteLine(string.Format("The number {0} divisible by three.", messageConditionBuilder(isDivisibleByThree)));
+                bool isDivisibleByThree = Ex01_01.Program.IsDivisible(int.Parse(i_InputString), 3);
+                Console.WriteLine("The number {0} divisible by three.", messageConditionBuilder(isDivisibleByThree));
             }
             else
             {
-                numberOfUppercaseLetters = countUppercase(i_InputString);
-                Console.WriteLine(string.Format("The number of uppercase letters is: {0}", numberOfUppercaseLetters));
+                int numberOfUppercaseLetters = countUppercase(i_InputString);
+                Console.WriteLine("The number of uppercase letters is: {0}", numberOfUppercaseLetters);
             }
-
-            Console.WriteLine("Hit ENTER to end the program...");
-            Console.ReadLine();
         }
 
         static string messageConditionBuilder(bool i_Condition)
         {
-            string conditionMessage = "is not";
-            if (i_Condition)
-            {
-                conditionMessage = "is";
-            }
-
-            return conditionMessage;
+            return i_Condition ? "is" : "is not";
         }
     }
 }
