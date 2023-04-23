@@ -160,9 +160,9 @@ namespace Ex01_01
             string statisticsReport = string.Format(
 @"[+] Average frequency of '1' digit among the given binary numbers : {0:F2}
 [+] Numbers that are a power of 2 : {1}  
-[+] Numbers that are a dived by 4 : {2}
-[+] Numbers that their decimal digits constitutes a strictly-decreasing series : {3}
-[+] Numbers that their decimal digits constitutes a Palindrome : {4}", 
+[+] Numbers that are a divisible by 4 : {2}
+[+] Numbers that their decimal digits constitute a strictly-decreasing series : {3}
+[+] Numbers that their decimal digits constitute a Palindrome : {4}", 
                 calculateOnesFrequency(i_BinaryNumbers),
                 i_DecimalNumbers.Count(isPowerOfTwo),
                 i_DecimalNumbers.Count(isDivisibleBy4),

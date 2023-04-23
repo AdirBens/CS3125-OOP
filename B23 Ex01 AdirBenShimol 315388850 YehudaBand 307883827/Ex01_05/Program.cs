@@ -27,7 +27,6 @@ namespace Ex01_05
 
         private static void printStatistics(string i_UserInput)
         { 
-            Console.WriteLine(string.Format("[+] The number you chose is: {0}", i_UserInput));
             Console.WriteLine(string.Format("[+] Number of digits strictly larget than the rightmost digit: {0}", 
                 getNumberOfDigitsStrictlyLargerThanRightmostDigit(i_UserInput)));
             Console.WriteLine(string.Format("[+] Smallest digit in the number: {0}", getLowestDigit(i_UserInput)));

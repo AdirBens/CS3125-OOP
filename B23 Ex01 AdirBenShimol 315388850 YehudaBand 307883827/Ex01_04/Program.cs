@@ -66,7 +66,6 @@ namespace Ex01_04
         {
             bool isPalyndrome = Ex01_01.Program.IsPalindrome(i_InputString);
 
-            Console.WriteLine("[+] The sequence you chose is: {0}", i_InputString);
             Console.WriteLine("[+] The sequence {0} a palyndrome.", messageConditionBuilder(isPalyndrome));
             if (StringIsNumber(i_InputString))
             {
