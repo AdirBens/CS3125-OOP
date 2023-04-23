@@ -7,6 +7,8 @@ namespace Ex01_05
         public static void Main()
         {
             runProgram();
+            Console.WriteLine("Press ENTER to exit ...");
+            Console.ReadLine();
         }
 
         static void runProgram()
@@ -14,10 +16,8 @@ namespace Ex01_05
             const string k_DialogMessage = "Please enter a 6 digit number and hit enter :";
             const string k_InvalidInputMessage = "Invalid input! Please enter a 6 digit number with no letters or symbols.";
 
-            Ex01_01.Program.GetInputLine(k_DialogMessage, stringIsSixDigitsNumber, k_InvalidInputMessage, out string userInput);
+            string userInput = Ex01_01.Program.GetInputLine(k_DialogMessage, stringIsSixDigitsNumber, k_InvalidInputMessage);
             printStatistics(userInput);
-            Console.WriteLine("Hit ENTER to end the program...");
-            Console.ReadLine();
         }
 
         static bool stringIsSixDigitsNumber(string i_UserInput)
@@ -27,11 +27,11 @@ namespace Ex01_05
 
         static void printStatistics(string i_UserInput)
         { 
-            Console.WriteLine(string.Format("The number you chose is: {0}", i_UserInput));
-            Console.WriteLine(string.Format("{0} digits from the number are greater than the rightmost digit.", 
+            Console.WriteLine(string.Format("[+] The number you chose is: {0}", i_UserInput));
+            Console.WriteLine(string.Format("[+] Number of digits strictly larget than the rightmost digit: {0}", 
                 getNumberOfDigitsStrictlyLargerThanRightmostDigit(i_UserInput)));
-            Console.WriteLine(string.Format("The smallest digit in the number is: {0}", getLowestDigit(i_UserInput)));
-            Console.WriteLine(string.Format("The average of all digits is: {0}", getDigitAverage(i_UserInput)));   
+            Console.WriteLine(string.Format("[+] Smallest digit in the number: {0}", getLowestDigit(i_UserInput)));
+            Console.WriteLine(string.Format("[+] Average of all digits: {0}", getDigitAverage(i_UserInput)));   
         }
 
         static int getNumberOfDigitsStrictlyLargerThanRightmostDigit(string i_UserInput)

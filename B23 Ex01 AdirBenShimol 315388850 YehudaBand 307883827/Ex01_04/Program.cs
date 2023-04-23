@@ -7,6 +7,8 @@ namespace Ex01_04
         public static void Main()
         {
             runProgram();
+            Console.WriteLine("Press ENTER to exit ...");
+            Console.ReadLine();
         }
 
         static void runProgram()
@@ -16,8 +18,6 @@ namespace Ex01_04
 
             string inputString = Ex01_01.Program.GetInputLine(k_DialogMessage, checkConditionsOnString, k_InvalidInputMessage);
             printStatistics(inputString);
-            Console.WriteLine("Hit ENTER to end the program...");
-            Console.ReadLine();
         }
 
         static bool stringIsWord(string i_InputString)
@@ -62,17 +62,17 @@ namespace Ex01_04
         {
             bool isPalyndrome = Ex01_01.Program.IsPalindrome(i_InputString);
 
-            Console.WriteLine("The sequence you chose is: {0}", i_InputString);
-            Console.WriteLine("The sequence {0} a palyndrome.", messageConditionBuilder(isPalyndrome));
+            Console.WriteLine("[+] The sequence you chose is: {0}", i_InputString);
+            Console.WriteLine("[+] The sequence {0} a palyndrome.", messageConditionBuilder(isPalyndrome));
             if (StringIsNumber(i_InputString))
             {
                 bool isDivisibleByThree = Ex01_01.Program.IsDivisible(int.Parse(i_InputString), 3);
-                Console.WriteLine("The number {0} divisible by three.", messageConditionBuilder(isDivisibleByThree));
+                Console.WriteLine("[+] The number {0} divisible by three.", messageConditionBuilder(isDivisibleByThree));
             }
             else
             {
                 int numberOfUppercaseLetters = countUppercase(i_InputString);
-                Console.WriteLine("The number of uppercase letters is: {0}", numberOfUppercaseLetters);
+                Console.WriteLine("[+] Number of uppercase letters is: {0}", numberOfUppercaseLetters);
             }
         }
 
