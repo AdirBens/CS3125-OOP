@@ -1,8 +1,4 @@
-﻿//TODO: Decide if we want to use the 'using static...' or not?
-//TODO: Decide if we want to manipulate chars or turn digits in to ints?
-using static Ex01_01.Program;
-using static Ex01_04.Program;
-using System;
+﻿using System;
 
 namespace Ex01_05
 {
@@ -18,13 +14,13 @@ namespace Ex01_05
             const string k_DialogMessage = "Please enter a 6 digit number and hit enter :";
             const string k_InvalidInputMessage = "Invalid input! Please enter a 6 digit number with no letters or symbols.";
 
-            GetInput(k_DialogMessage, stringIsSixDigitsNumber, k_InvalidInputMessage, out string userInput);
+            Ex01_01.Program.GetInputLine(k_DialogMessage, stringIsSixDigitsNumber, k_InvalidInputMessage, out string userInput);
             printStatistics(userInput);
         }
 
         static bool stringIsSixDigitsNumber(string i_UserInput)
         {
-            return (StringIsLengthSix(i_UserInput) && StringIsNumber(i_UserInput));
+            return (Ex01_04.Program.StringIsLengthSix(i_UserInput) && Ex01_04.Program.StringIsNumber(i_UserInput));
         }
 
         static void printStatistics(string i_UserInput)
