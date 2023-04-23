@@ -7,18 +7,18 @@ namespace Ex01_04
     {
         static void Main()
         {
-            RunProgram();
+            runProgram();
         }
 
-        static void RunProgram()
+        static void runProgram()
         {
-            const string v_DialogMessage = "Please enter a 6 charectar word or a 6 digit number :";
-            const string v_InvalidInputMessage = "Invalid input! Please enter an 'only digit' or 'only lettters' sequence of exactly 6 characters";
-            GetInput(v_DialogMessage, CheckConditionsOnString, v_InvalidInputMessage, out string UserInput);
-            PrintStatistics(UserInput);
+            const string k_DialogMessage = "Please enter a 6 charectar word or a 6 digit number :";
+            const string k_InvalidInputMessage = "Invalid input! Please enter an 'only digit' or 'only lettters' sequence of exactly 6 characters";
+            GetInput(k_DialogMessage, checkConditionsOnString, k_InvalidInputMessage, out string UserInput);
+            printStatistics(UserInput);
         }
 
-        static bool StringIsWord(string i_InputString)
+        static bool stringIsWord(string i_InputString)
         {
             bool isLetterString = true;
             foreach (char c in i_InputString)
@@ -41,7 +41,7 @@ namespace Ex01_04
             return int.TryParse(i_InputString, out _);
         }
 
-        static int CountUppercase(string i_InputString)
+        static int countUppercase(string i_InputString)
         {
             int numberOfUppercaseLetters = 0;
             foreach (char c in i_InputString)
@@ -54,26 +54,26 @@ namespace Ex01_04
             return numberOfUppercaseLetters;
         }
 
-        static bool CheckConditionsOnString(string i_InputString)
+        static bool checkConditionsOnString(string i_InputString)
         {
-            return (StringIsWord(i_InputString) || StringIsNumber(i_InputString)) && StringIsLengthSix(i_InputString);
+            return (stringIsWord(i_InputString) || StringIsNumber(i_InputString)) && StringIsLengthSix(i_InputString);
         }
 
-        static void PrintStatistics(string i_InputString)
+        static void printStatistics(string i_InputString)
         {
             bool isPalyndrome = IsPalindrome(i_InputString);
             bool isDivisibleByThree;
             int numberOfUppercaseLetters;
             Console.WriteLine(string.Format("The sequence you chose is: {0}", i_InputString));
-            Console.WriteLine(string.Format("The sequence {0} a palyndrome.", MessageConditionBuilder(isPalyndrome)));
+            Console.WriteLine(string.Format("The sequence {0} a palyndrome.", messageConditionBuilder(isPalyndrome)));
             if (StringIsNumber(i_InputString))
             {
                 isDivisibleByThree = IsDivisible(int.Parse(i_InputString), 3);
-                Console.WriteLine(string.Format("The number {0} divisible by three.", MessageConditionBuilder(isDivisibleByThree)));
+                Console.WriteLine(string.Format("The number {0} divisible by three.", messageConditionBuilder(isDivisibleByThree)));
             }
             else
             {
-                numberOfUppercaseLetters = CountUppercase(i_InputString);
+                numberOfUppercaseLetters = countUppercase(i_InputString);
                 Console.WriteLine(string.Format("The number of uppercase letters is: {0}", numberOfUppercaseLetters));
             }
 
@@ -81,7 +81,7 @@ namespace Ex01_04
             Console.ReadLine();
         }
 
-        static string MessageConditionBuilder(bool i_Condition)
+        static string messageConditionBuilder(bool i_Condition)
         {
             string conditionMessage = "is not";
             if (i_Condition)
