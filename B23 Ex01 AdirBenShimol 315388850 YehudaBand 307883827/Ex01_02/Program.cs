@@ -35,7 +35,6 @@ namespace Ex01_02
             {
                 Console.WriteLine(buildDiamondRow(i_NumberOfDelimiters, i_NumberOfSymbols, i_Symbol, i_Delimiter));
                 recursiveDiamond(i_NumberOfDelimiters - 1, i_NumberOfSymbols + 2, i_Symbol, i_Delimiter);
-                
                 if(i_NumberOfDelimiters != 0)
                 {
                     Console.WriteLine(buildDiamondRow(i_NumberOfDelimiters, i_NumberOfSymbols, i_Symbol, i_Delimiter));

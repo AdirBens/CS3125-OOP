@@ -75,6 +75,7 @@ namespace Ex01_05
             }
 
             float averageOfDigits = sumOfDigits / i_userInput.Length;
+
             return averageOfDigits; 
         }
     }
