@@ -1,4 +1,4 @@
-﻿using Ex02.ConsoleUtiles;
+﻿using Ex02.ConsoleUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +19,14 @@ namespace TicTacToe
         private const char k_HorizontalBorder = '=';
         private const char k_VerticalBorder = '|';
 
-        private static int scoreP1;
-        private static int scoreP2;
+        private static Player[] players = new Player[2];
+        private static int m_scorePlayer1;
+        private static int m_scorePlayer2;
 
-        private static eOpponentStrategy chosenStrategy = eOpponentStrategy.Unknown;
-        private static eGameState currentGameState = eGameState.Init;
+        private static int m_boardSize;
+
+        private static eOpponentStrategy m_chosenStrategy = eOpponentStrategy.Unknown;
+        private static eGameState m_currentGameState = eGameState.Init;
 
 
         private enum eGameState
@@ -32,6 +35,7 @@ namespace TicTacToe
             InProgress,
             Win,
             Tie,
+            RematchQuery,
             End
         }
 
@@ -49,64 +53,55 @@ namespace TicTacToe
 
         private static void runGame()
         {
+            bool rematchDecision;
+
             DrawInitScreen();
             while (!m_isKillSigRaised)
             {
-                switch (currentGameState)
+                switch (m_currentGameState)
                 {
                     case eGameState.Init:
-                        int boardSize = getBoardSizeFromUser();
-                        while (!GameEngine.setBoardSize(boardSize))
+                        m_boardSize = getBoardSizeFromUser();
+                        while (!GameEngine.setBoardSize(m_boardSize))
                         {
-                            boardSize = getBoardSizeFromUser();
+                            m_boardSize = getBoardSizeFromUser();
                             if (m_isKillSigRaised)
                             {
                                 break;
                             }
                         }
-                        chosenStrategy = getOpponentStrategyFromUser();
+                        m_chosenStrategy = getOpponentStrategyFromUser();
                         if (m_isKillSigRaised)
                             {
                                 break;
                             }
-                        currentGameState = eGameState.InProgress;
+                        m_currentGameState = eGameState.InProgress;
                         break;
                     case eGameState.InProgress:
                         runMiniGame();
                         break;
                     case eGameState.Win:
-                        //win message
-                        //another minigame? message
-                        if (anotherGame)
-                        {
-                            currentGameState = eGameState.InProgress;
-                        }
-                        break;
+                        //drawWinMessage();
                     case eGameState.Tie:
-                        //tie message
-                        //another minigame? message
-                        if (anotherGame)
+                        //drawTieMessage();
+                    case eGameState.RematchQuery:
+                        rematchDecision = getRematchDecisionFromUser();
+                        if (rematchDecision)
                         {
-                            currentGameState = eGameState.InProgress;
+                            m_currentGameState = eGameState.InProgress;
                         }
                         else
                         {
-                            currentGameState = eGameState.End;
+                            m_currentGameState = eGameState.End;
                         }
                         break;
-                    case eGameState.End: 
-                        //Summary message and shutdown
+                    case eGameState.End:
+
                         break;
                 }
             }
-
-
-            /// TODO:
-            /// Ask if rematch or quit.
-            /// if remach -> m_GameModel.reset();
-            ///         runMiniGame();
-            /// else: MESIBA
         }
+        
         internal static void DrawInitScreen()
         {
             Console.WriteLine("Welcome to the TicTacToe Reversed game!\nHit Q at any stage to quit the game");
@@ -135,7 +130,7 @@ namespace TicTacToe
             eOpponentStrategy chosenOpponentStrategy = eOpponentStrategy.Unknown;
 
             userInputRequest("Please enter game type:\nH for human opponent and C for playing against the computer");
-            string userInput = readInputLine();
+            string userInput = readInputLineWithKillSigValidation();
 
             while (userInput != "H" && userInput != "C" && !m_isKillSigRaised)
             {
@@ -147,37 +142,27 @@ namespace TicTacToe
             chosenOpponentStrategy = (userInput == "H") ? eOpponentStrategy.Human : eOpponentStrategy.CPU; 
             }
 
-            Screen.clear();
+            Screen.Clear();
             return chosenOpponentStrategy;
         }
 
         private static void runMiniGame()
         {
-            bool isMiniGameEnd = false;
-
-            while (!m_isKillSigRaised || isMiniGameEnd)
+            while (!m_isKillSigRaised || m_currentGameState == eGameState.InProgress)
             {
-                DrawBoard(GameEngine.getCurrentBoardState);
+                drawBoard(GameEngine.getCurrentBoardState);
                 executeHumanMove();
-                currentGameState = GameEngine.getCurrentGameState();
-                if (currentGameState == eGameState.InProgress)
+                switch (m_chosenStrategy)
                 {
-                    DrawBoard(GameEngine.getCurrentBoardState);
-                    switch (chosenStrategy)
-                    {
-                        case eOpponentStrategy.CPU:
-                            /// except for Tuple<int, int> GetNextMove From AIStrategy (as coordinate)
-                            break;
-                        case eOpponentStrategy.Human:
-                            executeHumanMove();
-                            break;
-
-                    }
+                    case eOpponentStrategy.CPU:
+                        executeCPUMove();
+                        break;
+                    case eOpponentStrategy.Human:
+                        drawBoard(GameEngine.getCurrentBoardState);
+                        executeHumanMove();
+                        break;
                 }
-                else
-                {
-                    isMiniGameEnd = true;
-                }
+                m_currentGameState = GameEngine.getCurrentGameState();
             }
         }
 
@@ -186,18 +171,63 @@ namespace TicTacToe
             bool isMoveValid = false;
             while (!isMoveValid)
             {
-                (int column, int row) nextMoveCoordinates = GetCoordinateFromUser();
+                (int column, int row) nextMoveCoordinates = getCoordinateFromUser();
                 isMoveValid = GameEngine.setNextMove(nextMoveCoordinates);
             }
         }
 
-        private static void DrawBoard(Board.ePlayerSymbol[,,] i_Board)
+        private static void executeCPUMove()
         {
-            //Get from GameEngine board matrix copy and flag of last move was legit
+            (int column, int row) nextMoveCoordinates = GameEnginge.GetCoordinateFromCPU();
+            GameEngine.setNextMove(nextMoveCoordinates);
         }
 
+        private static void drawBoard(Board.ePlayerSymbol[,] i_Board)
+        {
+            StringBuilder row1 = new StringBuilder();
+            StringBuilder doubleRow = new StringBuilder();
 
-        private static (int column, int row) GetCoordinateFromUser()
+            row1.Append("  ");
+            for (int i = 0;  i < m_boardSize; i++)
+            {
+                row1.Append(i.ToString() + "   ");
+            }
+            Console.WriteLine(row1.ToString());
+
+            for(int i = 0; i < m_boardSize; i++)
+            {
+                doubleRow.Clear();
+                doubleRow.Append(i.ToString() + '|');
+                for(int j = 0; j < m_boardSize; j++)
+                {
+                    doubleRow.Append(string.Format($" {i_Board[i,j]} |"));
+                }
+                doubleRow.Append('\n');
+                doubleRow.Append("=", 1, m_boardSize * 5 + 1);
+                Console.WriteLine(doubleRow.ToString());
+            }
+        }
+
+        private static bool getRematchDecisionFromUser()
+        {
+            bool rematchDecision = false;
+            userInputRequest("Would you like to rematch? (Y/N)\nHit Q to terminate the game");
+            string userInput = readInputLineWithKillSigValidation();
+
+            while (userInput != "Y" && userInput != "N" && !m_isKillSigRaised)
+            {
+                userInput = userInputRequest("Input is invalid! please press Y or N");
+            }
+
+            if (!m_isKillSigRaised)
+            {
+                rematchDecision = (userInput == "Y") ? true : false;
+            }
+
+            return rematchDecision;
+        }
+
+        private static (int column, int row) getCoordinateFromUser()
         {
             int column = 0;
             int row = 0;
@@ -218,15 +248,14 @@ namespace TicTacToe
             return (column, row);
         }
 
-        private static
-
         private static string userInputRequest(string i_invalidInputMessage)
         {
             Console.WriteLine(i_invalidInputMessage);   
-            return readInputLine();
+            return readInputLineWithKillSigValidation();
             
         }
-        private static string readInputLine()
+
+        private static string readInputLineWithKillSigValidation()
         {
             string userInput = Console.ReadLine();
             if (userInput == k_KillSignal) 
@@ -235,5 +264,6 @@ namespace TicTacToe
             }
             return userInput;
         }
+
     }
 }
