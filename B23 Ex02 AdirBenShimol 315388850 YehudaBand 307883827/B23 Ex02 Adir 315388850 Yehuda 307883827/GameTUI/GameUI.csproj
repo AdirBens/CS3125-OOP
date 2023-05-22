@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AA1CF0B1-84B4-413D-ACFD-43B422FC9434}</ProjectGuid>
+    <ProjectGuid>{5BA902B7-EE56-4016-8C5F-C93173995C40}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>AIStrategie</RootNamespace>
-    <AssemblyName>AIStrategie</AssemblyName>
+    <RootNamespace>GameTUI</RootNamespace>
+    <AssemblyName>GameTUI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -34,6 +34,20 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TerminalUserInterface.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TicTacToe\TicTacToe.csproj">
+      <Project>{2dc79e15-a4c1-4ab7-8d7f-5bcbb04bcbb0}</Project>
+      <Name>TicTacToe</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Ex02.ConsoleUtils">
+      <HintPath>..\..\..\..\..\..\..\..\tmp\Ex02.ConsoleUtils.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

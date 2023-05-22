@@ -1,33 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using static TicTacToe.GameEngine;
 
 namespace TicTacToe
 {
-    internal class Player
+    public struct Player
     {
-        internal int m_Score
-        {
-            get;
-            set;
-        } = 0;
 
-        internal eStrategy m_Strategy
-        { 
-            get;
+        public enum ePlayerStrategy
+        {
+            Empty,
+            Human,
+            AIStrategy
         }
 
-        internal enum eStrategy
+        public ePlayerStrategy m_Strategy
         {
-            AIStrategy,
-            ManualStrategy
+            get; private set;
+        }
+        public GameBoard.BoardEntry.eEntrySymbol m_Symbol
+        {
+            get; private set;
         }
 
-        internal Player(eStrategy i_PlayerStrategy)
+        public int m_Score
         {
-            m_Strategy = i_PlayerStrategy;
+            get; private set;
+        }
+
+        public Player(GameBoard.BoardEntry.eEntrySymbol i_Symbol, ePlayerStrategy i_Strategy)
+        {
+            m_Symbol = i_Symbol;
+            m_Strategy = i_Strategy;
+            m_Score = 0;
         }
     }
 }
