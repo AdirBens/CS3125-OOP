@@ -16,7 +16,7 @@ namespace TicTacToe
         private const char k_PlayerOneSymbol = 'X';
         private const char k_PlayerTwoSymbol = 'O';
 
-        private const char k_HorizontalBorder = '=';
+        private const string k_HorizontalBorder = "=";
         private const char k_VerticalBorder = '|';
 
         private static Player[] players = new Player[2];
@@ -55,7 +55,7 @@ namespace TicTacToe
         {
             bool rematchDecision;
 
-            DrawInitScreen();
+            drawInitScreen();
             while (!m_isKillSigRaised)
             {
                 switch (m_currentGameState)
@@ -102,7 +102,7 @@ namespace TicTacToe
             }
         }
         
-        internal static void DrawInitScreen()
+        private static void drawInitScreen()
         {
             Console.WriteLine("Welcome to the TicTacToe Reversed game!\nHit Q at any stage to quit the game");
         }
@@ -186,24 +186,38 @@ namespace TicTacToe
         {
             StringBuilder row1 = new StringBuilder();
             StringBuilder doubleRow = new StringBuilder();
+            char symbolToInsert = ' ';
+
 
             row1.Append("  ");
-            for (int i = 0;  i < m_boardSize; i++)
+            for (int col = 0;  col < m_boardSize; col++)
             {
-                row1.Append(i.ToString() + "   ");
+                row1.Append((col+1).ToString() + "   ");
             }
             Console.WriteLine(row1.ToString());
 
-            for(int i = 0; i < m_boardSize; i++)
+            for(int row = 0; row < m_boardSize; row++)
             {
                 doubleRow.Clear();
-                doubleRow.Append(i.ToString() + '|');
-                for(int j = 0; j < m_boardSize; j++)
+                doubleRow.Append((row+1).ToString() + k_VerticalBorder);
+                for(int col = 0; col < m_boardSize; col++)
                 {
-                    doubleRow.Append(string.Format($" {i_Board[i,j]} |"));
+                    switch(i_Board[row, col])
+                    {
+                        case Board.ePlayerSymbol.Empty:
+                            symbolToInsert = ' '; 
+                            break;
+                        case Board.ePlayerSymbol.PlayerOneSymbol:
+                            symbolToInsert = k_PlayerOneSymbol;
+                            break;
+                        case Board.ePlayerSymbol.PlayerTwoSymbol:
+                            symbolToInsert = k_PlayerTwoSymbol; 
+                            break;
+                    }
+                    doubleRow.Append(string.Format(" {0} |", symbolToInsert));
                 }
                 doubleRow.Append('\n');
-                doubleRow.Append("=", 1, m_boardSize * 5 + 1);
+                doubleRow.Append(k_HorizontalBorder, 1, (m_boardSize * 5) + 1);
                 Console.WriteLine(doubleRow.ToString());
             }
         }
