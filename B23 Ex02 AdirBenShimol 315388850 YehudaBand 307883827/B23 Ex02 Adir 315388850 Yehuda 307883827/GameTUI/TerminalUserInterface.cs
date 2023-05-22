@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 
 using Ex02.ConsoleUtils;
-using TicTacToe;
 
+using static TicTacToe.GameEngine;
+using static TicTacToe.GameBoard;
+using static TicTacToe.Player;
+using TicTacToe;
 
 namespace GameTUI
 {
@@ -33,119 +36,118 @@ namespace GameTUI
         private static void runGame()
         {
             drawInitScreen();
-            setGameParemetersFromUserInput();
+            setBoardSizeFromUser();
+            if (!m_isKillSigRaised)
+            {
+                setOpponentStrategyFromUser();
+            }
 
+            (int PlayerOneScore, int PlayerTwoScore) scoreSummary;
+            bool rematchDecision = false;
             while (!m_isKillSigRaised)
             {
-                (int scoreP1, int scoreP2) = GameEngine.GetScoreSummary();
                 switch (m_currentMoveACK.m_Status)
                 {
                     case eGameStatus.InProgress:
                         runMiniGame();
                         break;
                     case eGameStatus.Win:
-                        drawWinMessage(scoreP1, scoreP2, GameEngine.GetWinStreak());
+                        scoreSummary = GameEngine.GetScoreSummary();
+                        drawWinMessage(scoreSummary.PlayerOneScore, scoreSummary.PlayerTwoScore, GameEngine.GetWinStreak());
+                        rematchDecision = getRematchDecisionFromUser();
+                        if (!m_isKillSigRaised && rematchDecision)
+                        {
+                            m_currentMoveACK = GameEngine.SetGameRestart();
+                        }
+                        else
+                        {
+                            drawEndScreen();
+                        }
                         break;
                     case eGameStatus.Tie:
-                        drawTieMessage(scoreP1, scoreP2);
+                        scoreSummary = GameEngine.GetScoreSummary();
+                        drawTieMessage(scoreSummary.PlayerOneScore, scoreSummary.PlayerTwoScore);
+                        rematchDecision = getRematchDecisionFromUser();
+                        if (!m_isKillSigRaised && rematchDecision)
+                        {
+                            m_currentMoveACK = GameEngine.SetGameRestart();
+                        }
+                        else
+                        {
+                            drawEndScreen();
+
+                        }
                         break;
-                }
-
-                bool rematchDecision = false;
-
-                if (!m_isKillSigRaised)
-                {
-                    rematchDecision = getRematchDecisionFromUser();
-                }
-                if (!m_isKillSigRaised && rematchDecision)
-                {
-                    m_currentMoveACK = GameEngine.SetGameRestart();
-                }
-                else
-                {
-                    drawEndScreen();
-                    break;
                 }
             }
         }
+
 
         private static void drawInitScreen()
         {
             Console.WriteLine("Welcome to the TicTacToe Reversed game!\nHit Q at any stage to quit the game");
         }
 
-        private static int getBoardSizeFromUser()
+        private static void setBoardSizeFromUser()
         {
             int maxBoardSize = GameEngine.GetMaxBoardSize();
             int minBoardSize = GameEngine.GetMinBoardSize();
+            string userPromtMessage = string.Format($"Please enter a board size between {minBoardSize} and {maxBoardSize}:");
 
-            string userInput = userInputRequest(string.Format($"Please enter a board size between {maxBoardSize} and {minBoardSize}:"));
-            bool isParseSuccess = int.TryParse(userInput, out int boardSize);
+            bool isParseSuccess = false;
+            bool isBoardSizeValid = false;
 
-            while (!isParseSuccess && !m_isKillSigRaised)
+            while (!m_isKillSigRaised && !isParseSuccess && !isBoardSizeValid)
             {
-                userInputRequest("Board size invalid! Please enter a valid board size:");
-                isParseSuccess = int.TryParse(userInput, out boardSize);
-            }
+                string userInput = userInputRequest(userPromtMessage);
+                isParseSuccess = int.TryParse(userInput, out int boardSize);
 
-            Screen.Clear();
-            return boardSize;
-        }
-
-        private static ePlayerStrategy getOpponentStrategyFromUser()
-        {
-            ePlayerStrategy chosenPlayerStrategy = new ePlayerStrategy();
-
-            userInputRequest("Please enter game type:\nH for human opponent and C for playing against the computer");
-            string userInput = readInputLineWithKillSigValidation();
-
-            while (userInput != "H" && userInput != "C" && !m_isKillSigRaised)
-            {
-                userInput = userInputRequest("Input is invalid! please press H or C");
-            }
-
-            if (!m_isKillSigRaised)
-            {
-                chosenPlayerStrategy = (userInput == "H") ? ePlayerStrategy.Human : ePlayerStrategy.AIStrategy;
-
-            }
-
-            Screen.Clear();
-            return chosenPlayerStrategy;
-        }
-
-        private static void setGameParemetersFromUserInput()
-        {
-            int boardSize;
-            while (!m_isKillSigRaised && m_currentMoveACK.m_Status != eGameStatus.InProgress)
-            {
-                boardSize = getBoardSizeFromUser();
-                if (!m_isKillSigRaised)
+                if (!m_isKillSigRaised && isParseSuccess)
                 {
                     m_currentMoveACK = GameEngine.SetGameBoardSize(boardSize);
+                    isBoardSizeValid = m_currentMoveACK.m_Status != eGameStatus.Empty;
                 }
+
+                userPromtMessage = string.Format($"Invalid Input. Enter a board size between {minBoardSize} and {maxBoardSize}:");
+                isParseSuccess = false;
             }
-            if (!m_isKillSigRaised)
-            {
-                ePlayerStrategy chosenPlayerStrategy = getOpponentStrategyFromUser();
-                if (!m_isKillSigRaised)
-                {
-                    GameEngine.SetOpponentType(chosenPlayerStrategy);
-                }
-            }
+
+            Screen.Clear();
         }
 
+        private static void setOpponentStrategyFromUser()
+        {
+            string userPromtMessage = string.Format("Please enter game type:\nH for human opponent and C for playing against the computer");
+
+            bool isParseSuccess = false;
+            bool isBoardSizeValid = false;
+
+            while (!m_isKillSigRaised && !isParseSuccess && !isBoardSizeValid)
+            {
+                string userInput = userInputRequest(userPromtMessage);
+                isParseSuccess = userInput == "H" || userInput == "C";
+
+                if (!m_isKillSigRaised && isParseSuccess)
+                {
+                    ePlayerStrategy chosenPlayerStrategy = (userInput == "H") ? ePlayerStrategy.Human : ePlayerStrategy.AIStrategy;
+
+                    m_currentMoveACK = GameEngine.SetOpponentType(chosenPlayerStrategy);
+                    isBoardSizeValid = m_currentMoveACK.m_Status != eGameStatus.Empty;
+                }
+                else
+                {
+                    userPromtMessage = string.Format($"Invalid Input. Please press H or C:");
+                }
+            }
+            Screen.Clear();
+        }
 
         private static void runMiniGame()
         {
-            while (!m_isKillSigRaised || m_currentMoveACK.m_Status != eGameStatus.InProgress)
+            while (!m_isKillSigRaised && m_currentMoveACK.m_Status == eGameStatus.InProgress)
             {
                 drawBoard(m_currentMoveACK.m_Board);
-                (int column, int row) coordinatesFromUser = getCoordinateFromUser();
-                if (!m_isKillSigRaised)
-                {
-                    m_currentMoveACK = GameEngine.SetNextMove(coordinatesFromUser);
-                }
+                setCoordinateFromUser();
             }
         }
 
@@ -185,76 +187,88 @@ namespace GameTUI
                             break;
                     }
 
-                    if (winnerStreak.Contains(boardEntry))
+                    if (winnerStreak != null && winnerStreak.Contains(boardEntry))
                     {
-                        doubleRow.AppendLine(string.Format($"({symbolToInsert})|"));
+                        doubleRow.Append(string.Format($"({symbolToInsert})|"));
                     }
                     else
                     {
+
                         doubleRow.Append(string.Format($" {symbolToInsert} |"));
                     }
                 }
 
-                doubleRow.Append('\n');
-                doubleRow.Append(k_HorizontalBorder.ToString(), 1, (boardSize * 5) + 1);
+                doubleRow.Append("\n ");
+                doubleRow.Append(k_HorizontalBorder, (boardSize * 4) + 1);
                 Console.WriteLine(doubleRow.ToString());
             }
         }
 
         private static bool getRematchDecisionFromUser()
         {
+            string userPromtMessage = "Would you like to rematch? (Y/N)";
+
+            bool isParseSuccess = false;
             bool rematchDecision = false;
-            userInputRequest("Would you like to rematch? (Y/N)\nHit Q to terminate the game");
-            string userInput = readInputLineWithKillSigValidation();
 
-            while (userInput != "Y" && userInput != "N" && !m_isKillSigRaised)
+            while (!m_isKillSigRaised && !isParseSuccess)
             {
-                userInput = userInputRequest("Input is invalid! please press Y or N");
-            }
+                string userInput = userInputRequest(userPromtMessage);
+                isParseSuccess = userInput.Equals("Y") || userInput.Equals("N");
 
-            if (!m_isKillSigRaised)
-            {
-                rematchDecision = (userInput == "Y") ? true : false;
+                userPromtMessage = "Invalid Input" + userPromtMessage;
+
+                if (!m_isKillSigRaised && isParseSuccess)
+                {
+                    rematchDecision = (userInput == "Y");
+                }
             }
 
             return rematchDecision;
         }
 
-        private static (int column, int row) getCoordinateFromUser()
+        private static void setCoordinateFromUser()
         {
-            int column = 0;
-            int row = 0;
-            bool coordinateInputIsValid = false;
 
-            Console.WriteLine("Please enter your next move as a column number and row number:");
-            while (!coordinateInputIsValid)
+
+            string userPromtMessage = "Please enter your next move as a column number and row number:";
+
+            bool isParseSuccess = false;
+            bool isCoordinateValid = false;
+
+            while (!m_isKillSigRaised && !isParseSuccess && !isCoordinateValid)
             {
-                string columnInput = userInputRequest("Enter Column: ");
+                string userInput = userInputRequest(userPromtMessage + "\nEnter row:");
+                isParseSuccess = int.TryParse(userInput, out int row);
+
                 if (!m_isKillSigRaised)
                 {
-                    break;
-                }
-                string rowInput = userInputRequest("Enter Row: ");
-                if (!m_isKillSigRaised)
-                {
-                    coordinateInputIsValid = int.TryParse(columnInput, out column) && int.TryParse(rowInput, out row);
-                    if (!coordinateInputIsValid)
+                    userInput = userInputRequest("Enter column:");
+                    isParseSuccess &= int.TryParse(userInput, out int column);
+                    if (!m_isKillSigRaised && isParseSuccess)
                     {
-                        Console.WriteLine("Invalid input. Please enter a valid coordinate: ");
+                        m_currentMoveACK = GameEngine.SetNextMove((row - 1, column - 1));
+                        isCoordinateValid = m_currentMoveACK.m_Status != eGameStatus.Empty;
                     }
                 }
-            }
-            return (column, row);
-        }
 
-        private static void drawWinMessage(int i_scoreP1, int i_scoreP2, List<BoardEntry> i_winningStreak)
+
+
+
+                userPromtMessage = string.Format($"Invalid Input. ");
+                isParseSuccess = false;
+            }
+
+            Screen.Clear();
+        }
+    
+        private static void drawWinMessage(int i_scoreP1, int i_scoreP2, (Player winner, List<BoardEntry> winningStreak) i_WinningDetails)
         {
-            GameBoard.BoardEntry.eEntrySymbol winnerPlayerSymbol = i_winningStreak.Last().m_Symbol;
             StringBuilder winningMessage = new StringBuilder();
 
-            drawBoard(m_currentMoveACK.m_Board, i_winningStreak);
+            drawBoard(m_currentMoveACK.m_Board, i_WinningDetails.winningStreak);
 
-            winningMessage.Append(string.Format($"Well Done Player {(int)winnerPlayerSymbol}! You have won this round!"));
+            winningMessage.Append(string.Format($"Well Done Player {(int) i_WinningDetails.winner.m_Symbol}! You have won this round!"));
             winningMessage.Append(string.Format($"\nThe current score is {i_scoreP1} : {i_scoreP2}"));
 
             Console.WriteLine(winningMessage);
@@ -273,6 +287,7 @@ namespace GameTUI
         }
         private static void drawEndScreen()
         {
+            m_isKillSigRaised = true;
             Console.WriteLine("Thanks for playing our game!");
             Console.ReadLine();
         }
@@ -294,6 +309,4 @@ namespace GameTUI
         }
 
     }
-
-
 }

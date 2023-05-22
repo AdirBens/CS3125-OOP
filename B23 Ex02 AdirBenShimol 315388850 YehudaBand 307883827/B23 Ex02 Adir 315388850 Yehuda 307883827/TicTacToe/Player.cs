@@ -2,7 +2,7 @@
 
 namespace TicTacToe
 {
-    public struct Player
+    public class Player
     {
 
         public enum ePlayerStrategy
@@ -23,7 +23,7 @@ namespace TicTacToe
 
         public int m_Score
         {
-            get; private set;
+            get; internal set;
         }
 
         public Player(GameBoard.BoardEntry.eEntrySymbol i_Symbol, ePlayerStrategy i_Strategy)

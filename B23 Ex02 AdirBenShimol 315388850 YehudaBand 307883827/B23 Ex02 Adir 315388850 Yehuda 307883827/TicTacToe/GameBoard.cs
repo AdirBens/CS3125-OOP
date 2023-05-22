@@ -71,12 +71,17 @@ namespace TicTacToe
 
         internal bool SetEntry(BoardEntry.eEntrySymbol i_PlayerEntry, (int row, int column) i_Coordinate)
         {
-            BoardEntry entryToSet = m_Board[i_Coordinate.row, i_Coordinate.column];
-            bool isFreeToSet = !(entryToSet.CheckIfOccupied());
-            if (isFreeToSet && (i_Coordinate.column <= m_Board.Length && i_Coordinate.row <= m_Board.Length))
+            bool isFreeToSet = false;
+            if (i_Coordinate.column <= m_BoardSize && i_Coordinate.row <= m_BoardSize)
             {
-                entryToSet.m_Symbol = i_PlayerEntry;
-                m_NumEmptyEntries--;
+                BoardEntry entryToSet = m_Board[i_Coordinate.row, i_Coordinate.column];
+                isFreeToSet = !(entryToSet.CheckIfOccupied());
+
+                if (isFreeToSet)
+                {
+                    entryToSet.m_Symbol = i_PlayerEntry;
+                    m_NumEmptyEntries--;
+                }
             }
 
             return isFreeToSet;
@@ -93,8 +98,8 @@ namespace TicTacToe
 
         internal void ClearBoard()
         {
-            initBoard(m_Board.Length);
-            m_NumEmptyEntries = m_Board.Length * m_Board.Length;
+            initBoard(m_BoardSize);
+            m_NumEmptyEntries = m_BoardSize * m_BoardSize;
         }
 
         private void initBoard(int i_BoardSize)
@@ -110,7 +115,7 @@ namespace TicTacToe
 
         internal IEnumerable<BoardEntry> GetMainDiagonalIterator()
         {
-            for (int row = 0; row < m_Board.Length; row++)
+            for (int row = 0; row < m_BoardSize; row++)
             {
                 int col = row;
                 yield return m_Board[row, col];
@@ -119,16 +124,16 @@ namespace TicTacToe
 
         internal IEnumerable<BoardEntry> GetCounterDiagonalIterator()
         {
-            for (int row = 0; row < m_Board.Length; row++)
+            for (int col = m_BoardSize - 1; col >= 0; col--)
             {
-                int col = m_Board.Length - 1 - row;
+                int row = m_BoardSize - 1 - col;
                 yield return m_Board[row, col];
             }
         }
 
         internal IEnumerable<BoardEntry> GetColumnIterator(int i_ColumnNumber)
         {
-            for (int row = 0; row < m_Board.Length; row++)
+            for (int row = 0; row < m_BoardSize; row++)
             {
                 yield return m_Board[row, i_ColumnNumber];
             }
@@ -136,7 +141,7 @@ namespace TicTacToe
 
         internal IEnumerable<BoardEntry> GetRowIterator(int i_RowNumber)
         {
-            for (int col = 0; col < m_Board.Length; col++)
+            for (int col = 0; col < m_BoardSize; col++)
             {
                 yield return m_Board[i_RowNumber, col];
             }

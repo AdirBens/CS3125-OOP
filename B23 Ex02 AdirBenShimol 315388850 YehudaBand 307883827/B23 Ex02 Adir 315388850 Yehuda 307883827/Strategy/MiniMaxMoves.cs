@@ -11,7 +11,12 @@ namespace Strategy
 
         public static (int row, int col) GetBestMove()
         {
-            return (0, 0);
+            Random rnd = new Random();
+
+            int col = rnd.Next(0, 3);
+            int row = rnd.Next(0, 3);
+            
+            return (row, col);
         }
     }
 }

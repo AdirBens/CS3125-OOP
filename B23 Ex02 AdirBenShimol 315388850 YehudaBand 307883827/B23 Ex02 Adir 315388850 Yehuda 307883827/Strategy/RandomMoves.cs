@@ -8,5 +8,7 @@ namespace Strategy
 {
     internal class RandomMoves
     {
+
+
     }
 }

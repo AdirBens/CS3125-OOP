@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace TicTacToe
 {
@@ -83,9 +84,10 @@ namespace TicTacToe
         {
             eGameStatus gameStatus = eGameStatus.Empty;
             Player currentPlayer = m_Players[m_NumOfTurnPlayed % k_NumberOfPlayers];
-
+            
             if (m_Board.SetEntry(currentPlayer.m_Symbol, i_Coordinate) == true)
             {
+                m_lastMovePlayed = m_Board.GetBoardEntry(i_Coordinate.row, i_Coordinate.column);
                 gameStatus = GameStatusCheker.GetGameStatus(m_Board, m_lastMovePlayed, out m_WinningStrike);
                 m_NumOfTurnPlayed++;
                 currentPlayer = m_Players[m_NumOfTurnPlayed % k_NumberOfPlayers];
@@ -94,6 +96,11 @@ namespace TicTacToe
                     currentPlayer.m_Strategy == Player.ePlayerStrategy.AIStrategy)
                 {
                     gameStatus = playAIPlayer();
+                }
+
+                if (gameStatus == eGameStatus.Win)
+                {
+                    currentPlayer.m_Score++;
                 }
             }
 
@@ -107,12 +114,19 @@ namespace TicTacToe
         }
         public static (int PlayerOneScore, int PlayerTwoScore) GetScoreSummary()
         {
-            return (m_Players[0].m_Score, m_Players[1].m_Score);
+            int p1s = m_Players[0].m_Score;
+            int p2s = m_Players[1].m_Score;
+            
+            return (p1s, p2s);
         }
-        public static List<GameBoard.BoardEntry> GetWinStreak()
+
+        public static (Player winner, List<GameBoard.BoardEntry>) GetWinStreak()
         {
-            return m_WinningStrike;
+            Player currentPlayer = m_Players[m_NumOfTurnPlayed % k_NumberOfPlayers];
+
+            return (currentPlayer, m_WinningStrike);
         }
+
         public static int GetMinBoardSize()
         {
             return k_MinBoardSize;
@@ -133,7 +147,5 @@ namespace TicTacToe
             
             return GameStatusCheker.GetGameStatus(m_Board, m_lastMovePlayed, out m_WinningStrike);
         }
-
-
     }
 }
