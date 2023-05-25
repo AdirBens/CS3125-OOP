@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2DC79E15-A4C1-4AB7-8D7F-5BCBB04BCBB0}</ProjectGuid>
+    <ProjectGuid>{2C71BE42-D105-4BB9-8451-0CDCA5A53C85}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>TicTacToe</RootNamespace>
-    <AssemblyName>TicTacToe</AssemblyName>
+    <RootNamespace>GameUtils</RootNamespace>
+    <AssemblyName>GameUtils</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -40,15 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameBoard.cs" />
-    <Compile Include="GameEngine.cs" />
-    <Compile Include="GameStatusCheker.cs" />
+    <Compile Include="GameStatusChecker.cs" />
     <Compile Include="Player.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Strategy\Strategy.csproj">
-      <Project>{7b7a6ea2-eb87-4c66-9c17-8a6c2df51d88}</Project>
-      <Name>Strategy</Name>
-    </ProjectReference>
+    <Compile Include="BoardEntry.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

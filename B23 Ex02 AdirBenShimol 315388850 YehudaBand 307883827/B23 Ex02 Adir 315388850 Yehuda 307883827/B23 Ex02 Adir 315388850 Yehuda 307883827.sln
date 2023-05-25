@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{2DC79E15-A4C1-4AB7-8D7F-5BCBB04BCBB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerminalUI", "TerminalUI\TerminalUI.csproj", "{C3F9F396-EFFF-4EDA-AA01-E9D697995DB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strategy", "Strategy\Strategy.csproj", "{7B7A6EA2-EB87-4C66-9C17-8A6C2DF51D88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine", "GameEngine\GameEngine.csproj", "{1CD30033-26E0-4972-8BA0-BD3DEEB500D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameUI", "GameTUI\GameUI.csproj", "{5BA902B7-EE56-4016-8C5F-C93173995C40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameUtils", "GameUtils\GameUtils.csproj", "{2C71BE42-D105-4BB9-8451-0CDCA5A53C85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIStrategy", "AIStrategy\AIStrategy.csproj", "{ABCD52C5-4B12-4E14-8106-4B2D6DF0D665}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,23 +17,27 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2DC79E15-A4C1-4AB7-8D7F-5BCBB04BCBB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2DC79E15-A4C1-4AB7-8D7F-5BCBB04BCBB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2DC79E15-A4C1-4AB7-8D7F-5BCBB04BCBB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2DC79E15-A4C1-4AB7-8D7F-5BCBB04BCBB0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B7A6EA2-EB87-4C66-9C17-8A6C2DF51D88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B7A6EA2-EB87-4C66-9C17-8A6C2DF51D88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B7A6EA2-EB87-4C66-9C17-8A6C2DF51D88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B7A6EA2-EB87-4C66-9C17-8A6C2DF51D88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5BA902B7-EE56-4016-8C5F-C93173995C40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BA902B7-EE56-4016-8C5F-C93173995C40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BA902B7-EE56-4016-8C5F-C93173995C40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BA902B7-EE56-4016-8C5F-C93173995C40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3F9F396-EFFF-4EDA-AA01-E9D697995DB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3F9F396-EFFF-4EDA-AA01-E9D697995DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3F9F396-EFFF-4EDA-AA01-E9D697995DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3F9F396-EFFF-4EDA-AA01-E9D697995DB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CD30033-26E0-4972-8BA0-BD3DEEB500D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CD30033-26E0-4972-8BA0-BD3DEEB500D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CD30033-26E0-4972-8BA0-BD3DEEB500D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CD30033-26E0-4972-8BA0-BD3DEEB500D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C71BE42-D105-4BB9-8451-0CDCA5A53C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C71BE42-D105-4BB9-8451-0CDCA5A53C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C71BE42-D105-4BB9-8451-0CDCA5A53C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C71BE42-D105-4BB9-8451-0CDCA5A53C85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABCD52C5-4B12-4E14-8106-4B2D6DF0D665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABCD52C5-4B12-4E14-8106-4B2D6DF0D665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABCD52C5-4B12-4E14-8106-4B2D6DF0D665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCD52C5-4B12-4E14-8106-4B2D6DF0D665}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {938C45F0-1DF1-44B9-9940-63BF9ED42415}
+		SolutionGuid = {2191752E-C97E-49B0-AEA4-534BB44D5B93}
 	EndGlobalSection
 EndGlobal

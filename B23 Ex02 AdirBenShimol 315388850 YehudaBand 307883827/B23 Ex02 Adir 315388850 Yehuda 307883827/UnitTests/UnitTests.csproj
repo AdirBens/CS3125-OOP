@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5BA902B7-EE56-4016-8C5F-C93173995C40}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>GameTUI</RootNamespace>
-    <AssemblyName>GameTUI</AssemblyName>
+    <ProjectGuid>{2E8B1348-A5B7-4605-8A69-71F1D53F6F74}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>UnitTests</RootNamespace>
+    <AssemblyName>UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,23 +32,28 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UIMessages.cs" />
-    <Compile Include="TerminalUserInterface.cs" />
+    <Compile Include="Tester.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TicTacToe\TicTacToe.csproj">
-      <Project>{2dc79e15-a4c1-4ab7-8d7f-5bcbb04bcbb0}</Project>
-      <Name>TicTacToe</Name>
+    <ProjectReference Include="..\GameEngine\GameEngine.csproj">
+      <Project>{1cd30033-26e0-4972-8ba0-bd3deeb500d4}</Project>
+      <Name>GameEngine</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Ex02.ConsoleUtils">
-      <HintPath>..\..\..\..\..\..\..\..\..\..\temp\Ex02.ConsoleUtils.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\GameUtils\GameUtils.csproj">
+      <Project>{2c71be42-d105-4bb9-8451-0cdca5a53c85}</Project>
+      <Name>GameUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TerminalUI\TerminalUI.csproj">
+      <Project>{c3f9f396-efff-4eda-aa01-e9d697995db6}</Project>
+      <Name>TerminalUI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

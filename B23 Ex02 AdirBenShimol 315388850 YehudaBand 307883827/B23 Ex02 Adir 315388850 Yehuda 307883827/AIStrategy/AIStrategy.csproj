@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7B7A6EA2-EB87-4C66-9C17-8A6C2DF51D88}</ProjectGuid>
+    <ProjectGuid>{ABCD52C5-4B12-4E14-8106-4B2D6DF0D665}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Strategy</RootNamespace>
-    <AssemblyName>Strategy</AssemblyName>
+    <RootNamespace>AIStrategy</RootNamespace>
+    <AssemblyName>AIStrategy</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,8 +39,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MiniMaxMoves.cs" />
     <Compile Include="RandomMoves.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameUtils\GameUtils.csproj">
+      <Project>{2c71be42-d105-4bb9-8451-0cdca5a53c85}</Project>
+      <Name>GameUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
