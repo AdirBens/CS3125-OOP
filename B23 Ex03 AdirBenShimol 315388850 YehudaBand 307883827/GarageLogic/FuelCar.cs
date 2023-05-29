@@ -12,7 +12,7 @@ namespace GarageLogic
         {
             get; set;
         }
-        internal eNumOfDoors m_NumOfDoors
+        internal int m_NumOfDoors
         {
             get; set;
         }
