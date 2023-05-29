@@ -6,7 +6,8 @@ using System.Collections.Generic;
 
 namespace GarageLogic
 {
-    public abstract class Vehicle
+    
+    abstract class Vehicle
     {
         internal string m_LicencePlate { get; set; }
         internal string m_ModelName { get; set; }

@@ -32,25 +32,25 @@ namespace GarageLogic
 
     public enum eNumOfDoors
     {
+        Empty,
         Two,
         Three,
         Four,
-        Five,
-        Unknown
+        Five
     }
 
     public enum eLicenseClass
     {
+        Empty,
         A1,
         A2,
         AA,
-        B1,
-        Unknown
+        B1
     }
 
     public enum eVehicelStatus
     {
-        Unknown,
+        Empty,
         InRepair,
         Repaired,
         Payed

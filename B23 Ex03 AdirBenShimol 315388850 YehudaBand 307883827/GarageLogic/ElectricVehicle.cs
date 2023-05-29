@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace GarageLogic
+﻿namespace GarageLogic
 {
     internal abstract class ElectricVehicle : Vehicle
     {
