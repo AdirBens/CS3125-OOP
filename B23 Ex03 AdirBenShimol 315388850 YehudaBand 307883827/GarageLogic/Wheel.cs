@@ -1,23 +1,34 @@
 ﻿
+using System.Collections.Generic;
+
 namespace GarageLogic
 {
-    public class Wheel
+    /// [?] Do we need to implement InflateTire(tireIndex, airPressure) 
+    internal class Wheel
     {
-        private readonly string m_Manufacturer;
-        internal float m_CurrentTirePressure { get; set; }
         internal readonly float m_RecommendedTirePressure;
+        internal float m_CurrentTirePressure { get; set; }
 
-        internal Wheel(string i_Manufacturer, float i_CurrentTirePressure, float i_RecommendedTirePressure)
+        private string m_Manufacturer { get; set; }
+
+        private Wheel(float i_RecommendedTirePressure)
         {
-            m_Manufacturer = i_Manufacturer;
-            m_CurrentTirePressure = i_CurrentTirePressure;
             m_RecommendedTirePressure = i_RecommendedTirePressure;
+            m_CurrentTirePressure = 0;
         }
-        internal void InflateTire(int i_AirPressureToAdd)
+
+        internal static List<Wheel> CreateWheelsCollection(int i_NumWheels, float i_RecommendedTirePressure)
         {
-            if (m_CurrentTirePressure + i_AirPressureToAdd < m_RecommendedTirePressure)
+            List<Wheel> wheels = new List<Wheel>();
+
+            return wheels;
+        }
+
+        internal void InflateTire(int i_AirPressure)
+        {
+            if (m_CurrentTirePressure + i_AirPressure < m_RecommendedTirePressure)
             {
-                m_CurrentTirePressure += i_AirPressureToAdd;
+                m_CurrentTirePressure += i_AirPressure;
             }
             else
             {
@@ -26,3 +37,26 @@ namespace GarageLogic
         }
     }
 }
+
+
+//        private void AddWheelsToVehicle(List<(string i_Manufacturer, float i_CurrentTirePressure)> i_WheelsDetails,
+//    float i_RecommendedTirePressure, out List<Wheel> o_Wheels)
+//        {
+//            o_Wheels = new List<Wheel>();
+//            foreach ((string manufacturer, float currentTirePressure) wheelDetaisl in i_WheelsDetails)
+//            {
+//                try
+//                {
+//                    if (wheelDetaisl.currentTirePressure < i_RecommendedTirePressure)
+//                    {
+//                        o_Wheels.Add(new Wheel(wheelDetaisl.manufacturer, wheelDetaisl.currentTirePressure, i_RecommendedTirePressure));
+//                    }
+//                }
+//                catch
+//                {
+//                    ///Raise exception
+//                }
+//            }
+//        }
+//    }
+

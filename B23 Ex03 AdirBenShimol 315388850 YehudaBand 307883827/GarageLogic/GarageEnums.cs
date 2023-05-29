@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace GarageLogic
 {
-    public enum eNumOfWheels
+    public enum eVehicleType
     {
-        Two = 2,
-        Five = 5,
-        Fourteen = 14
-    }
-    public enum eVehicleAttribute
-    {
-        Unknown,
+        Empty,
+        ElectricCar,
+        ElectricMotorcycle,
+        FuelCar,
+        FuelMotorcycle,
+        FuelTruck
     }
 
-    public enum eFuelType
+    public enum eEnergySourceType
     {
-        Unknown,
+        Empty = 0,
         Diesel,
         Octane95,
         Octane96,
-        Octane98
+        Octane98,
+        Battery
     }
 
     public enum eBodyColour

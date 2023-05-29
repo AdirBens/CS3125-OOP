@@ -1,31 +1,27 @@
-﻿using System.Collections.Generic;
-
+﻿
 namespace GarageLogic
 {
     internal class FuelCar : FuelVehicle
     {
-        internal readonly eBodyColour m_BodyColour;
-        internal readonly eNumOfDoors m_NumOfDoors;
-
         private const float k_RecommendedTirePressure = 33;
-        private const float k_FuelTankCapacity = 46;
-        private const eFuelType k_FuelType = eFuelType.Octane95;
+        private const int k_NumOfWheels = 5;
+        private const float k_FuelTankMaxCapacity = 46;
+        private const eEnergySourceType k_FuelType = eEnergySourceType.Octane95;
 
-
-        internal FuelCar(string i_modelName, string i_licensePlate, string i_energyPercentage,
-            List<(string i_Manufacturer, float i_CurrentTirePressure)> i_WheelsDetails, (string i_Name, string i_PhoneNumber) i_ownerDetails,
-            float i_CurrentFuelTankLevel,
-            eBodyColour i_BodyColour, eNumOfDoors i_NumOfDoors)
-            : base(i_modelName, i_licensePlate, i_energyPercentage, i_WheelsDetails, k_RecommendedTirePressure,
-                  i_ownerDetails, i_CurrentFuelTankLevel, k_FuelTankCapacity, k_FuelType)
+        internal eBodyColour m_BodyColour
         {
-            m_NumOfDoors = i_NumOfDoors;
-            m_BodyColour = i_BodyColour;
+            get; set;
         }
-        internal override Dictionary<eVehicleAttribute, string> GetVehicleAttributes()
+        internal eNumOfDoors m_NumOfDoors
         {
-            Dictionary<eVehicleAttribute, string> vehicleAttributes = new Dictionary<eVehicleAttribute, string>();
-            return vehicleAttributes;
+            get; set;
+        }
+
+        internal FuelCar(string i_LicensePlate)
+        {
+            m_LicencePlate = i_LicensePlate;
+            m_EnergySource = new EnergySource(k_FuelType, k_FuelTankMaxCapacity);
+            m_Wheels = Wheel.CreateWheelsCollection(k_NumOfWheels, k_RecommendedTirePressure);
         }
     }
 }

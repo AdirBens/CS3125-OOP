@@ -4,27 +4,24 @@ namespace GarageLogic
 {
     internal class FuelMotorcycle : FuelVehicle
     {
-        internal readonly eLicenseClass m_LicenseClass;
-        private readonly int m_EngineDisplacement;
-
         private const float k_RecommendedTirePressure = 31;
-        private const float k_FuelTankCapacity = (float)6.4;
-        private const eFuelType k_FuelType = eFuelType.Octane98;
-
-        internal FuelMotorcycle(string i_modelName, string i_licensePlate, string i_energyPercentage,
-            List<(string i_Manufacturer, float i_CurrentTirePressure)> i_WheelsDetails, (string i_Name, string i_PhoneNumber) i_ownerDetails,
-            float i_CurrentFuelTankLevel, eLicenseClass i_LicenseClass, int i_EngineDisplacement)
-            : base(i_modelName, i_licensePlate, i_energyPercentage, i_WheelsDetails, k_RecommendedTirePressure,
-                  i_ownerDetails, i_CurrentFuelTankLevel, k_FuelTankCapacity, k_FuelType)
+        private const int k_NumOfWheels = 2;
+        private const float k_FuelTankMaxCapacity = 6.4f;
+        private const eEnergySourceType k_FuelType = eEnergySourceType.Octane98;
+        internal eLicenseClass m_LicenseClass
         {
-            m_LicenseClass = i_LicenseClass;
-            m_EngineDisplacement = i_EngineDisplacement;
+            get; set;
+        }
+        internal int m_EngineDisplacement
+        {
+            get; set;
         }
 
-        internal override Dictionary<eVehicleAttribute, string> GetVehicleAttributes()
+        internal FuelMotorcycle(string i_LicensePlate)
         {
-            Dictionary<eVehicleAttribute, string> vehicleAttributes = new Dictionary<eVehicleAttribute, string>();
-            return vehicleAttributes;
+            m_LicencePlate = i_LicensePlate;
+            m_EnergySource = new EnergySource(k_FuelType, k_FuelTankMaxCapacity);
+            m_Wheels = Wheel.CreateWheelsCollection(k_NumOfWheels, k_RecommendedTirePressure);
         }
     }
 }

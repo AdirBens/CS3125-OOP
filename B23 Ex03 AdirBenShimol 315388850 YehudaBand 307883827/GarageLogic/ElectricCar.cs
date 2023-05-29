@@ -1,30 +1,26 @@
-﻿using System.Collections.Generic;
-
-namespace GarageLogic
+﻿namespace GarageLogic
 {
     internal class ElectricCar : ElectricVehicle
     {
-        internal readonly eBodyColour m_BodyColour;
-        internal readonly eNumOfDoors m_NumOfDoors;
-
-        private const float k_BatteryCapacity = (float)5.2;
         private const float k_RecommendedTirePressure = 33;
+        private const int k_NumOfWheels = 5;
+        private const float k_BatteryMaxCapacity = 5.2f;
+        private const eEnergySourceType k_EnergySourceType = eEnergySourceType.Battery;
 
-        internal ElectricCar(string i_modelName, string i_licensePlate, string i_energyPercentage,
-            List<(string i_Manufacturer, float i_CurrentTirePressure)> i_WheelsDetails,
-            (string i_Name, string i_PhoneNumber) i_ownerDetails, float i_remainingBatteryTime,
-            eBodyColour i_bodyColour, eNumOfDoors i_numOfDoors)
-            : base(i_modelName, i_licensePlate, i_energyPercentage, i_WheelsDetails, k_RecommendedTirePressure,
-                i_ownerDetails, i_remainingBatteryTime, k_BatteryCapacity)
+        internal eBodyColour m_BodyColour
         {
-            m_BodyColour = i_bodyColour;
-            m_NumOfDoors = i_numOfDoors;
+            get; set;
+        }
+        internal int m_NumOfDoors
+        {
+            get; set;
         }
 
-        internal override Dictionary<eVehicleAttribute, string> GetVehicleAttributes()
+        internal ElectricCar(string i_LicensePlate)
         {
-            Dictionary<eVehicleAttribute, string> vehicleAttributes = new Dictionary<eVehicleAttribute, string>();
-            return vehicleAttributes;
+            m_LicencePlate = i_LicensePlate;
+            m_EnergySource = new EnergySource(k_EnergySourceType, k_BatteryMaxCapacity);
+            m_Wheels = Wheel.CreateWheelsCollection(k_NumOfWheels, k_RecommendedTirePressure);
         }
     }
 }
