@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{85D1070D-6A03-415E-8FEF-66F1395FA848}</ProjectGuid>
+    <ProjectGuid>{BFD2BF9B-E80C-4B54-8FB3-7F4FD1029AAD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GarageLogic</RootNamespace>
-    <AssemblyName>GarageLogic</AssemblyName>
+    <RootNamespace>Ex01_03</RootNamespace>
+    <AssemblyName>Ex01_03</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,27 +32,21 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ElectricCar.cs" />
-    <Compile Include="ElectricMotorcycle.cs" />
-    <Compile Include="ElectricVehicle.cs" />
-    <Compile Include="EnergySource.cs" />
-    <Compile Include="FuelCar.cs" />
-    <Compile Include="FuelMotorcycle.cs" />
-    <Compile Include="FuelTruck.cs" />
-    <Compile Include="FuelVehicle.cs" />
-    <Compile Include="GarageEnums.cs" />
-    <Compile Include="OwnerCard.cs" />
-    <Compile Include="Test.cs" />
-    <Compile Include="Vehicle.cs" />
-    <Compile Include="VehicleBuilder.cs" />
-    <Compile Include="Wheel.cs" />
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ex01_01\Ex01_01.csproj">
+      <Project>{8eb0461c-d650-4521-bc10-ceba1ce3c219}</Project>
+      <Name>Ex01_01</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ex01_02\Ex01_02.csproj">
+      <Project>{b4d9bd2c-dc37-4c46-bf89-e7ac94646271}</Project>
+      <Name>Ex01_02</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -41,11 +41,11 @@ namespace GarageLogic
 
     public enum eLicenseClass
     {
+        Empty = 0,
         A1,
         A2,
         AA,
-        B1,
-        Unknown
+        B1
     }
 
     public enum eVehicelStatus
@@ -55,5 +55,4 @@ namespace GarageLogic
         Repaired,
         Payed
     }
-
 }

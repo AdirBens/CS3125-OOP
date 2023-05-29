@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{85D1070D-6A03-415E-8FEF-66F1395FA848}</ProjectGuid>
+    <ProjectGuid>{8EB0461C-D650-4521-BC10-CEBA1CE3C219}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GarageLogic</RootNamespace>
-    <AssemblyName>GarageLogic</AssemblyName>
+    <RootNamespace>Ex01_01</RootNamespace>
+    <AssemblyName>Ex01_01</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,27 +32,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ElectricCar.cs" />
-    <Compile Include="ElectricMotorcycle.cs" />
-    <Compile Include="ElectricVehicle.cs" />
-    <Compile Include="EnergySource.cs" />
-    <Compile Include="FuelCar.cs" />
-    <Compile Include="FuelMotorcycle.cs" />
-    <Compile Include="FuelTruck.cs" />
-    <Compile Include="FuelVehicle.cs" />
-    <Compile Include="GarageEnums.cs" />
-    <Compile Include="OwnerCard.cs" />
-    <Compile Include="Test.cs" />
-    <Compile Include="Vehicle.cs" />
-    <Compile Include="VehicleBuilder.cs" />
-    <Compile Include="Wheel.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
