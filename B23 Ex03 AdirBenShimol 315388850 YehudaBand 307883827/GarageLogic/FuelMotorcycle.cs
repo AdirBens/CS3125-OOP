@@ -7,20 +7,18 @@ namespace GarageLogic
         internal readonly eLicenseClass m_LicenseClass;
         private readonly int m_EngineDisplacement;
 
-        private const float k_TirePressureCapacity = 31;
-        private const float k_FuelTankCapacity = (float) 6.4;
+        private const float k_RecommendedTirePressure = 31;
+        private const float k_FuelTankCapacity = (float)6.4;
+        private const eFuelType k_FuelType = eFuelType.Octane98;
 
-        internal FuelMotorcycle(string i_modelName, string i_licensePlate, string i_energyPercentage, List<Wheel> i_Wheels, OwnerCard i_ownerCard,
-            float i_CurrentFuelTankLevel,
-            eLicenseClass i_LicenseClass, int i_EngineDisplacement)
-            : base(i_modelName, i_licensePlate, i_energyPercentage, i_Wheels, i_ownerCard, i_CurrentFuelTankLevel)
+        internal FuelMotorcycle(string i_modelName, string i_licensePlate, string i_energyPercentage,
+            List<(string i_Manufacturer, float i_CurrentTirePressure)> i_WheelsDetails, (string i_Name, string i_PhoneNumber) i_ownerDetails,
+            float i_CurrentFuelTankLevel, eLicenseClass i_LicenseClass, int i_EngineDisplacement)
+            : base(i_modelName, i_licensePlate, i_energyPercentage, i_WheelsDetails, k_RecommendedTirePressure,
+                  i_ownerDetails, i_CurrentFuelTankLevel, k_FuelTankCapacity, k_FuelType)
         {
             m_LicenseClass = i_LicenseClass;
             m_EngineDisplacement = i_EngineDisplacement;
-            
-            this.m_FuelType = eFuelType.Octane98;
-            this.m_FuelTankCapacity = k_FuelTankCapacity;
-
         }
 
         internal override Dictionary<eVehicleAttribute, string> GetVehicleAttributes()

@@ -8,8 +8,8 @@ namespace GarageLogic
 {
     public class OwnerCard
     {
-        internal string m_Name { get; private set; }  
-        internal string m_PhoneNumber { get; private set; }    
+        internal string m_Name { get; private set; }
+        internal string m_PhoneNumber { get; private set; }
 
         internal OwnerCard(string i_Name, string i_PhoneNumber)
         {
