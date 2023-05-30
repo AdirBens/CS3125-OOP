@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GarageLogic
 {
-    internal class OwnerCard
+    internal class ClientRecord
     {
-        internal string m_Name 
+        internal string m_ClientName 
         { 
             get; set; 
         }
@@ -17,9 +17,9 @@ namespace GarageLogic
             get; set; 
         }
 
-        internal OwnerCard(string i_Name, string i_PhoneNumber)
+        internal ClientRecord(string i_Name, string i_PhoneNumber)
         {
-            m_Name = i_Name;
+            m_ClientName = i_Name;
             m_PhoneNumber = i_PhoneNumber;
         }
     }

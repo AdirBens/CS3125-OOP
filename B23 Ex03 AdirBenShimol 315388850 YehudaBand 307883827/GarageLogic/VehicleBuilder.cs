@@ -1,6 +1,6 @@
-﻿using System;
+﻿using GarageLogic.SupportedVehicles;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace GarageLogic
 {
@@ -9,65 +9,130 @@ namespace GarageLogic
         internal enum eVehicleType
         {
             Empty = 0,
-            ElectricMotorcycle,
             ElectricCar,
-            FuelMotorcycle,
+            ElectricMotorcycle,
             FuelCar,
+            FuelMotorcycle,
             FuelTruck
         }
 
-        private static Vehicle m_AssmleVehicle;
-        /// change to private after testing
-        internal static IEnumerable<PropertyInfo>  m_PropertiesToSet;
-        private static PropertyInfo m_CurrentPropertyToSet;
-
-        internal static Vehicle GetVehicle(string i_LicencePlate, eVehicleType i_VehicleType)
+        private static readonly Dictionary<eVehicleType, int> sr_WheelsNumber = 
+            new Dictionary<eVehicleType, int>()
         {
-            initNewVehicle(i_LicencePlate, i_VehicleType);
-            return m_AssmleVehicle;
-        }
+            { eVehicleType.ElectricCar, 5 },
+            { eVehicleType.ElectricMotorcycle, 2 },
+            { eVehicleType.FuelCar, 5 },
+            { eVehicleType.FuelMotorcycle, 2 },
+            { eVehicleType.FuelTruck, 14 }
+        };
 
-        private static void initNewVehicle(string i_LicencePlate, eVehicleType i_VehicleType)
+        private static readonly Dictionary<eVehicleType, float> sr_WheelsAirPressure =
+            new Dictionary<eVehicleType, float>()
         {
-            switch (i_VehicleType)
+            { eVehicleType.ElectricCar, 31 },
+            { eVehicleType.ElectricMotorcycle, 33 },
+            { eVehicleType.FuelCar, 31 },
+            { eVehicleType.FuelMotorcycle, 33 },
+            { eVehicleType.FuelTruck, 26 }
+        };
+
+        private static readonly Dictionary<eVehicleType, FuelTank.eFuelType> sr_FuelType =
+            new Dictionary<eVehicleType, FuelTank.eFuelType>()
+        {
+            { eVehicleType.FuelCar, FuelTank.eFuelType.Octane95 },
+            { eVehicleType.FuelMotorcycle, FuelTank.eFuelType.Octane98 },
+            { eVehicleType.FuelTruck,  FuelTank.eFuelType.Diesel }
+        };
+
+        private static readonly Dictionary<eVehicleType, float> sr_EnergySourceCapacity =
+            new Dictionary<eVehicleType, float>()
+        {
+            { eVehicleType.ElectricCar, 5.2f },
+            { eVehicleType.ElectricMotorcycle, 2.6f },
+            { eVehicleType.FuelCar, 46 },
+            { eVehicleType.FuelMotorcycle, 6.4f },
+            { eVehicleType.FuelTruck, 135 }
+        };
+
+        internal static Vehicle CreateVehicle(string i_LicencePlate, eVehicleType i_VehicleType)
+        {
+            //// TODO: consider to change to Switch case with `jump to`
+            Vehicle assembledVehicle;
+
+            if (i_VehicleType == eVehicleType.FuelCar ||
+                i_VehicleType == eVehicleType.ElectricCar)
             {
-                case eVehicleType.ElectricMotorcycle:
-                    m_AssmleVehicle = new ElectricMotorcycle(i_LicencePlate);
-                    break;
-                case eVehicleType.ElectricCar:
-                    m_AssmleVehicle = new ElectricCar(i_LicencePlate);
-                    break;
-                case eVehicleType.FuelMotorcycle:
-                    m_AssmleVehicle = new FuelMotorcycle(i_LicencePlate);
-                    break;
-                case eVehicleType.FuelCar:
-                    m_AssmleVehicle = new FuelCar(i_LicencePlate);
-                    break;
-                case eVehicleType.FuelTruck:
-                    m_AssmleVehicle = new FuelTruck(i_LicencePlate);
-                    break;
-                default:
-                    // TODO: Implement Unsupported Vehicle Type Exception
-                    throw new Exception();
+                assembledVehicle = new Car(i_LicencePlate);
             }
-        }
-
-        internal static void SetEnergyStatus(float i_EnergyLevel)
-        {
-            m_AssmleVehicle.m_EnergySource.m_CurrentLevel = i_EnergyLevel;
-        }
-
-        internal static void setWheelsStatus(float i_TirePressure, bool i_SetAll)
-        {
-            if (i_SetAll)
+            else if (i_VehicleType == eVehicleType.FuelMotorcycle ||
+                     i_VehicleType == eVehicleType.ElectricMotorcycle)
             {
-                m_AssmleVehicle.m_Wheels.ForEach(wheel => { wheel.m_CurrentTirePressure = i_TirePressure; });
+                assembledVehicle = new Motorcycle(i_LicencePlate);
             }
+            else if (i_VehicleType == eVehicleType.FuelTruck)
+            {
+                assembledVehicle = new Truck(i_LicencePlate);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+
+            assembledVehicle.m_EnergySource = buildEnergyUnit(i_VehicleType);
+            assembledVehicle.m_Wheels = buildWheels(i_VehicleType);
+
+            return assembledVehicle;
         }
 
-        internal static void setMetadata()
+        private static EnergySource buildEnergyUnit(eVehicleType i_VehicleType)
         {
-            m_PropertiesToSet = m_AssmleVehicle.GetType().GetRuntimeProperties();
+            EnergySource energyUnit = null;
+            float capacity;
+            
+            if (sr_EnergySourceCapacity.TryGetValue(i_VehicleType, out capacity))
+            {
+                if (i_VehicleType == eVehicleType.FuelCar ||
+                    i_VehicleType == eVehicleType.FuelMotorcycle ||
+                    i_VehicleType == eVehicleType.FuelTruck)
+                {
+                    FuelTank.eFuelType fuelType;
+                    if (sr_FuelType.TryGetValue(i_VehicleType, out fuelType))
+                    {
+                        energyUnit = new FuelTank(fuelType, capacity);
+                    }
+                    else
+                    {
+                        throw new ArgumentException();
+                    }
+                }
+                else if (i_VehicleType == eVehicleType.ElectricCar ||
+                         i_VehicleType == eVehicleType.ElectricMotorcycle)
+                {
+                    energyUnit = new Battery(capacity);
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+
+            return energyUnit;
+        }
+
+        private static List<Wheel> buildWheels(eVehicleType i_VehicleType)
+        {
+            List<Wheel> wheels = null;
+            float airPressure;
+            int wheelNumber;
+
+            if (sr_WheelsAirPressure.TryGetValue(i_VehicleType, out airPressure) && 
+                sr_WheelsNumber.TryGetValue(i_VehicleType, out wheelNumber))
+            {
+                wheels = Wheel.CreateWheelsCollection(wheelNumber, airPressure);
+            }
+            else { throw new ArgumentException(); }
+
+            return wheels;
         }
     }
 }

@@ -9,21 +9,48 @@ namespace GarageLogic
 {
     public class Test
     {
-
         public static void Main()
         {
             Console.WriteLine("type number:");
             int.TryParse(Console.ReadLine(), out int typeNumber);
-            VehicleBuilder.eVehicleType vType = (VehicleBuilder.eVehicleType) typeNumber;
 
-            Vehicle v = VehicleBuilder.GetVehicle("123", vType);
-            Console.WriteLine(v);
+            Vehicle v = VehicleBuilder.CreateVehicle("1234", (VehicleBuilder.eVehicleType)3);
+            List<PropertyInfo> properties = v.GetType().GetRuntimeProperties().ToList();
 
-            foreach(PropertyInfo p in  v.GetType().GetRuntimeProperties())
+            foreach(PropertyInfo property in properties)
             {
-                string i = (p.GetValue(v) == null) ? string.Empty : p.Name;
-                Console.WriteLine(p.Name + ": " + p.GetValue(v) + " " + i);
+                try
+                {
+                    Console.WriteLine(property.Name + " [ " + printArr(property.PropertyType.GetEnumNames()) + " ]");    
+                }
+                catch(ArgumentException aex) 
+                { 
+                    Console.WriteLine(property.Name);                
+                }
             }
+        }
+
+        private static string printArr(string[] arr)
+        {
+            StringBuilder s = new StringBuilder();
+            foreach (string item in arr)
+            {
+                s.Append(" " + item + ", ");
+            }
+
+            return s.ToString();
         }
     }
 }
+/*         Dictionary<string, string[]> s = GarageAgent.GetRequireadDetails("123", typeNumber);
+         foreach (string property in s.Keys)
+         {
+             Console.WriteLine(property);
+             if (s[property] != null)
+             {
+                 printArr(s[property]);
+             }
+
+         }
+     }
+     */
