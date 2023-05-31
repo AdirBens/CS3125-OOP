@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GarageLogic
 {
-    internal class ClientRecord
+    internal struct ClientRecord
     {
         internal string m_ClientName 
         { 
@@ -15,12 +15,6 @@ namespace GarageLogic
         internal string m_PhoneNumber 
         { 
             get; set; 
-        }
-
-        internal ClientRecord(string i_Name, string i_PhoneNumber)
-        {
-            m_ClientName = i_Name;
-            m_PhoneNumber = i_PhoneNumber;
         }
     }
 }

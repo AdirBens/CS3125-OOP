@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GarageLogic.Exceptions
 {
-    internal class ValueOutOfRangeException: Exception
+    public class ValueOutOfRangeException: Exception
     {
 
         private readonly float r_MaxValue;

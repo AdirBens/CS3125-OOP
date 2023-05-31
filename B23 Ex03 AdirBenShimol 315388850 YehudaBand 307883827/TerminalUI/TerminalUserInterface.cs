@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using TerminalUI;
 using GarageLogic;
-using GarageLogic.Exceptions;
-using System.Runtime.Remoting.Messaging;
 
 namespace ConsoleUI
 {
@@ -50,8 +48,7 @@ namespace ConsoleUI
                                 showVehicleDetails();
                                 break;
                             case eUserAction.ExitProgram:
-                                TerminalRenderer.renderEndProgramScreen();
-                                break;
+                                throw new QuitProgramRaiseException();
                         }
                         actionFinished = true;
                     }
@@ -62,12 +59,6 @@ namespace ConsoleUI
                     catch (ArgumentException fe)
                     {
                         TerminalRenderer.renderExceptionMessage(fe.Message);
-                    }
-                    ///ASK Adir to change access modifier
-                    ///catch (ValueOutOfRangeException) { }
-                    catch (BackSignalRaiseException bsre)
-                    {
-                        actionFinished = true;
                     }
                     finally
                     {
@@ -87,7 +78,7 @@ namespace ConsoleUI
                     TerminalRenderer.renderTitle(UIMessages.k_MainMenuTitle);
                     TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_ActionListHeaderRequest, actionChoices);
 
-                    int userNumChoice = (int) readInputAsFloat("");
+                    int userNumChoice = readInputAsInt("");
                     validateInput(userNumChoice, typeof(eUserAction));
 
                     eUserAction userAction = (eUserAction)userNumChoice;
@@ -115,13 +106,13 @@ namespace ConsoleUI
             if (!isVehicleInSystem)
             {
                 TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_VehicleTypeRequest, GarageAgent.GetSupportedVehicleTypes());
-                int vehicleTypeID = (int) readInputAsFloat("");
+                int vehicleTypeID = readInputAsInt("");
 
                 Dictionary<string, string[]> missingDetails = GarageAgent.GetRequireadDetails(licensePlate, vehicleTypeID);
                 Dictionary<string, string> detailsForAgent;
 
                 detailsForAgent = getMissingDetailsFromUser(missingDetails);
-                GarageAgent.SetRequireadDetails(detailsForAgent);
+                GarageAgent.SetRequireadDetails(licensePlate, detailsForAgent);
 
                 TerminalRenderer.renderMessageAndRedirect(UIMessages.k_VehicleAddedMessage);
             }
@@ -166,15 +157,16 @@ namespace ConsoleUI
         private void showVehicleList()
         {
             TerminalRenderer.renderTitle(UIMessages.k_ShowVehicleListTitle);
-            
+
             TerminalRenderer.renderFilterByStatusRequest(GarageAgent.GetVehicleStatusTypes());
 
-            int vehicleStatusID = (int) readInputAsFloat("");
+            int vehicleStatusID = readInputAsInt("");
 
-            List<string> filteredList = null;///DELETE THIS AFTER ADIR CHANGES FROM VOID
-            ///List<string> filteredList = GarageAgent.GetVehiclesByStatus(vehicleStatusID);
+            List<string> filteredList = GarageAgent.GetVehiclesByStatus(vehicleStatusID);
 
             TerminalRenderer.renderShowVehicleList(filteredList);
+            TerminalRenderer.renderSuccsfulActionMessage();
+
         }
 
         private void modifyVehicleStatus()
@@ -188,7 +180,7 @@ namespace ConsoleUI
 
             TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_SetVehicleStatusRequest, vehicleStatusTypes);
 
-            vehicleStatusAsNumber = (int) readInputAsFloat("");
+            vehicleStatusAsNumber = readInputAsInt("");
 
             GarageAgent.UpdateVehicleStatus(licensePlate, vehicleStatusAsNumber);
 
@@ -209,20 +201,18 @@ namespace ConsoleUI
 
             TerminalRenderer.renderInflateTiresRequest();
 
-            int userNumChoice = (int)readInputAsFloat("");
+            int userNumChoice = readInputAsInt("");
             validateInput(userNumChoice, typeof(eTireInflationOptions));
 
             eTireInflationOptions chosenInflationOption = (eTireInflationOptions)userNumChoice;
             switch (chosenInflationOption)
             {
                 case (eTireInflationOptions.InflateAllToMaxCapacity):
-                    ///inflate to max implementation  - ADIR
-                    GarageAgent.InflateTires(licensePlate, 0);
+                    GarageAgent.InflateTires(licensePlate, i_InflateToMax: true);
                     break;
                 case (eTireInflationOptions.InflateAllToGivenAirPressure):
-                    float PSIToFill;
-                    PSIToFill = readInputAsFloat(UIMessages.k_SpecifiedPSIRequest);
-                    GarageAgent.InflateTires(licensePlate, PSIToFill);
+                    float airPressureToFill = readInputAsFloat(UIMessages.k_SpecifiedAirPressureRequest);
+                    GarageAgent.InflateTires(licensePlate, airPressureToFill);
                     break;
             }
             TerminalRenderer.renderSuccsfulActionMessage();
@@ -237,9 +227,9 @@ namespace ConsoleUI
             string[] fuelTypes = GarageAgent.GetFuelTypes();
 
             TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_FuelVehicleTypeRequest, fuelTypes);
-            int fuelTypeAsNumber = (int) readInputAsFloat("");
+            int fuelTypeAsNumber = readInputAsInt("");
 
-            float numOfLiters = readInputAsFloat(TerminalRenderer.asActionString(UIMessages.k_NumOfLitersToFuelRequest), true);
+            float numOfLiters = readInputAsFloat(TerminalRenderer.asActionString(UIMessages.k_NumOfLitersToFuelRequest));
 
 
             GarageAgent.ReFuel(licensePlate, fuelTypeAsNumber, numOfLiters);
@@ -254,7 +244,7 @@ namespace ConsoleUI
             string licensePlate = getLicensePlateFromUser();
 
             string numOfMinutesToChargeRequest = TerminalRenderer.asActionString(UIMessages.k_NumOfMinutesToChargeRequest);
-            float chargingDuration = readInputAsFloat(numOfMinutesToChargeRequest, true);
+            float chargingDuration = readInputAsFloat(numOfMinutesToChargeRequest);
 
             GarageAgent.ReChargeBattery(licensePlate, chargingDuration);
 
@@ -294,29 +284,26 @@ namespace ConsoleUI
             TerminalRenderer.renderMessage(i_MessageDialog);
             string userInput = Console.ReadLine();
 
-            if (userInput.Equals(k_BackSignalFromUser) == true)
-            {
-                throw new BackSignalRaiseException();
-            }
-
             return userInput;
         }
 
-        private float readInputAsFloat(string i_MessageDialog, bool executeFloatValidation = false)
+        private float readInputAsFloat(string i_MessageDialog)
         {
-            bool isParseSuccess;
             string inputString = readInputLine(i_MessageDialog);
-            float numToReturn;
+            bool isParseSuccess = float.TryParse(inputString, out float numToReturn);
 
-            if (executeFloatValidation)
+            if (!isParseSuccess)
             {
-                isParseSuccess = float.TryParse(inputString, out numToReturn);
+                throw new FormatException(UIMessages.k_FormatExceptionNumParse);
             }
-            else
-            {
-                isParseSuccess = int.TryParse(inputString, out int inputNumberInt);
-                numToReturn = inputNumberInt;
-            }
+
+            return numToReturn;
+        }
+
+        private int readInputAsInt(string i_MessageDialog)
+        {
+            string inputString = readInputLine(i_MessageDialog);
+            bool isParseSuccess = int.TryParse(inputString, out int numToReturn);
 
             if (!isParseSuccess)
             {

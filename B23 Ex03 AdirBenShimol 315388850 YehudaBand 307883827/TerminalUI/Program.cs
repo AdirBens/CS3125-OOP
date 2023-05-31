@@ -1,13 +1,21 @@
 ﻿using ConsoleUI;
+using System;
 
 namespace TerminalUI
 {
     public class Program
     {
-        public static void Main()
+        private static void Main()
         {
-            TerminalUserInterface userInterface = new TerminalUserInterface();
-            userInterface.RunProgram();
+            try
+            {
+                TerminalUserInterface userInterface = new TerminalUserInterface();
+                userInterface.RunProgram();
+            }
+            catch (QuitProgramRaiseException)
+            {
+                TerminalRenderer.renderEndProgramScreen();
+            }
         }
     }
 }

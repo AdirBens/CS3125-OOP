@@ -1,11 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using static GarageLogic.SupportedVehicles.Motorcycle;
+using static GarageLogic.SupportedVehicles.Truck;
 
 namespace GarageLogic.SupportedVehicles
 {
     internal class Truck: Vehicle
     {
-        internal bool m_IsHazmatTransporter { get; set; }
-        internal int m_CurrentCargoVolume { get; set; }
+        internal enum eLoadType
+        {
+            Empty = 0,
+            HazmatLoad,
+            RegularLoad
+        }
+
+        internal eLoadType m_IsHazmatTransporter { get; set; }
+        internal float m_CurrentCargoVolume { get; set; }
 
         internal Truck(string i_LicensePlate)
             : base(i_LicensePlate) { }
@@ -18,14 +28,34 @@ namespace GarageLogic.SupportedVehicles
                 { "m_EnergySource.m_CurrentLevel", null },
                 { "m_Wheels.m_CurrentTirePressure", null },
                 { "m_Wheels.m_TireManufacturer", null },
-                { "m_IsHazmatTransporter", new string[] { "true", "false" } },
-                { "m_CurrentCargoVolume", null }
+                { "m_IsHazmatTransporter", typeof(eLoadType).GetEnumNames() },
+                { "m_CurrentCargoVolume", null },
+                { "m_ClientRecord.m_ClientName", null },
+                { "m_ClientRecord.m_PhoneNumber", null}
             };
         }
 
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
         {
-            throw new System.NotImplementedException();
+            bool isAllPass = true;
+
+            isAllPass &= setBaseProperties(i_PropertiesDict);
+            foreach (string propertyName in i_PropertiesDict.Keys)
+            {
+                string propertyValue = i_PropertiesDict[propertyName];
+
+                if (propertyName == "m_IsHazmatTransporter")
+                {
+                    eLoadType loadType;
+                    isAllPass &= Enum.TryParse(propertyValue, out loadType);
+                    m_IsHazmatTransporter = loadType;
+                }
+                else if (propertyName == "m_CurrentCargoVolume")
+                {
+                    isAllPass &= float.TryParse(propertyValue, out float cargoVolume);
+                    m_CurrentCargoVolume = cargoVolume;
+                }
+            }
         }
     }
 }

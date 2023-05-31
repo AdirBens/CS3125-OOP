@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using static GarageLogic.SupportedVehicles.Car;
 
 namespace GarageLogic.SupportedVehicles
 {
-    internal class Motorcycle: Vehicle
+    internal class Motorcycle : Vehicle
     {
         internal enum eLicenseClass
         {
@@ -33,13 +35,34 @@ namespace GarageLogic.SupportedVehicles
                 { "m_EnergySource.m_CurrentLevel", null },
                 { "m_Wheels.m_CurrentTirePressure", null },
                 { "m_Wheels.m_TireManufacturer", null },
-                { "m_LicenseClass", typeof(eLicenseClass).GetEnumNames() }
+                { "m_ClientRecord.m_ClientName", null },
+                { "m_ClientRecord.m_PhoneNumber", null},
+                { "m_LicenseClass", typeof(eLicenseClass).GetEnumNames() },
+                { "m_EngineDisplacement", null }
             };
         }
 
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
         {
-            throw new System.NotImplementedException();
+            bool isAllPass = true;
+
+            isAllPass &= setBaseProperties(i_PropertiesDict);
+            foreach (string propertyName in i_PropertiesDict.Keys)
+            {
+                string propertyValue = i_PropertiesDict[propertyName];
+
+                if (propertyName == "m_LicenseClass")
+                {
+                    eLicenseClass licenseClass;
+                    isAllPass &= Enum.TryParse(propertyValue, out licenseClass);
+                    m_LicenseClass = licenseClass;
+                }
+                else if (propertyName == "m_EngineDisplacement")
+                {
+                    isAllPass &= int.TryParse(propertyValue, out int engineDisplacement);
+                    m_EngineDisplacement = engineDisplacement;
+                }
+            }
         }
     }
 }

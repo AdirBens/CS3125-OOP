@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Policy;
-using static GarageLogic.FuelTank;
+using System.Linq;
+using System.Reflection;
+using static GarageLogic.VehicleBuilder;
+
 
 namespace GarageLogic
 {
@@ -17,104 +18,12 @@ namespace GarageLogic
         }
 
         private static readonly GarageVehicleCollection sr_VehicleCollection = new GarageVehicleCollection();
-        private static Vehicle s_CurrentVehicleHandle;
-
-        public static bool LookUpLicensePlate(string i_LicencePlate)
-        {
-            return false;
-        }
-
-        public static void InsertVehicle()
-        {
-            throw new NotImplementedException();
-        }
-
-        //public static void InflateTires(string i_LicensePlate, float i_PsiTpSet)
-        public static void InflateTires(string i_LicensePlate, string i_PsiTpSet)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static void GetVehicleByID(string vehicleID)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public static void GetVehiclesByStatus(int i_VehicleStatus)
-        public static List<string> GetVehiclesByStatus(string i_VehicleStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static List<string> GetAllVehicleList()
-        {
-            return null;
-        }
-
-        //public static void UpdateVehicleStatus(string i_LicensePlate, int i_NewStatus)
-        public static void UpdateVehicleStatus(string i_LicensePlate, string i_NewStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static Dictionary<string, string> GetVehicleProfile(string i_LicensePlate)
-        {
-            throw new NotImplementedException();
-        }
+        private static (Vehicle vehicle, eVehicelStatus status) s_CurrentVehicleHandle;
 
         public static string[] GetVehicleStatusTypes()
         {
             return typeof(eVehicelStatus).GetEnumNames();
         }
-
-        ///public static void ReChargeBattery(string i_LicensePlate, float i_ChargingDuration, bool i_ChargeToMax = false)
-        public static void ReChargeBattery(string i_LicensePlate, string i_ChargingDuration, bool i_ChargeToMax = false)
-        {
-            /// need to implement ChargeBattery method
-            /**
-            try
-            {
-                (s_CurrentVehicleHandle.m_EnergySource as Battery).ReCharge(i_ChargingDuration, i_ChargeToMax);
-            }
-            catch(InvalidCastException ice)
-            {
-                throw new ArgumentNullException();
-            }
-            */
-            throw new NotImplementedException();
-        }
-
-        ///public static void ReFuel(string i_LicensePlate, int i_FuelType, float i_NumLiters, bool i_RefuelToMax = false)
-        public static void ReFuel(string i_LicensePlate, string i_FuelType, string i_NumLiters, bool i_RefuelToMax = false)
-        {
-            /// Need to Seperate Format exception potenial and Argument .....
-            /// need to implement Fule method
-            ///(m_CurrentVehicleHandle as FuelVehicle).Fule
-            /**
-            try
-            {
-                eFuelType fuelType = (eFuelType)i_FuelType;
-                (s_CurrentVehicleHandle.m_EnergySource as FuelTank).Refuel(i_NumLiters, fuelType, i_RefuelToMax);
-            }
-            catch (InvalidCastException ice)
-            {
-                throw new ArgumentNullException();
-            }
-            */
-            throw new NotImplementedException();
-        }
-
-        public static Dictionary<string, string[]> GetRequireadDetails(string i_LicencePlate, int i_VehicleTypeNumber)
-        {
-            createNewVehicle(i_LicencePlate, (VehicleBuilder.eVehicleType)i_VehicleTypeNumber);
-            return s_CurrentVehicleHandle.GetRequiredProperties();
-        }
-
-        public static void SetRequireadDetails(Dictionary<string, string> i_PropertiesDict)
-        {
-            throw new NotImplementedException();
-        }
-
         public static string[] GetFuelTypes()
         {
             return typeof(FuelTank.eFuelType).GetEnumNames();
@@ -125,9 +34,143 @@ namespace GarageLogic
             return typeof(VehicleBuilder.eVehicleType).GetEnumNames();
         }
 
-        private static void createNewVehicle(string i_LicencePlate, VehicleBuilder.eVehicleType i_VehicleType)
+        public static List<string> GetVehiclesByStatus(int i_VehicleStatus)
         {
-            s_CurrentVehicleHandle = VehicleBuilder.CreateVehicle(i_LicencePlate, i_VehicleType);
+            eVehicelStatus status;
+            List<string> vehiclesFiltered = null;
+            bool isValidEnumName = Enum.TryParse<eVehicelStatus>(i_VehicleStatus.ToString(), out status);
+
+            if (isValidEnumName)
+            {
+                switch (status)
+                {
+                    case eVehicelStatus.Empty:
+                        vehiclesFiltered = sr_VehicleCollection.GetAllVehicle();
+                        break;
+                    default:
+                        vehiclesFiltered = sr_VehicleCollection.GetVehiclesByStatus(status).Keys.ToList();
+                        break;
+                }
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+
+            return vehiclesFiltered;
+        }
+
+
+        public static Dictionary<string, string> GetVehicleProfile(string i_LicensePlate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Dictionary<string, string[]> GetRequireadDetails(string i_LicencePlate, int i_VehicleTypeNumber)
+        {
+            Vehicle newVehicleSkeleton = createNewVehicle(i_LicencePlate, i_VehicleTypeNumber);
+            return newVehicleSkeleton.GetRequiredProperties();
+        }
+
+        public static void SetRequireadDetails(string i_LicencePlate, Dictionary<string, string> i_PropertiesDict)
+        {
+            s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicencePlate);
+            s_CurrentVehicleHandle.vehicle.SetRequiredProperties(i_PropertiesDict);
+        }
+
+        public static bool LookUpLicensePlate(string i_LicencePlate)
+        {
+            bool isExists = sr_VehicleCollection.IsVehicleExists(i_LicencePlate);
+
+            if (isExists)
+            {
+                sr_VehicleCollection.UpdateVehicleStaus(i_LicencePlate, eVehicelStatus.InRepair);
+            }
+
+            return isExists;
+        }
+
+        public static void UpdateVehicleStatus(string i_LicensePlate, int i_UpdatedStatus)
+        {
+            eVehicelStatus updatedStatus;
+            bool isValidEnumName = Enum.TryParse(i_UpdatedStatus.ToString(), out updatedStatus);
+
+            if (!isValidEnumName)
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                sr_VehicleCollection.UpdateVehicleStaus(i_LicensePlate, updatedStatus);
+            }
+        }
+
+        public static void InflateTires(string i_LicensePlate, float i_AirPressureToSet = 0, bool i_InflateToMax = false)
+        {
+            s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
+            
+            foreach(Wheel wheel in s_CurrentVehicleHandle.vehicle.m_Wheels)
+            {
+                wheel.InflateTire(i_AirPressureToSet, i_InflateToMax);
+            }
+        }
+
+        public static void ReChargeBattery(string i_LicensePlate, float i_ChargingDuration, bool i_ChargeToMax = false)
+        {
+            s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
+            Battery electricEnergyUnit = s_CurrentVehicleHandle.vehicle.m_EnergySource as Battery;
+            
+            if (electricEnergyUnit != null )
+            {
+                electricEnergyUnit.ReCharge(i_ChargingDuration, i_ChargeToMax);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        public static void ReFuel(string i_LicensePlate, int i_FuelType, float i_NumLiters, bool i_RefuelToMax = false)
+        {
+            FuelTank.eFuelType fuelType;
+            bool isValidEnumName = Enum.TryParse(i_FuelType.ToString(), out fuelType);
+
+            if (!isValidEnumName)
+            {
+                throw new ArgumentException();
+            }
+            else
+            {
+                s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
+                FuelTank fuelEnergyUnit = s_CurrentVehicleHandle.vehicle.m_EnergySource as FuelTank;
+                if (fuelEnergyUnit != null)
+                {
+                    fuelEnergyUnit.Refuel(i_NumLiters, fuelType, i_RefuelToMax);
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+            }
+        }
+        
+        private static Vehicle createNewVehicle(string i_LicencePlate, int i_VehicleType)
+        {
+            Vehicle newVehicle = null;
+            eVehicleType vehicleType;
+            bool isParsed = Enum.TryParse(i_VehicleType.ToString(), out vehicleType);
+            
+            if (isParsed && vehicleType != eVehicleType.Empty)
+            {
+                newVehicle = CreateVehicle(i_LicencePlate, vehicleType);
+                sr_VehicleCollection.AddNewVehicle(newVehicle, eVehicelStatus.InRepair);
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+
+            return newVehicle;
         }
     }
 }

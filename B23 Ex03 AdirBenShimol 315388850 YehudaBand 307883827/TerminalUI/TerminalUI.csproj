@@ -42,8 +42,10 @@
   <ItemGroup>
     <Compile Include="BackSignalRaiseException.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="QuitProgramRaiseException.cs" />
     <Compile Include="TerminalRenderer.cs" />
     <Compile Include="TerminalUserInterface.cs" />
+    <Compile Include="Testing.cs" />
     <Compile Include="UIMessages.cs" />
   </ItemGroup>
   <ItemGroup>

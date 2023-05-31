@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GarageLogic.SupportedVehicles
 {
@@ -37,13 +39,34 @@ namespace GarageLogic.SupportedVehicles
                 { "m_Wheels.m_CurrentTirePressure", null },
                 { "m_Wheels.m_TireManufacturer", null },
                 { "m_BodyColour", typeof(eBodyColour).GetEnumNames() },
-                { "m_DoorsNumber", typeof(eNumOfDoors).GetEnumNames() }
+                { "m_DoorsNumber", typeof(eNumOfDoors).GetEnumNames() },
+                { "m_ClientRecord.m_ClientName", null },
+                { "m_ClientRecord.m_PhoneNumber", null}
             };
         }
 
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
         {
-            throw new System.NotImplementedException();
+            bool isAllPass = true;
+
+            isAllPass &= setBaseProperties(i_PropertiesDict);
+            foreach (string propertyName in i_PropertiesDict.Keys)
+            {
+                string propertyValue = i_PropertiesDict[propertyName];
+
+                if (propertyName == "m_BodyColour")
+                {
+                    eBodyColour colour;
+                    isAllPass &= Enum.TryParse(propertyValue, out colour);
+                    m_BodyColour = colour;
+                }
+                else if (propertyName == "m_DoorsNumber")
+                {
+                    eNumOfDoors doorsNumber;
+                    isAllPass &= Enum.TryParse(propertyValue, out doorsNumber);
+                    m_DoorsNumber = doorsNumber;
+                }
+            }
         }
     }
 }

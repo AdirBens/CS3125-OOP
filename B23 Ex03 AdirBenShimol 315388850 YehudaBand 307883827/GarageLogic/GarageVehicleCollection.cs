@@ -1,64 +1,139 @@
-﻿using GarageLogic.Exceptions;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GarageLogic
 {
     internal class GarageVehicleCollection
     {
-        private readonly Dictionary<GarageAgent.eVehicelStatus, Dictionary<string, Vehicle>> r_GarageVehicleStore;
+
+        private readonly Dictionary<GarageAgent.eVehicelStatus, Dictionary<string, Vehicle>> r_Collection;
+        private Dictionary<string, Vehicle> m_InnerPartitionPointer;
 
         internal GarageVehicleCollection()
         {
-            r_GarageVehicleStore = new Dictionary<GarageAgent.eVehicelStatus, Dictionary<string, Vehicle>>();
+            r_Collection = new Dictionary<GarageAgent.eVehicelStatus, Dictionary<string, Vehicle>>
+            {
+                { GarageAgent.eVehicelStatus.InRepair, new Dictionary<string, Vehicle>() },
+                { GarageAgent.eVehicelStatus.Repaired, new Dictionary<string, Vehicle>() },
+                { GarageAgent.eVehicelStatus.Payed, new Dictionary<string, Vehicle>() }
+            };
         }
-
-        internal bool IsVehicleExists(string i_LicencePlate)
+        
+        internal void AddNewVehicle(Vehicle i_Vehicle, GarageAgent.eVehicelStatus i_VehicleStatus)
         {
-            bool isVehicleExists = false;
-            foreach (Dictionary<string, Vehicle> dict in r_GarageVehicleStore.Values)
+            string licensePlate = i_Vehicle.m_LicensePlate;
+            if (!IsVehicleExists(licensePlate))
             {
-                if (isVehicleExists  = dict.TryGetValue(i_LicencePlate, out Vehicle vehicle))
-                {
-                    break;
-                }
+                setInnerPartitionPointer(i_VehicleStatus);
+                m_InnerPartitionPointer.Add(licensePlate, i_Vehicle);
             }
-            return isVehicleExists;
-        }
-
-        internal Vehicle FetchByLicencePlate(string i_LicencePlate)
-        {
-            /// maybe better to try...catch (no user of TryGetValue)
-            Vehicle vehicle = null;
-            bool isVehicleExists = false;
-         
-            foreach (Dictionary<string, Vehicle> dict in r_GarageVehicleStore.Values)
+            else
             {
-                if (isVehicleExists  = dict.TryGetValue(i_LicencePlate, out vehicle))
-                {
-                    break;
-                }
-            }
-
-            if (!isVehicleExists)
-            {
-                //throw new VehicleDoesNotExistsException();
-                throw new ArgumentException();
-            }
-            return vehicle;
-        }
-
-        internal List<Vehicle> FetchByStatus(GarageAgent.eVehicelStatus i_VehicleStatus) 
-        {
-            Dictionary<string, Vehicle> vehicles;
-            if (!r_GarageVehicleStore.TryGetValue(i_VehicleStatus, out vehicles))
-            {
+                /// TODO : vehicle already exists
                 throw new Exception();
             }
-            return vehicles.Values.ToList();
+        }
+
+        internal bool IsVehicleExists(string i_LicensePlate)
+        {
+            bool isExists = false;
+
+            foreach(GarageAgent.eVehicelStatus statusPartition in r_Collection.Keys)
+            {
+                setInnerPartitionPointer(statusPartition);
+                isExists = m_InnerPartitionPointer.ContainsKey(i_LicensePlate);
+                if (isExists)
+                {
+                    break;
+                }
+            }
+
+            return isExists;
+        }
+
+        internal (Vehicle vehicle, GarageAgent.eVehicelStatus status) GetVehicleByLicensePlate(string i_LicensePlate)
+        {
+            Vehicle requestedVehicle = null;
+            GarageAgent.eVehicelStatus currentStatus = GarageAgent.eVehicelStatus.Empty;
+
+            if (IsVehicleExists(i_LicensePlate))
+            {
+                foreach (GarageAgent.eVehicelStatus statusPartition in r_Collection.Keys)
+                {
+                    setInnerPartitionPointer(statusPartition);
+                    m_InnerPartitionPointer.TryGetValue(i_LicensePlate, out requestedVehicle);
+                    if (requestedVehicle != null)
+                    {
+                        currentStatus = statusPartition;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                /// TODO: vehicle doesnt exists
+                throw new Exception();
+            }
+
+            return (requestedVehicle, currentStatus);
+        }
+
+        internal Dictionary<string, Vehicle> GetVehiclesByStatus(GarageAgent.eVehicelStatus i_VehicleStatus)
+        {
+            setInnerPartitionPointer(i_VehicleStatus);
+            return m_InnerPartitionPointer;
+        }
+
+        internal void UpdateVehicleStaus(string i_LicensePlate, GarageAgent.eVehicelStatus i_UpdatedStatus)
+        {
+            (Vehicle vehicle, GarageAgent.eVehicelStatus status) vehicleRecord = GetVehicleByLicensePlate(i_LicensePlate);
+            if (vehicleRecord.vehicle != null && vehicleRecord.status != GarageAgent.eVehicelStatus.Empty)
+            {
+                removeRecord(i_LicensePlate, vehicleRecord.status);
+                addRecord(i_LicensePlate, vehicleRecord.vehicle, i_UpdatedStatus);
+            }
+            else
+            {
+                /// TODO: propper exception...
+                throw new Exception();
+            }
+        }
+
+        internal List<string> GetAllVehicle()
+        {
+            List<string> allVehicles = new List<string>();
+
+            foreach (GarageAgent.eVehicelStatus statusPartition in r_Collection.Keys)
+            {
+                setInnerPartitionPointer(statusPartition);
+                allVehicles.AddRange(m_InnerPartitionPointer.Keys.ToList());
+            }
+
+            return allVehicles;
+        }
+
+        private void removeRecord(string i_LicensePlate, GarageAgent.eVehicelStatus i_InnerPartition)
+        {
+            setInnerPartitionPointer(i_InnerPartition);
+            m_InnerPartitionPointer.Remove(i_LicensePlate);
+        }
+
+        private void addRecord(string i_LicensePlate, Vehicle i_Vehicle, GarageAgent.eVehicelStatus i_InnerPartition)
+        {
+            setInnerPartitionPointer(i_InnerPartition);
+            m_InnerPartitionPointer.Add(i_LicensePlate, i_Vehicle);
+        }
+
+        private void setInnerPartitionPointer(GarageAgent.eVehicelStatus i_StatusPartition)
+        {
+            if (!r_Collection.TryGetValue(i_StatusPartition, out m_InnerPartitionPointer))
+            {
+                /// TODO: is custon exp neccesery?
+                throw new Exception();
+            }
+
         }
     }
 }

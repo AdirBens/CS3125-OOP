@@ -22,7 +22,6 @@ namespace ConsoleUI
 
             welcomeScreen.AppendLine(asTitleString(UIMessages.k_ProgramTitle));
             welcomeScreen.AppendLine(UIMessages.k_WelcomeMessage);
-            welcomeScreen.AppendLine(UIMessages.k_BackSignalMessage);
 
             Console.WriteLine(welcomeScreen.ToString());
         }
@@ -32,7 +31,6 @@ namespace ConsoleUI
             StringBuilder pageHeader = new StringBuilder();
 
             pageHeader.AppendLine(asTitleString(i_Title));
-            pageHeader.AppendLine(asMarkedString(UIMessages.k_BackSignalMessage));
             
             Console.WriteLine(pageHeader.ToString());
         }

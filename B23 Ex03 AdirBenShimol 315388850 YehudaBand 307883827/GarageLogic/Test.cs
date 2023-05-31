@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GarageLogic
 {
@@ -11,23 +10,34 @@ namespace GarageLogic
     {
         public static void Main()
         {
-            Console.WriteLine("type number:");
-            int.TryParse(Console.ReadLine(), out int typeNumber);
-
             Vehicle v = VehicleBuilder.CreateVehicle("1234", (VehicleBuilder.eVehicleType)3);
-            List<PropertyInfo> properties = v.GetType().GetRuntimeProperties().ToList();
 
-            foreach(PropertyInfo property in properties)
+            foreach (FieldInfo i in v.GetType().GetRuntimeFields())
             {
-                try
-                {
-                    Console.WriteLine(property.Name + " [ " + printArr(property.PropertyType.GetEnumNames()) + " ]");    
-                }
-                catch(ArgumentException aex) 
-                { 
-                    Console.WriteLine(property.Name);                
-                }
+                Console.WriteLine(i.Name);
             }
+
+            Console.WriteLine();
+
+            foreach (PropertyInfo i in v.GetType().GetRuntimeProperties())
+            {
+                Console.WriteLine(i.Name);
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Ve fi");
+            foreach (FieldInfo i in typeof(Vehicle).GetRuntimeFields())
+            {
+                Console.WriteLine(i.Name);
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("Ve pro");
+            foreach (PropertyInfo i in typeof(Vehicle).GetRuntimeProperties())
+            {
+                Console.WriteLine(i.Name);
+            }
+            Console.WriteLine();
         }
 
         private static string printArr(string[] arr)
@@ -42,15 +52,3 @@ namespace GarageLogic
         }
     }
 }
-/*         Dictionary<string, string[]> s = GarageAgent.GetRequireadDetails("123", typeNumber);
-         foreach (string property in s.Keys)
-         {
-             Console.WriteLine(property);
-             if (s[property] != null)
-             {
-                 printArr(s[property]);
-             }
-
-         }
-     }
-     */

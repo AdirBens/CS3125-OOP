@@ -29,15 +29,18 @@ namespace GarageLogic
             return wheels;
         }
 
-        internal void InflateTire(int i_AirPressure, bool i_InflateToMax = false)
+        internal void InflateTire(float i_AirPressure, bool i_InflateToMax = false)
         {
-            if (m_CurrentTirePressure + i_AirPressure < m_RecommendedTirePressure)
+            if (i_InflateToMax == true)
+            {
+                m_CurrentTirePressure = m_RecommendedTirePressure;
+            }
+            else if (m_CurrentTirePressure + i_AirPressure < m_RecommendedTirePressure)
             {
                 m_CurrentTirePressure += i_AirPressure;
             }
             else
             {
-                //throw new TireOverInflationException();
                 throw new ValueOutOfRangeException(null, 0, m_RecommendedTirePressure - m_CurrentTirePressure);
             }
         }

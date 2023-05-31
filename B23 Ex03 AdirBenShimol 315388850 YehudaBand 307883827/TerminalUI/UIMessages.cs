@@ -41,12 +41,12 @@ namespace ConsoleUI
         internal const string k_NumOfLitersToFuelRequest = "Please enter amount of liters to fuel:";
 
         internal const string k_InflateTiresChoiceRequest = "Please choose how you would like to inflate the tires:";
-        internal const string k_SpecifiedPSIRequest = "Please enter PSI to inflate to all tires:";
+        internal const string k_SpecifiedAirPressureRequest = "Please enter air pressure to inflate to all tires:";
 
         internal const string k_NumOfMinutesToChargeRequest = "Please enter the number of minutes to charge:";
 
         internal const string k_ActionSuccesful = "Action succesfully executed.";
-        internal const string k_RedirectionToMainScreen = "You will now be redirected to the main page where you can make changes to any vehicle";
+        internal const string k_RedirectionToMainScreen = "You will now be redirected to the main page";
 
         internal const string k_GoodbyeMessage = "SAD TO SEE YOU GO!";
 

@@ -56,7 +56,6 @@ namespace GarageLogic
 
         internal static Vehicle CreateVehicle(string i_LicencePlate, eVehicleType i_VehicleType)
         {
-            //// TODO: consider to change to Switch case with `jump to`
             Vehicle assembledVehicle;
 
             if (i_VehicleType == eVehicleType.FuelCar ||
@@ -80,8 +79,14 @@ namespace GarageLogic
 
             assembledVehicle.m_EnergySource = buildEnergyUnit(i_VehicleType);
             assembledVehicle.m_Wheels = buildWheels(i_VehicleType);
+            assembledVehicle.m_ClientRecord = buildClientRecord();
 
             return assembledVehicle;
+        }
+
+        private static ClientRecord buildClientRecord()
+        {
+            return new ClientRecord();
         }
 
         private static EnergySource buildEnergyUnit(eVehicleType i_VehicleType)
