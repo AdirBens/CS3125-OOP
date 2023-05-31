@@ -33,8 +33,10 @@ namespace ConsoleUI
         internal const string k_VehicleExistsMessage = "Vehicle is already in the system.";
         internal const string k_VehicleAddedMessage = "Your vehicel has been added to the system succefully.";
 
-        internal const string k_FilterByStatusMessage = "To filter the vehicle list please choose vehicle status type to view.";
-        internal const string k_FilterByStatusRequest = "If no filter is needed hit 0:";
+        internal const string k_FilterByStatusMessage = "To filter the vehicle list please choose list filtering:";
+        internal const string k_NoFilterOption = "   [0]  No filter";
+        internal const string k_VehicleListEmptyMessage = "No Vehicles exist in the system!";
+
         internal const string k_SetVehicleStatusRequest = "Please choose the status to set the given vehicle to by entering the corresponding number:";
 
         internal const string k_FuelVehicleTypeRequest = "Please choose the fuel to fill vehicle with by entering the corresponding number:";

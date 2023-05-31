@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TerminalUI;
 using GarageLogic;
+using GarageLogic.Exceptions;
 
 namespace ConsoleUI
 {
@@ -48,7 +49,7 @@ namespace ConsoleUI
                                 showVehicleDetails();
                                 break;
                             case eUserAction.ExitProgram:
-                                throw new QuitProgramRaiseException();
+                                break;
                         }
                         actionFinished = true;
                     }
@@ -59,6 +60,14 @@ namespace ConsoleUI
                     catch (ArgumentException fe)
                     {
                         TerminalRenderer.renderExceptionMessage(fe.Message);
+                    }
+                    catch (BackSignalRaiseException)
+                    {
+                        actionFinished = true;
+                    }
+                    catch (ValueOutOfRangeException voore)
+                    {
+                        TerminalRenderer.renderExceptionMessage(voore.Message);
                     }
                     finally
                     {
@@ -76,9 +85,9 @@ namespace ConsoleUI
                     string[] actionChoices = typeof(eUserAction).GetEnumNames();
 
                     TerminalRenderer.renderTitle(UIMessages.k_MainMenuTitle);
-                    TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_ActionListHeaderRequest, actionChoices);
+                    TerminalRenderer.renderMultiChoiceRequest(actionChoices, UIMessages.k_ActionListHeaderRequest);
 
-                    int userNumChoice = readInputAsInt("");
+                    int userNumChoice = readInputAsInt();
                     validateInput(userNumChoice, typeof(eUserAction));
 
                     eUserAction userAction = (eUserAction)userNumChoice;
@@ -93,6 +102,7 @@ namespace ConsoleUI
                 {
                     TerminalRenderer.renderExceptionMessage(ex.Message);
                 }
+                catch (BackSignalRaiseException) { }
             }
         }
 
@@ -105,8 +115,8 @@ namespace ConsoleUI
 
             if (!isVehicleInSystem)
             {
-                TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_VehicleTypeRequest, GarageAgent.GetSupportedVehicleTypes());
-                int vehicleTypeID = readInputAsInt("");
+                TerminalRenderer.renderMultiChoiceRequest(GarageAgent.GetSupportedVehicleTypes(), UIMessages.k_VehicleTypeRequest);
+                int vehicleTypeID = readInputAsInt();
 
                 Dictionary<string, string[]> missingDetails = GarageAgent.GetRequireadDetails(licensePlate, vehicleTypeID);
                 Dictionary<string, string> detailsForAgent;
@@ -120,8 +130,6 @@ namespace ConsoleUI
             {
                 TerminalRenderer.renderMessage(UIMessages.k_VehicleExistsMessage);
                 string[] vehicleStatusTypes = GarageAgent.GetVehicleStatusTypes();
-
-                GarageAgent.UpdateVehicleStatus(licensePlate, Array.IndexOf(vehicleStatusTypes, "InRepair")); ////////////////// HANDLE THIS FUCKING SHIIIIT
             }
 
             TerminalRenderer.renderToContinueMessage();
@@ -139,14 +147,14 @@ namespace ConsoleUI
 
                 if (missingDetail.Value != null)
                 {
-                    TerminalRenderer.renderMultiChoiceRequest(multiChoiceDetailRequest, missingDetail.Value);
+                    TerminalRenderer.renderMultiChoiceRequest(missingDetail.Value, multiChoiceDetailRequest);
                 }
                 else
                 {
                     TerminalRenderer.renderMessage(TerminalRenderer.asActionString(detailRequest));
                 }
 
-                string missingDetailValue = readInputLine("");
+                string missingDetailValue = readInputLine();
 
                 vehicleDetails.Add(missingDetail.Key, missingDetailValue);
             }
@@ -160,12 +168,19 @@ namespace ConsoleUI
 
             TerminalRenderer.renderFilterByStatusRequest(GarageAgent.GetVehicleStatusTypes());
 
-            int vehicleStatusID = readInputAsInt("");
+            int vehicleStatusID = readInputAsInt();
 
             List<string> filteredList = GarageAgent.GetVehiclesByStatus(vehicleStatusID);
 
+            if (filteredList.Count > 0)
+            {
             TerminalRenderer.renderShowVehicleList(filteredList);
             TerminalRenderer.renderSuccsfulActionMessage();
+            }
+            else
+            {
+                TerminalRenderer.renderMessageAndRedirect(UIMessages.k_VehicleListEmptyMessage);
+            }
 
         }
 
@@ -178,9 +193,9 @@ namespace ConsoleUI
 
             string[] vehicleStatusTypes = GarageAgent.GetVehicleStatusTypes();
 
-            TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_SetVehicleStatusRequest, vehicleStatusTypes);
+            TerminalRenderer.renderMultiChoiceRequest(vehicleStatusTypes, UIMessages.k_SetVehicleStatusRequest);
 
-            vehicleStatusAsNumber = readInputAsInt("");
+            vehicleStatusAsNumber = readInputAsInt();
 
             GarageAgent.UpdateVehicleStatus(licensePlate, vehicleStatusAsNumber);
 
@@ -201,7 +216,7 @@ namespace ConsoleUI
 
             TerminalRenderer.renderInflateTiresRequest();
 
-            int userNumChoice = readInputAsInt("");
+            int userNumChoice = readInputAsInt();
             validateInput(userNumChoice, typeof(eTireInflationOptions));
 
             eTireInflationOptions chosenInflationOption = (eTireInflationOptions)userNumChoice;
@@ -226,11 +241,10 @@ namespace ConsoleUI
 
             string[] fuelTypes = GarageAgent.GetFuelTypes();
 
-            TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_FuelVehicleTypeRequest, fuelTypes);
-            int fuelTypeAsNumber = readInputAsInt("");
+            TerminalRenderer.renderMultiChoiceRequest(fuelTypes, UIMessages.k_FuelVehicleTypeRequest);
+            int fuelTypeAsNumber = readInputAsInt();
 
             float numOfLiters = readInputAsFloat(TerminalRenderer.asActionString(UIMessages.k_NumOfLitersToFuelRequest));
-
 
             GarageAgent.ReFuel(licensePlate, fuelTypeAsNumber, numOfLiters);
 
@@ -279,15 +293,21 @@ namespace ConsoleUI
             }
         }
 
-        private string readInputLine(string i_MessageDialog)
+        private string readInputLine(string i_MessageDialog = "")
         {
             TerminalRenderer.renderMessage(i_MessageDialog);
             string userInput = Console.ReadLine();
+            Console.WriteLine();
+
+            if (userInput.Equals(k_BackSignalFromUser) == true)
+            {
+                throw new BackSignalRaiseException();
+            }
 
             return userInput;
         }
 
-        private float readInputAsFloat(string i_MessageDialog)
+        private float readInputAsFloat(string i_MessageDialog = "")
         {
             string inputString = readInputLine(i_MessageDialog);
             bool isParseSuccess = float.TryParse(inputString, out float numToReturn);
@@ -300,7 +320,7 @@ namespace ConsoleUI
             return numToReturn;
         }
 
-        private int readInputAsInt(string i_MessageDialog)
+        private int readInputAsInt(string i_MessageDialog = "")
         {
             string inputString = readInputLine(i_MessageDialog);
             bool isParseSuccess = int.TryParse(inputString, out int numToReturn);
