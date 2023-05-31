@@ -57,7 +57,7 @@ namespace ConsoleUI
         internal const string k_CorrespondingNumberMessage = "by entering the corresponding number:";
         internal const string k_ExceptionMessage = "{0}, hit enter to try again!";
 
-        internal const string k_FormatExceptionInt = "Input entered is not a valid number";
+        internal const string k_FormatExceptionNumParse = "Input entered is not a valid number";
         internal const string k_ArgumentExceptionRange = "Number entered is not in the right range";
 
 

@@ -35,6 +35,7 @@ namespace ConsoleUI
             pageHeader.AppendLine(asMarkedString(UIMessages.k_BackSignalMessage));
             Console.WriteLine(pageHeader.ToString());
         }
+
         internal static void renderChooseActionRequest()
         {
             string[] actionChoices = typeof(TerminalUserInterface.eUserAction).GetEnumNames();
@@ -243,7 +244,8 @@ namespace ConsoleUI
 
         internal static string parsePropertyToDisplayedProperty(string i_Property)
         {
-            string withoutPrefix = i_Property.Replace("m_", string.Empty);
+            string withoutPrefix = i_Property.Replace("m_", string.Empty).Replace(".", string.Empty);
+
             StringBuilder newString = new StringBuilder();
             foreach (char character in withoutPrefix)
             {
@@ -257,24 +259,5 @@ namespace ConsoleUI
 
             return newString.ToString();
         }
-
-        private static string[] getEnumNames(Enum i_Enum)
-        {
-            string[] enumName = null;
-            /// trycatch is redundent (?)
-            try
-            {
-                enumName = i_Enum.GetType().GetEnumNames();
-            }
-            catch(InvalidCastException ice)
-            {
-                ///
-                throw new InvalidCastException(ice.Message);
-            }
-
-            return enumName;
-        }
     }
 }
-
-//39 98
