@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarageLogic.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,8 +25,8 @@ namespace GarageLogic.SupportedVehicles
             Five
         }
 
-        internal eBodyColour m_BodyColour { get; set; }
-        internal eNumOfDoors m_DoorsNumber { get; set; }
+        internal eBodyColour m_BodyColour { get; private set; }
+        internal eNumOfDoors m_DoorsNumber { get; private set; }
 
         internal Car(string i_LicensePlate)
             : base(i_LicensePlate) { }
@@ -48,12 +49,12 @@ namespace GarageLogic.SupportedVehicles
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
         {
             bool isAllPass = true;
+            string firstFailure = string.Empty;
 
             isAllPass &= setBaseProperties(i_PropertiesDict);
             foreach (string propertyName in i_PropertiesDict.Keys)
             {
-                string propertyValue = i_PropertiesDict[propertyName];
-
+                string propertyValue = i_PropertiesDict[propertyName];                
                 if (propertyName == "m_BodyColour")
                 {
                     eBodyColour colour;
@@ -66,6 +67,16 @@ namespace GarageLogic.SupportedVehicles
                     isAllPass &= Enum.TryParse(propertyValue, out doorsNumber);
                     m_DoorsNumber = doorsNumber;
                 }
+
+                if (!isAllPass && firstFailure == string.Empty)
+                {
+                    firstFailure = propertyName;
+                }
+            }
+            
+            if (!isAllPass)
+            {
+                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValue);
             }
         }
     }

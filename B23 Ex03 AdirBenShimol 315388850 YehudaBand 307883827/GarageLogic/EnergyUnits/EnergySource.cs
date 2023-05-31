@@ -5,7 +5,7 @@ namespace GarageLogic
     internal abstract class EnergySource
     {
         internal readonly float r_MaxCapacity;
-        internal float m_CurrentLevel { get; set; }
+        internal float m_CurrentLevel { get; private set; }
 
         internal EnergySource(float i_MaxCapacity)
         {

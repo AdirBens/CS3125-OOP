@@ -1,4 +1,5 @@
-﻿using GarageLogic.SupportedVehicles;
+﻿using GarageLogic.Exceptions;
+using GarageLogic.SupportedVehicles;
 using System;
 using System.Collections.Generic;
 
@@ -74,7 +75,8 @@ namespace GarageLogic
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleTypeArg,
+                    message: ExceptionsMessageStrings.k_UnsupportedVehicleTypeMessage);
             }
 
             assembledVehicle.m_EnergySource = buildEnergyUnit(i_VehicleType);
@@ -107,17 +109,14 @@ namespace GarageLogic
                     }
                     else
                     {
-                        throw new ArgumentException();
+                        throw new ArgumentException(paramName: ExceptionsMessageStrings.k_FuelTypeArg,
+                                            message: ExceptionsMessageStrings.k_UnsupportedFuelType);
                     }
                 }
                 else if (i_VehicleType == eVehicleType.ElectricCar ||
                          i_VehicleType == eVehicleType.ElectricMotorcycle)
                 {
                     energyUnit = new Battery(capacity);
-                }
-                else
-                {
-                    throw new ArgumentException();
                 }
             }
 
@@ -135,7 +134,6 @@ namespace GarageLogic
             {
                 wheels = Wheel.CreateWheelsCollection(wheelNumber, airPressure);
             }
-            else { throw new ArgumentException(); }
 
             return wheels;
         }

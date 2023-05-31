@@ -1,4 +1,4 @@
-﻿
+﻿using GarageLogic.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,6 @@ namespace GarageLogic
 {
     internal class GarageVehicleCollection
     {
-
         private readonly Dictionary<GarageAgent.eVehicelStatus, Dictionary<string, Vehicle>> r_Collection;
         private Dictionary<string, Vehicle> m_InnerPartitionPointer;
 
@@ -31,8 +30,8 @@ namespace GarageLogic
             }
             else
             {
-                /// TODO : vehicle already exists
-                throw new Exception();
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_LicensePlateArg,
+                                    message: ExceptionsMessageStrings.k_VehicleAlreadyExists);
             }
         }
 
@@ -73,8 +72,8 @@ namespace GarageLogic
             }
             else
             {
-                /// TODO: vehicle doesnt exists
-                throw new Exception();
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_LicensePlateArg,
+                                    message: ExceptionsMessageStrings.k_VehicleDoesNotExists);
             }
 
             return (requestedVehicle, currentStatus);
@@ -89,15 +88,10 @@ namespace GarageLogic
         internal void UpdateVehicleStaus(string i_LicensePlate, GarageAgent.eVehicelStatus i_UpdatedStatus)
         {
             (Vehicle vehicle, GarageAgent.eVehicelStatus status) vehicleRecord = GetVehicleByLicensePlate(i_LicensePlate);
-            if (vehicleRecord.vehicle != null && vehicleRecord.status != GarageAgent.eVehicelStatus.Empty)
+            if (i_UpdatedStatus != GarageAgent.eVehicelStatus.Empty)
             {
                 removeRecord(i_LicensePlate, vehicleRecord.status);
                 addRecord(i_LicensePlate, vehicleRecord.vehicle, i_UpdatedStatus);
-            }
-            else
-            {
-                /// TODO: propper exception...
-                throw new Exception();
             }
         }
 
@@ -128,12 +122,19 @@ namespace GarageLogic
 
         private void setInnerPartitionPointer(GarageAgent.eVehicelStatus i_StatusPartition)
         {
-            if (!r_Collection.TryGetValue(i_StatusPartition, out m_InnerPartitionPointer))
+            bool isStatusValid = r_Collection.TryGetValue(i_StatusPartition, out m_InnerPartitionPointer);
+            
+            if (!isStatusValid)
             {
-                /// TODO: is custon exp neccesery?
-                throw new Exception();
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_InvalidVehicleStatus,
+                                    message: ExceptionsMessageStrings.k_InvalidVehicleStatusMessage);
             }
+        }
 
+        public override string ToString()
+        {
+            /// TODO: Implement TOSTRING
+            return base.ToString();
         }
     }
 }

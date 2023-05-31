@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarageLogic.Exceptions;
+using System;
 using System.Collections.Generic;
 using static GarageLogic.SupportedVehicles.Car;
 
@@ -45,6 +46,7 @@ namespace GarageLogic.SupportedVehicles
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
         {
             bool isAllPass = true;
+            string firstFailure = string.Empty;
 
             isAllPass &= setBaseProperties(i_PropertiesDict);
             foreach (string propertyName in i_PropertiesDict.Keys)
@@ -62,6 +64,16 @@ namespace GarageLogic.SupportedVehicles
                     isAllPass &= int.TryParse(propertyValue, out int engineDisplacement);
                     m_EngineDisplacement = engineDisplacement;
                 }
+                
+                if (!isAllPass && firstFailure == string.Empty)
+                {
+                    firstFailure = propertyName;
+                }
+            }
+
+            if (!isAllPass)
+            {
+                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValue);
             }
         }
     }

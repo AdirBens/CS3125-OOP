@@ -1,7 +1,7 @@
-﻿using System;
+﻿using GarageLogic.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using static GarageLogic.VehicleBuilder;
 
 
@@ -31,14 +31,14 @@ namespace GarageLogic
 
         public static string[] GetSupportedVehicleTypes()
         {
-            return typeof(VehicleBuilder.eVehicleType).GetEnumNames();
+            return typeof(eVehicleType).GetEnumNames();
         }
 
         public static List<string> GetVehiclesByStatus(int i_VehicleStatus)
         {
             eVehicelStatus status;
             List<string> vehiclesFiltered = null;
-            bool isValidEnumName = Enum.TryParse<eVehicelStatus>(i_VehicleStatus.ToString(), out status);
+            bool isValidEnumName = Enum.TryParse(i_VehicleStatus.ToString(), out status);
 
             if (isValidEnumName)
             {
@@ -52,14 +52,9 @@ namespace GarageLogic
                         break;
                 }
             }
-            else
-            {
-                throw new ArgumentException();
-            }
 
             return vehiclesFiltered;
         }
-
 
         public static Dictionary<string, string> GetVehicleProfile(string i_LicensePlate)
         {
@@ -97,7 +92,8 @@ namespace GarageLogic
 
             if (!isValidEnumName)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_InvalidVehicleStatus,
+                    message: ExceptionsMessageStrings.k_InvalidVehicleStatusMessage);
             }
             else
             {
@@ -115,29 +111,31 @@ namespace GarageLogic
             }
         }
 
-        public static void ReChargeBattery(string i_LicensePlate, float i_ChargingDuration, bool i_ChargeToMax = false)
+        public static void ReChargeBattery(string i_LicensePlate, float i_ChargingDuration)
         {
             s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
             Battery electricEnergyUnit = s_CurrentVehicleHandle.vehicle.m_EnergySource as Battery;
             
             if (electricEnergyUnit != null )
             {
-                electricEnergyUnit.ReCharge(i_ChargingDuration, i_ChargeToMax);
+                electricEnergyUnit.ReCharge(i_ChargingDuration);
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleTypeNotSupportMethod,
+                                    message: ExceptionsMessageStrings.k_VehicleTypeNotSupportMethodMessage);
             }
         }
 
-        public static void ReFuel(string i_LicensePlate, int i_FuelType, float i_NumLiters, bool i_RefuelToMax = false)
+        public static void ReFuel(string i_LicensePlate, int i_FuelType, float i_NumLiters)
         {
             FuelTank.eFuelType fuelType;
             bool isValidEnumName = Enum.TryParse(i_FuelType.ToString(), out fuelType);
 
             if (!isValidEnumName)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_UnsupportedFuelType,
+                                    message: ExceptionsMessageStrings.k_UnsupportedFuelTypeMessage);
             }
             else
             {
@@ -145,11 +143,12 @@ namespace GarageLogic
                 FuelTank fuelEnergyUnit = s_CurrentVehicleHandle.vehicle.m_EnergySource as FuelTank;
                 if (fuelEnergyUnit != null)
                 {
-                    fuelEnergyUnit.Refuel(i_NumLiters, fuelType, i_RefuelToMax);
+                    fuelEnergyUnit.Refuel(i_NumLiters, fuelType);
                 }
                 else
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleTypeNotSupportMethod,
+                                        message: ExceptionsMessageStrings.k_VehicleTypeNotSupportMethodMessage);
                 }
             }
         }
@@ -159,15 +158,16 @@ namespace GarageLogic
             Vehicle newVehicle = null;
             eVehicleType vehicleType;
             bool isParsed = Enum.TryParse(i_VehicleType.ToString(), out vehicleType);
-            
-            if (isParsed && vehicleType != eVehicleType.Empty)
+
+            if (isParsed)
             {
                 newVehicle = CreateVehicle(i_LicencePlate, vehicleType);
                 sr_VehicleCollection.AddNewVehicle(newVehicle, eVehicelStatus.InRepair);
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_UnsupportedVehicleType,
+                                    message: ExceptionsMessageStrings.k_UnsupportedVehicleTypeMessage);
             }
 
             return newVehicle;

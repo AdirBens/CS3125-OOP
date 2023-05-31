@@ -8,7 +8,6 @@ namespace GarageLogic
     {
         internal readonly float m_RecommendedTirePressure;
         internal float m_CurrentTirePressure { get; set; }
-
         internal string m_TireManufacturer { get; set; }
 
         private Wheel(float i_RecommendedTirePressure)

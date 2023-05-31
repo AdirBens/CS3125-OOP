@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarageLogic.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace GarageLogic
 
     public abstract class Vehicle
     {
-        internal string m_LicensePlate;
+        internal string m_LicensePlate { get; set; }
         internal string m_ModelName { get; set; }
         internal GarageAgent.eVehicelStatus m_VehicleStatus;
         internal EnergySource m_EnergySource;
@@ -22,12 +23,11 @@ namespace GarageLogic
         }
 
         internal abstract Dictionary<string, string[]> GetRequiredProperties();
-
         internal abstract void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict);
-
         protected bool setBaseProperties(Dictionary<string, string> i_PropertiesValuesDict)
         {
             bool isAllPass = true;
+            string firstFailure = string.Empty;
 
             foreach (string propertyName in i_PropertiesValuesDict.Keys)
             {
@@ -60,6 +60,16 @@ namespace GarageLogic
                 {
                     m_ClientRecord.m_PhoneNumber = propertyValue;
                 }
+
+                if (!isAllPass && firstFailure == string.Empty)
+                {
+                    firstFailure = propertyName;
+                }
+            }
+
+            if (!isAllPass)
+            {
+                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValue);
             }
 
             return isAllPass;

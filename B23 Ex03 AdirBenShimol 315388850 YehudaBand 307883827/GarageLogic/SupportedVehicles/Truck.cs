@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarageLogic.Exceptions;
+using System;
 using System.Collections.Generic;
 using static GarageLogic.SupportedVehicles.Motorcycle;
 using static GarageLogic.SupportedVehicles.Truck;
@@ -38,6 +39,7 @@ namespace GarageLogic.SupportedVehicles
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
         {
             bool isAllPass = true;
+            string firstFailure = string.Empty;
 
             isAllPass &= setBaseProperties(i_PropertiesDict);
             foreach (string propertyName in i_PropertiesDict.Keys)
@@ -55,6 +57,16 @@ namespace GarageLogic.SupportedVehicles
                     isAllPass &= float.TryParse(propertyValue, out float cargoVolume);
                     m_CurrentCargoVolume = cargoVolume;
                 }
+
+                if (!isAllPass && firstFailure == string.Empty)
+                {
+                    firstFailure = propertyName;
+                }
+            }
+            
+            if (!isAllPass)
+            {
+                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValue);
             }
         }
     }

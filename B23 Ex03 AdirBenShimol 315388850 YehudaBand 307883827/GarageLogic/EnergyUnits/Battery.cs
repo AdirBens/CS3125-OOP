@@ -1,6 +1,4 @@
 ﻿
-using System;
-
 namespace GarageLogic
 {
     internal class Battery : EnergySource
@@ -8,18 +6,11 @@ namespace GarageLogic
         internal Battery(float i_MaxCapacity)
             : base(i_MaxCapacity) { }
 
-        internal float ReCharge(float i_ChargingDuration, bool i_ChargeToMax = false)
+        internal void ReCharge(float i_ChargingDuration)
         {
-            if (i_ChargeToMax == true)
-            {
-                m_CurrentLevel = r_MaxCapacity;
-            }
-            else
-            {
-                m_CurrentLevel += i_ChargingDuration;
-            }
-
-            return m_CurrentLevel;
+            float levelAfterReCharge = i_ChargingDuration + m_CurrentLevel;
+            
+            setCurrentLevel(levelAfterReCharge);
         }
     }
 }

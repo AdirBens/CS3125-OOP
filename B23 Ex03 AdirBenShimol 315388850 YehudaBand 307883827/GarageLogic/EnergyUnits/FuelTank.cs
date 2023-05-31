@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarageLogic.Exceptions;
+using System;
 
 namespace GarageLogic
 {
@@ -14,32 +15,23 @@ namespace GarageLogic
         }
 
         internal readonly eFuelType r_FuelType;
-        internal FuelTank(eFuelType i_FuelType, float i_MaxCapacity) 
+        internal FuelTank(eFuelType i_FuelType, float i_MaxCapacity)
             : base(i_MaxCapacity)
         {
             r_FuelType = i_FuelType;
         }
 
-        internal float Refuel(float i_NumLiters, eFuelType i_FuelType, bool i_RefuelToMax = false)
-            /// TODO: is it neccery to refuel to max ? 
+        internal void Refuel(float i_NumLiters, eFuelType i_FuelType)
         {
-            if(r_FuelType == i_FuelType)
+            float levelAfterRefuel = i_NumLiters + m_CurrentLevel;
+
+            if (r_FuelType != i_FuelType)
             {
-                if (i_RefuelToMax == true)
-                {
-                    m_CurrentLevel = r_MaxCapacity;
-                }
-                else
-                {
-                    m_CurrentLevel += i_NumLiters;
-                }
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_FuelTypeArg,
+                                              message: ExceptionsMessageStrings.k_WrongFuelType);
             }
-            else
-            {
-                /// TODO: Add detailt to excetpion
-                throw new ArgumentException();
-            }
-            return m_CurrentLevel;
+
+            setCurrentLevel(levelAfterRefuel);
         }
     }
 }
