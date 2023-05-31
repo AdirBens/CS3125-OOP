@@ -57,9 +57,9 @@ namespace ConsoleUI
                     {
                         TerminalRenderer.renderExceptionMessage(fe.Message);
                     }
-                    catch (ArgumentException fe)
+                    catch (ArgumentException ae)
                     {
-                        TerminalRenderer.renderExceptionMessage(fe.Message);
+                        TerminalRenderer.renderExceptionMessage(string.Format(UIMessages.k_ArgumentExceptionRange, ae.ParamName));
                     }
                     catch (BackSignalRaiseException)
                     {
@@ -131,8 +131,6 @@ namespace ConsoleUI
                 TerminalRenderer.renderMessage(UIMessages.k_VehicleExistsMessage);
                 string[] vehicleStatusTypes = GarageAgent.GetVehicleStatusTypes();
             }
-
-            TerminalRenderer.renderToContinueMessage();
         }
 
         private Dictionary<string, string> getMissingDetailsFromUser(Dictionary<string, string[]> i_MissingDetails)

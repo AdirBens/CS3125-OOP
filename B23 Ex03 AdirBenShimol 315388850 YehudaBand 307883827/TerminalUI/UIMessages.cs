@@ -36,6 +36,9 @@ namespace ConsoleUI
         internal const string k_FilterByStatusMessage = "To filter the vehicle list please choose list filtering:";
         internal const string k_NoFilterOption = "   [0]  No filter";
         internal const string k_VehicleListEmptyMessage = "No Vehicles exist in the system!";
+        
+        internal static string k_VehicleRecordLine = "[{0}] {1}";
+        internal static string k_VehicleListHeader = "======Vehicle list======";
 
         internal const string k_SetVehicleStatusRequest = "Please choose the status to set the given vehicle to by entering the corresponding number:";
 
@@ -56,9 +59,6 @@ namespace ConsoleUI
         internal const string k_ExceptionMessage = "{0}, hit enter to try again!";
 
         internal const string k_FormatExceptionNumParse = "Input entered is not a valid number";
-        internal const string k_ArgumentExceptionRange = "Number entered is not in the right range";
-
-
-
+        internal const string k_ArgumentExceptionRange = "{0} is invalid!";
     }
 }

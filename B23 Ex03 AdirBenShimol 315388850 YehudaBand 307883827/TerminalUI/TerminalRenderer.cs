@@ -56,9 +56,10 @@ namespace ConsoleUI
         internal static void renderShowVehicleList(List<string> filteredList)
         {
             StringBuilder vehicleList = new StringBuilder();
-            foreach (string vehicleLicensePlate in filteredList)
+            vehicleList.AppendLine(UIMessages.k_VehicleListHeader);
+            for (int i = 0; i < filteredList.Count; i++)
             {
-                vehicleList.AppendLine(vehicleLicensePlate);
+                vehicleList.AppendLine(string.Format(UIMessages.k_VehicleRecordLine, filteredList[i], i + 1));
             }
             Console.WriteLine(vehicleList.ToString());
         }
@@ -107,7 +108,6 @@ namespace ConsoleUI
         internal static void renderSuccsfulActionMessage()
         {
             renderMessageAndRedirect(UIMessages.k_ActionSuccesful);
-            TerminalRenderer.renderToContinueMessage();
         }
 
         internal static void renderMultiChoiceRequest (string[] i_ChoiceArray, string i_ChoiceHeader = null)
@@ -134,9 +134,9 @@ namespace ConsoleUI
 
         }
 
-        internal static void renderExceptionMessage(string i_Message)
+        internal static void renderExceptionMessage(string i_ExceptionMessage)
         {
-            Console.WriteLine(string.Format(asWarningString(UIMessages.k_ExceptionMessage), i_Message));
+            Console.WriteLine(asWarningString(i_ExceptionMessage));
             Console.ReadLine();
         }
 
