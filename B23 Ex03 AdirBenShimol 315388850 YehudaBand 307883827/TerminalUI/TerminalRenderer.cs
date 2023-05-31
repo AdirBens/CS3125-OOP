@@ -30,8 +30,10 @@ namespace ConsoleUI
         {
             StringBuilder pageHeader = new StringBuilder();
 
-            pageHeader.AppendLine(asTitleString(i_Title));
-            
+            pageHeader.Append(asTitleString(i_Title));
+            pageHeader.AppendLine(UIMessages.k_BackSignalMessage);
+
+
             Console.WriteLine(pageHeader.ToString());
         }
 
@@ -42,16 +44,22 @@ namespace ConsoleUI
 
         internal static void renderFilterByStatusRequest(string[] i_VehicleStatusListFromAgent)
         {
-            Console.WriteLine(UIMessages.k_FilterByStatusMessage);
-            renderMultiChoiceRequest(UIMessages.k_FilterByStatusRequest, i_VehicleStatusListFromAgent);
+            StringBuilder filterRequest = new StringBuilder();
+            
+            filterRequest.AppendLine(UIMessages.k_FilterByStatusMessage);
+            filterRequest.AppendLine(UIMessages.k_NoFilterOption);
+            filterRequest.Append(convertChoiceArrayToDisplay(i_VehicleStatusListFromAgent));
+            
+            Console.WriteLine(filterRequest.ToString());
         }
 
         internal static void renderShowVehicleList(List<string> filteredList)
         {
             StringBuilder vehicleList = new StringBuilder();
-            foreach (string vehicleLicensePlate in filteredList)
+            vehicleList.AppendLine(UIMessages.k_VehicleListHeader);
+            for (int i = 0; i < filteredList.Count; i++)
             {
-                vehicleList.AppendLine(vehicleLicensePlate);
+                vehicleList.AppendLine(string.Format(UIMessages.k_VehicleRecordLine, filteredList[i], i + 1));
             }
             Console.WriteLine(vehicleList.ToString());
         }
@@ -60,7 +68,7 @@ namespace ConsoleUI
         {
             string[] tireInflationOptions = typeof(TerminalUserInterface.eTireInflationOptions).GetEnumNames();
 
-            renderMultiChoiceRequest(UIMessages.k_InflateTiresChoiceRequest, tireInflationOptions);
+            renderMultiChoiceRequest(tireInflationOptions, UIMessages.k_InflateTiresChoiceRequest);
         }
 
         internal static void renderVehicleDetails(Dictionary<string, string> i_VehicleDetails)
@@ -94,15 +102,15 @@ namespace ConsoleUI
             messageBuilder.Append(UIMessages.k_RedirectionToMainScreen);
 
             Console.WriteLine(messageBuilder.ToString());
+            renderToContinueMessage();
         }
 
         internal static void renderSuccsfulActionMessage()
         {
             renderMessageAndRedirect(UIMessages.k_ActionSuccesful);
-            TerminalRenderer.renderToContinueMessage();
         }
 
-        internal static void renderMultiChoiceRequest(string i_ChoiceHeader, string[] i_ChoiceArray)
+        internal static void renderMultiChoiceRequest (string[] i_ChoiceArray, string i_ChoiceHeader = null)
         {
             StringBuilder choiceRequest = new StringBuilder();
 
@@ -120,14 +128,15 @@ namespace ConsoleUI
 
         internal static void renderToContinueMessage()
         {
+            Console.WriteLine();
             Console.WriteLine(asActionString(UIMessages.k_ToContinueMessage));
             Console.ReadLine();
 
         }
 
-        internal static void renderExceptionMessage(string i_Message)
+        internal static void renderExceptionMessage(string i_ExceptionMessage)
         {
-            Console.WriteLine(string.Format(asWarningString(UIMessages.k_ExceptionMessage), i_Message));
+            Console.WriteLine(asWarningString(i_ExceptionMessage));
             Console.ReadLine();
         }
 

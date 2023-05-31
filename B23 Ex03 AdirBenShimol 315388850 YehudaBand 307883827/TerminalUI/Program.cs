@@ -7,15 +7,8 @@ namespace TerminalUI
     {
         private static void Main()
         {
-            try
-            {
-                TerminalUserInterface userInterface = new TerminalUserInterface();
-                userInterface.RunProgram();
-            }
-            catch (QuitProgramRaiseException)
-            {
-                TerminalRenderer.renderEndProgramScreen();
-            }
+            TerminalUserInterface userInterface = new TerminalUserInterface();
+            userInterface.RunProgram();
         }
     }
 }
