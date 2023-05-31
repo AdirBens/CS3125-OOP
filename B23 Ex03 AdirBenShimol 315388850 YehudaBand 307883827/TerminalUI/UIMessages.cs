@@ -8,7 +8,7 @@ namespace ConsoleUI
     {
         internal const string k_ToContinueMessage = "To Continue Press the [Enter] key.";
 
-        internal const string k_ProgramTitle = "Garage Management System";
+        internal const string k_ProgramTitle = "GARAGE MANAGEMENT SYSTEM";
         internal const string k_WelcomeMessage = "Welcome to the Garage management system!";
         internal const string k_BackSignalMessage = "Hit \"B\" at any stage to go back to the main menu.";
 
@@ -21,18 +21,14 @@ namespace ConsoleUI
         internal const string k_ChargeBatteryTitle = "CHARGE BATTERY";
         internal const string k_VehicleDetailsTitle = "VEHICLE DETAILS";
 
-
-
-
-
         internal const string k_ActionListHeaderRequest = "Please choose your desired action by entering the corresponding number:";
 
         internal const string k_LicensePlateRequest = "Please enter car License Plate:";
         internal const string k_VehicleTypeRequest = "Please enter vehicle type by entering the corresponding number:";
         internal const string k_MultiChoiceRequest = "Please choose by entering the corresponding number:";
 
-        internal const string k_VehicleDetailRequestMultiChoice = "Please enter the {0} by entering the corresponding number:";
-        internal const string k_VehicleDetailRequest = "Please enter the{0}:";
+        internal const string k_VehicleDetailRequestMultiChoice = "Please enter{0} by entering the corresponding number:";
+        internal const string k_VehicleDetailRequest = "Please enter{0}:";
 
         internal const string k_VehicleExistsMessage = "Vehicle is already in the system.";
         internal const string k_VehicleAddedMessage = "Your vehicel has been added to the system succefully.";

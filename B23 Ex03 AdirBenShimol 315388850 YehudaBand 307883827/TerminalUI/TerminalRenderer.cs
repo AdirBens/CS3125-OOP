@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Reflection.Emit;
@@ -31,47 +30,16 @@ namespace ConsoleUI
         internal static void renderTitle(string i_Title)
         {
             StringBuilder pageHeader = new StringBuilder();
+
             pageHeader.AppendLine(asTitleString(i_Title));
             pageHeader.AppendLine(asMarkedString(UIMessages.k_BackSignalMessage));
+            
             Console.WriteLine(pageHeader.ToString());
         }
 
-        internal static void renderChooseActionRequest()
+        internal static void renderMessage(string i_Message)
         {
-            string[] actionChoices = typeof(TerminalUserInterface.eUserAction).GetEnumNames();
-
-            renderMultiChoiceRequest(UIMessages.k_ActionListHeaderRequest, actionChoices);
-        }
-
-        internal static void renderEnterLicensePlateRequest()
-        {
-            Console.WriteLine(asActionString(UIMessages.k_LicensePlateRequest));
-
-        }
-
-        internal static void renderEnterVehicleTypeRequest(string[] i_VehicleListFromAgent)
-        {
-            renderMultiChoiceRequest(UIMessages.k_VehicleTypeRequest, i_VehicleListFromAgent);
-        }
-
-        internal static void renderVehicleAddedSuccefullyMessage()
-        {
-            StringBuilder vehicleAdded = new StringBuilder();
-
-            vehicleAdded.AppendLine(UIMessages.k_VehicleAddedMessage);
-            vehicleAdded.Append(UIMessages.k_RedirectionToMainScreen);
-
-            Console.WriteLine(vehicleAdded.ToString());
-        }
-
-        internal static void renderVehicleAlreadyExistsMessage()
-        {
-            StringBuilder vehicleExists = new StringBuilder();
-
-            vehicleExists.AppendLine(UIMessages.k_VehicleExistsMessage);
-            vehicleExists.Append(UIMessages.k_RedirectionToMainScreen);
-
-            Console.WriteLine(vehicleExists.ToString());
+            Console.WriteLine(i_Message);
         }
 
         internal static void renderFilterByStatusRequest(string[] i_VehicleStatusListFromAgent)
@@ -90,21 +58,11 @@ namespace ConsoleUI
             Console.WriteLine(vehicleList.ToString());
         }
 
-        internal static void renderSetVehicleStatusRequest(string[] i_VehicleTypeListFromAgent)
-        {
-            renderMultiChoiceRequest(UIMessages.k_SetVehicleStatusRequest, i_VehicleTypeListFromAgent);
-        }
-
         internal static void renderInflateTiresRequest()
         {
             string[] tireInflationOptions = typeof(TerminalUserInterface.eTireInflationOptions).GetEnumNames();
 
             renderMultiChoiceRequest(UIMessages.k_InflateTiresChoiceRequest, tireInflationOptions);
-        }
-
-        internal static void renderFuelTypeRequest(string[] i_FuelTypeListFromAgent)
-        {
-            renderMultiChoiceRequest(UIMessages.k_FuelVehicleTypeRequest, i_FuelTypeListFromAgent);
         }
 
         internal static void renderVehicleDetails(Dictionary<string, string> i_VehicleDetails)
@@ -114,47 +72,46 @@ namespace ConsoleUI
             foreach (KeyValuePair<string, string> vehicleProperty in i_VehicleDetails)
             {
                 string property = parsePropertyToDisplayedProperty(vehicleProperty.Key);
+                    vehicleDetailsBuilder.Append(property);
+                    vehicleDetailsBuilder.Append(k_MidLineSymnol, repeatCount: k_IndentationCount - property.Length);
                 if (property == "wheels")
                 {
-                    //special case for wheels
+                    //int numOfWheels = vehicleProperty; MISIIIINGGGGG
+                    vehicleDetailsBuilder.AppendLine(string.Format(""));
+
                 }
                 else
                 {
-                    string value = vehicleProperty.Value;
-                    vehicleDetailsBuilder.Append(property);
-                    vehicleDetailsBuilder.Append(k_MidLineSymnol, repeatCount: k_IndentationCount - property.Length);
-                    vehicleDetailsBuilder.AppendLine(value);
+                    vehicleDetailsBuilder.AppendLine(vehicleProperty.Value);
                 }
             }
             Console.WriteLine(vehicleDetailsBuilder.ToString());
         }
 
-        internal static void renderSuccsfulActionMessage()
+        internal static void renderMessageAndRedirect(string i_Message)
         {
-            StringBuilder succesfulAction = new StringBuilder();
+            StringBuilder messageBuilder = new StringBuilder();
 
-            succesfulAction.AppendLine(UIMessages.k_ActionSuccesful);
-            succesfulAction.Append(UIMessages.k_RedirectionToMainScreen);
+            messageBuilder.AppendLine(i_Message);
+            messageBuilder.Append(UIMessages.k_RedirectionToMainScreen);
 
-            Console.WriteLine(succesfulAction.ToString());
-            TerminalRenderer.renderToContinueMessage();
-
-
+            Console.WriteLine(messageBuilder.ToString());
         }
 
-        internal static void renderMultiChoiceRequest(string i_ChoiceHeader, string[] i_ChoiceList)
+        internal static void renderSuccsfulActionMessage()
+        {
+            renderMessageAndRedirect(UIMessages.k_ActionSuccesful);
+            TerminalRenderer.renderToContinueMessage();
+        }
+
+        internal static void renderMultiChoiceRequest(string i_ChoiceHeader, string[] i_ChoiceArray)
         {
             StringBuilder choiceRequest = new StringBuilder();
 
             choiceRequest.AppendLine(asActionString(i_ChoiceHeader));
-            choiceRequest.Append(convertChoiceList(i_ChoiceList));
+            choiceRequest.Append(convertChoiceArrayToDisplay(i_ChoiceArray));
 
             Console.WriteLine(choiceRequest.ToString());
-        }
-
-        internal static void renderOpenRequest(string i_RequestHeader)
-        {
-            Console.WriteLine(asActionString(i_RequestHeader));
         }
 
         internal static void renderEndProgramScreen()
@@ -170,18 +127,13 @@ namespace ConsoleUI
 
         }
 
-        internal static void renderUserInputRequestMessage(string i_MessageDialog)
-        {
-            Console.WriteLine(i_MessageDialog);
-        }
-
         internal static void renderExceptionMessage(string i_Message)
         {
             Console.WriteLine(string.Format(asWarningString(UIMessages.k_ExceptionMessage), i_Message));
             Console.ReadLine();
         }
 
-        private static string convertChoiceList(string[] i_ChoiceList)
+        private static string convertChoiceArrayToDisplay(string[] i_ChoiceList)
         {
             StringBuilder listToDisplay = new StringBuilder();
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TerminalUI;
 using GarageLogic;
+using GarageLogic.Exceptions;
 using System.Runtime.Remoting.Messaging;
 
 namespace ConsoleUI
@@ -54,15 +55,17 @@ namespace ConsoleUI
                         }
                         actionFinished = true;
                     }
-                    catch (FormatException ex)
+                    catch (FormatException fe)
                     {
-                        TerminalRenderer.renderExceptionMessage(ex.Message);
+                        TerminalRenderer.renderExceptionMessage(fe.Message);
                     }
-                    catch (ArgumentException ex)
+                    catch (ArgumentException fe)
                     {
-                        TerminalRenderer.renderExceptionMessage(ex.Message);
+                        TerminalRenderer.renderExceptionMessage(fe.Message);
                     }
-                    catch (BackSignalRaiseException ex)
+                    ///ASK Adir to change access modifier
+                    ///catch (ValueOutOfRangeException) { }
+                    catch (BackSignalRaiseException bsre)
                     {
                         actionFinished = true;
                     }
@@ -79,15 +82,17 @@ namespace ConsoleUI
             {
                 try
                 {
+                    string[] actionChoices = typeof(eUserAction).GetEnumNames();
+
                     TerminalRenderer.renderTitle(UIMessages.k_MainMenuTitle);
-                    TerminalRenderer.renderChooseActionRequest();
+                    TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_ActionListHeaderRequest, actionChoices);
 
                     int userNumChoice = (int) readInputAsFloat("");
                     validateInput(userNumChoice, typeof(eUserAction));
 
-                    eUserAction initialAction = (eUserAction)userNumChoice;
+                    eUserAction userAction = (eUserAction)userNumChoice;
 
-                    return initialAction;
+                    return userAction;
                 }
                 catch (FormatException ex)
                 {
@@ -109,7 +114,7 @@ namespace ConsoleUI
 
             if (!isVehicleInSystem)
             {
-                TerminalRenderer.renderEnterVehicleTypeRequest(GarageAgent.GetSupportedVehicleTypes());
+                TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_VehicleTypeRequest, GarageAgent.GetSupportedVehicleTypes());
                 int vehicleTypeID = (int) readInputAsFloat("");
 
                 Dictionary<string, string[]> missingDetails = GarageAgent.GetRequireadDetails(licensePlate, vehicleTypeID);
@@ -118,11 +123,11 @@ namespace ConsoleUI
                 detailsForAgent = getMissingDetailsFromUser(missingDetails);
                 GarageAgent.SetRequireadDetails(detailsForAgent);
 
-                TerminalRenderer.renderVehicleAddedSuccefullyMessage();
+                TerminalRenderer.renderMessageAndRedirect(UIMessages.k_VehicleAddedMessage);
             }
             else
             {
-                Console.WriteLine(UIMessages.k_VehicleExistsMessage);
+                TerminalRenderer.renderMessage(UIMessages.k_VehicleExistsMessage);
                 string[] vehicleStatusTypes = GarageAgent.GetVehicleStatusTypes();
 
                 GarageAgent.UpdateVehicleStatus(licensePlate, Array.IndexOf(vehicleStatusTypes, "InRepair")); ////////////////// HANDLE THIS FUCKING SHIIIIT
@@ -138,15 +143,16 @@ namespace ConsoleUI
             foreach (KeyValuePair<string, string[]> missingDetail in i_MissingDetails)
             {
                 string missingDetailToDisplay = TerminalRenderer.parsePropertyToDisplayedProperty(missingDetail.Key);
+                string multiChoiceDetailRequest = string.Format(UIMessages.k_VehicleDetailRequestMultiChoice, missingDetailToDisplay);
                 string detailRequest = string.Format(UIMessages.k_VehicleDetailRequest, missingDetailToDisplay);
 
                 if (missingDetail.Value != null)
                 {
-                    TerminalRenderer.renderMultiChoiceRequest(detailRequest, missingDetail.Value);
+                    TerminalRenderer.renderMultiChoiceRequest(multiChoiceDetailRequest, missingDetail.Value);
                 }
                 else
                 {
-                    TerminalRenderer.renderOpenRequest(detailRequest);
+                    TerminalRenderer.renderMessage(TerminalRenderer.asActionString(detailRequest));
                 }
 
                 string missingDetailValue = readInputLine("");
@@ -160,6 +166,7 @@ namespace ConsoleUI
         private void showVehicleList()
         {
             TerminalRenderer.renderTitle(UIMessages.k_ShowVehicleListTitle);
+            
             TerminalRenderer.renderFilterByStatusRequest(GarageAgent.GetVehicleStatusTypes());
 
             int vehicleStatusID = (int) readInputAsFloat("");
@@ -179,7 +186,8 @@ namespace ConsoleUI
 
             string[] vehicleStatusTypes = GarageAgent.GetVehicleStatusTypes();
 
-            TerminalRenderer.renderSetVehicleStatusRequest(vehicleStatusTypes);
+            TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_SetVehicleStatusRequest, vehicleStatusTypes);
+
             vehicleStatusAsNumber = (int) readInputAsFloat("");
 
             GarageAgent.UpdateVehicleStatus(licensePlate, vehicleStatusAsNumber);
@@ -228,7 +236,7 @@ namespace ConsoleUI
 
             string[] fuelTypes = GarageAgent.GetFuelTypes();
 
-            TerminalRenderer.renderFuelTypeRequest(fuelTypes);
+            TerminalRenderer.renderMultiChoiceRequest(UIMessages.k_FuelVehicleTypeRequest, fuelTypes);
             int fuelTypeAsNumber = (int) readInputAsFloat("");
 
             float numOfLiters = readInputAsFloat(TerminalRenderer.asActionString(UIMessages.k_NumOfLitersToFuelRequest), true);
@@ -283,7 +291,7 @@ namespace ConsoleUI
 
         private string readInputLine(string i_MessageDialog)
         {
-            TerminalRenderer.renderUserInputRequestMessage(i_MessageDialog);
+            TerminalRenderer.renderMessage(i_MessageDialog);
             string userInput = Console.ReadLine();
 
             if (userInput.Equals(k_BackSignalFromUser) == true)
