@@ -28,7 +28,7 @@ namespace GarageLogic
             if (r_FuelType != i_FuelType)
             {
                 throw new ArgumentException(paramName: ExceptionsMessageStrings.k_FuelTypeArg,
-                                              message: ExceptionsMessageStrings.k_WrongFuelType);
+                                              message: ExceptionsMessageStrings.k_WrongFuelTypeMessage);
             }
 
             setCurrentLevel(levelAfterRefuel);

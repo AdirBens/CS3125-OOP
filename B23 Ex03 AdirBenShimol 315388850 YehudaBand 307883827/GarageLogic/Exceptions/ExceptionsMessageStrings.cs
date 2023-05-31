@@ -3,29 +3,28 @@ namespace GarageLogic.Exceptions
 {
     internal class ExceptionsMessageStrings
     {
-        internal const string k_WrongFuelType = "";
-        internal const string k_FuelTypeArg = "FuelType";
-        internal const string k_InvalidPropertyValue = "";
+        internal const string k_InvalidPropertyValueMessage = "Invalid Property Value Passed";
 
-        internal const string k_VehicleStatusArg = "VehicleStatus";
-        internal const string k_InvalidVehicleStatusMessage = "";
+        internal const string k_FuelTypeArg = "Fuel Type";
+        internal const string k_WrongFuelTypeMessage = "Wrong Fuel Type";
+        internal const string k_UnsupportedFuelTypeMessage = "Unsupported Fuel Type";
 
-        internal const string k_VehicleTypeNotSupportMethodMessage = "";
-        internal const string k_VehicleTypeNotSupportMethod = "";
+        internal const string k_VehicleStatusArg = "Vehicle Status";
+        internal const string k_InvalidVehicleStatusMessage = "Unsupported Vehicle Status";
 
-        internal const string k_UnsupportedFuelTypeMessage = "";
-        internal const string k_UnsupportedFuelType = "";
+        internal const string k_VehicleTypeNotSupportMethodMessage = "Method Unsupported By Vehicle Type";
+        internal const string k_VehicleTypeNotSupportMethod = "Vehicle (License Plate)";
+        
+        internal const string k_UnsupportedVehicleTypeMessage = "Unsupported Vehicle Type";
 
-        internal const string k_UnsupportedVehicleType = "";
-        internal const string k_UnsupportedVehicleTypeMessage = "";
+        internal const string k_VehicleAlreadyExists = "Vehicle Already Exists in Collection";
+        internal const string k_LicensePlateArg = "License Plate";
 
-        internal const string k_VehicleAlreadyExists = "";
-        internal const string k_LicensePlateArg = "";
+        internal const string k_VehicleDoesNotExists = "Vehicle Does Not Exists in Collection";
+        internal const string k_VehicleTypeArg = "Vehicle Type";
 
-        internal const string k_VehicleDoesNotExists = "";
-        internal const string k_VehicleTypeArg = "";
-
-
-        internal const string k_ValueOutOfRange = "FuelType";
+        internal const string k_ValueOutOfRange = "{0} Value must be in range of {1} and {2}";
+        internal const string k_AmountEnergyToAdd = "Amount To Add";
+        internal const string k_AirPressureToAdd = "Air Pressure To Inflate";
     }
 }

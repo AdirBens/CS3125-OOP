@@ -66,7 +66,7 @@ namespace GarageLogic.SupportedVehicles
             
             if (!isAllPass)
             {
-                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValue);
+                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
         }
     }

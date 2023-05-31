@@ -69,7 +69,7 @@ namespace GarageLogic
 
             if (!isAllPass)
             {
-                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValue);
+                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
 
             return isAllPass;

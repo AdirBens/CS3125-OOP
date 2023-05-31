@@ -92,7 +92,7 @@ namespace GarageLogic
 
             if (!isValidEnumName)
             {
-                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_InvalidVehicleStatus,
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleStatusArg,
                     message: ExceptionsMessageStrings.k_InvalidVehicleStatusMessage);
             }
             else
@@ -134,7 +134,7 @@ namespace GarageLogic
 
             if (!isValidEnumName)
             {
-                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_UnsupportedFuelType,
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_FuelTypeArg,
                                     message: ExceptionsMessageStrings.k_UnsupportedFuelTypeMessage);
             }
             else
@@ -166,7 +166,7 @@ namespace GarageLogic
             }
             else
             {
-                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_UnsupportedVehicleType,
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleTypeArg,
                                     message: ExceptionsMessageStrings.k_UnsupportedVehicleTypeMessage);
             }
 

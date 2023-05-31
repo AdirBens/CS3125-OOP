@@ -126,7 +126,7 @@ namespace GarageLogic
             
             if (!isStatusValid)
             {
-                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_InvalidVehicleStatus,
+                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleStatusArg,
                                     message: ExceptionsMessageStrings.k_InvalidVehicleStatusMessage);
             }
         }

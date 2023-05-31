@@ -40,7 +40,8 @@ namespace GarageLogic
             }
             else
             {
-                throw new ValueOutOfRangeException(null, 0, m_RecommendedTirePressure - m_CurrentTirePressure);
+                throw new ValueOutOfRangeException(null, ExceptionsMessageStrings.k_AirPressureToAdd,
+                        0, m_RecommendedTirePressure - m_CurrentTirePressure);
             }
         }
     }

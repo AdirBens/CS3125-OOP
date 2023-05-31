@@ -21,7 +21,8 @@ namespace GarageLogic
             }
             else
             {
-                throw new ValueOutOfRangeException(null, 0f, r_MaxCapacity);
+                throw new ValueOutOfRangeException(null, ExceptionsMessageStrings.k_AmountEnergyToAdd, 
+                    0, r_MaxCapacity - m_CurrentLevel);
             }
         }
     }
