@@ -25,8 +25,8 @@ namespace GarageLogic.SupportedVehicles
             get; set;
         }
 
-        internal Motorcycle(string i_LicensePlate)
-            : base(i_LicensePlate) { }
+        internal Motorcycle(string i_LicensePlate, VehicleBuilder.eVehicleType i_VehicleType)
+            : base(i_LicensePlate, i_VehicleType) { }
 
         internal override Dictionary<string, string[]> GetRequiredProperties()
         {
@@ -75,6 +75,14 @@ namespace GarageLogic.SupportedVehicles
             {
                 throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format(@"{0}
+Unique Properties:
+Engine Displacement: {1} L
+License Class: {2}", base.ToString(), m_EngineDisplacement, m_LicenseClass.ToString());
         }
     }
 }

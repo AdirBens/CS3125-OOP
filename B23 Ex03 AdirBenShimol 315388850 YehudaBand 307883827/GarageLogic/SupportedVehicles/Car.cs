@@ -28,8 +28,8 @@ namespace GarageLogic.SupportedVehicles
         internal eBodyColour m_BodyColour { get; private set; }
         internal eNumOfDoors m_DoorsNumber { get; private set; }
 
-        internal Car(string i_LicensePlate)
-            : base(i_LicensePlate) { }
+        internal Car(string i_LicensePlate, VehicleBuilder.eVehicleType i_VehicleType)
+            : base(i_LicensePlate, i_VehicleType) { }
 
         internal override Dictionary<string, string[]> GetRequiredProperties()
         {
@@ -78,6 +78,14 @@ namespace GarageLogic.SupportedVehicles
             {
                 throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format(@"{0}
+Unique Properties:
+  [>] Body Color: {1}
+  [>] Number Of Doors: {2}", base.ToString(), m_BodyColour.ToString(), m_DoorsNumber.ToString());
         }
     }
 }

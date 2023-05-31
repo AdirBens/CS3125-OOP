@@ -33,5 +33,11 @@ namespace GarageLogic
 
             setCurrentLevel(levelAfterRefuel);
         }
+
+        public override string ToString()
+        {
+            return string.Format(@"{0}
+  [>] Fuel Type: {1}", base.ToString(), r_FuelType.ToString());
+        }
     }
 }

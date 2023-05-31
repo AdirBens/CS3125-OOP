@@ -55,23 +55,23 @@ namespace GarageLogic
             { eVehicleType.FuelTruck, 135 }
         };
 
-        internal static Vehicle CreateVehicle(string i_LicencePlate, eVehicleType i_VehicleType)
+        internal static Vehicle CreateVehicle(string i_LicensePlate, eVehicleType i_VehicleType)
         {
             Vehicle assembledVehicle;
 
             if (i_VehicleType == eVehicleType.FuelCar ||
                 i_VehicleType == eVehicleType.ElectricCar)
             {
-                assembledVehicle = new Car(i_LicencePlate);
+                assembledVehicle = new Car(i_LicensePlate, i_VehicleType);
             }
             else if (i_VehicleType == eVehicleType.FuelMotorcycle ||
                      i_VehicleType == eVehicleType.ElectricMotorcycle)
             {
-                assembledVehicle = new Motorcycle(i_LicencePlate);
+                assembledVehicle = new Motorcycle(i_LicensePlate, i_VehicleType);
             }
             else if (i_VehicleType == eVehicleType.FuelTruck)
             {
-                assembledVehicle = new Truck(i_LicencePlate);
+                assembledVehicle = new Truck(i_LicensePlate, i_VehicleType);
             }
             else
             {
@@ -110,7 +110,7 @@ namespace GarageLogic
                     else
                     {
                         throw new ArgumentException(paramName: ExceptionsMessageStrings.k_FuelTypeArg,
-                                            message: ExceptionsMessageStrings.k_UnsupportedFuelType);
+                                            message: ExceptionsMessageStrings.k_UnsupportedFuelTypeMessage);
                     }
                 }
                 else if (i_VehicleType == eVehicleType.ElectricCar ||

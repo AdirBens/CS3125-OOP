@@ -40,16 +40,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnergyUnits\Battery.cs" />
+    <Compile Include="Exceptions\ExceptionsMessageStrings.cs" />
     <Compile Include="Exceptions\ValueOutOfRangeException.cs" />
     <Compile Include="EnergyUnits\FuelTank.cs" />
     <Compile Include="GarageAgent.cs" />
+    <Compile Include="GarageLogicBaseStrings.cs" />
     <Compile Include="GarageVehicleCollection.cs" />
     <Compile Include="SupportedVehicles\Car.cs" />
     <Compile Include="EnergyUnits\EnergySource.cs" />
     <Compile Include="ClientRecord.cs" />
     <Compile Include="SupportedVehicles\Motorcycle.cs" />
     <Compile Include="SupportedVehicles\Truck.cs" />
-    <Compile Include="Test.cs" />
     <Compile Include="SupportedVehicles\Vehicle.cs" />
     <Compile Include="VehicleBuilder.cs" />
     <Compile Include="Wheel.cs" />

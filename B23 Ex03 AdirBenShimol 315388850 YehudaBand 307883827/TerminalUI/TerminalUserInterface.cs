@@ -266,12 +266,8 @@ namespace ConsoleUI
         private void showVehicleDetails()
         {
             TerminalRenderer.renderTitle(UIMessages.k_VehicleDetailsTitle);
-
             string licensePlate = getLicensePlateFromUser();
-
-            Dictionary<string, string> vehicleDetails = GarageAgent.GetVehicleProfile(licensePlate);
-
-            TerminalRenderer.renderVehicleDetails(vehicleDetails);
+            TerminalRenderer.renderMessage(GarageAgent.GetVehicleProfile(licensePlate));
             TerminalRenderer.renderToContinueMessage();
         }
 

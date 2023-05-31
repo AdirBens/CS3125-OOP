@@ -44,5 +44,12 @@ namespace GarageLogic
                         0, m_RecommendedTirePressure - m_CurrentTirePressure);
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format(@"'{0}' Tire
+  [>] Recommend Air Pressure: {1}
+  [>] Current Air Pressure: {2}", m_TireManufacturer, m_RecommendedTirePressure, m_CurrentTirePressure);
+        }
     }
 }

@@ -69,6 +69,7 @@ namespace GarageLogic
                         break;
                     }
                 }
+                requestedVehicle.m_VehicleStatus = currentStatus;
             }
             else
             {
@@ -92,6 +93,7 @@ namespace GarageLogic
             {
                 removeRecord(i_LicensePlate, vehicleRecord.status);
                 addRecord(i_LicensePlate, vehicleRecord.vehicle, i_UpdatedStatus);
+                vehicleRecord.vehicle.m_VehicleStatus = i_UpdatedStatus;
             }
         }
 

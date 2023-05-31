@@ -24,7 +24,7 @@ namespace GarageLogic.Exceptions
         internal const string k_VehicleTypeArg = "Vehicle Type";
 
         internal const string k_ValueOutOfRange = "{0} Value must be in range of {1} and {2}";
-        internal const string k_AmountEnergyToAdd = "Amount To Add";
+        internal const string k_AmountEnergyToAdd = "Energy To Add";
         internal const string k_AirPressureToAdd = "Air Pressure To Inflate";
     }
 }

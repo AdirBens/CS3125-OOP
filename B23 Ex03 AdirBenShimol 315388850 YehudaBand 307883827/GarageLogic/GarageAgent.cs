@@ -56,30 +56,31 @@ namespace GarageLogic
             return vehiclesFiltered;
         }
 
-        public static Dictionary<string, string> GetVehicleProfile(string i_LicensePlate)
+        public static string GetVehicleProfile(string i_LicensePlate)
         {
-            throw new NotImplementedException();
+            s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
+            return s_CurrentVehicleHandle.vehicle.ToString();
         }
 
-        public static Dictionary<string, string[]> GetRequireadDetails(string i_LicencePlate, int i_VehicleTypeNumber)
+        public static Dictionary<string, string[]> GetRequireadDetails(string i_LicensePlate, int i_VehicleTypeNumber)
         {
-            Vehicle newVehicleSkeleton = createNewVehicle(i_LicencePlate, i_VehicleTypeNumber);
+            Vehicle newVehicleSkeleton = createNewVehicle(i_LicensePlate, i_VehicleTypeNumber);
             return newVehicleSkeleton.GetRequiredProperties();
         }
 
-        public static void SetRequireadDetails(string i_LicencePlate, Dictionary<string, string> i_PropertiesDict)
+        public static void SetRequireadDetails(string i_LicensePlate, Dictionary<string, string> i_PropertiesDict)
         {
-            s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicencePlate);
+            s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
             s_CurrentVehicleHandle.vehicle.SetRequiredProperties(i_PropertiesDict);
         }
 
-        public static bool LookUpLicensePlate(string i_LicencePlate)
+        public static bool LookUpLicensePlate(string i_LicensePlate)
         {
-            bool isExists = sr_VehicleCollection.IsVehicleExists(i_LicencePlate);
+            bool isExists = sr_VehicleCollection.IsVehicleExists(i_LicensePlate);
 
             if (isExists)
             {
-                sr_VehicleCollection.UpdateVehicleStaus(i_LicencePlate, eVehicelStatus.InRepair);
+                sr_VehicleCollection.UpdateVehicleStaus(i_LicensePlate, eVehicelStatus.InRepair);
             }
 
             return isExists;
@@ -153,7 +154,7 @@ namespace GarageLogic
             }
         }
         
-        private static Vehicle createNewVehicle(string i_LicencePlate, int i_VehicleType)
+        private static Vehicle createNewVehicle(string i_LicensePlate, int i_VehicleType)
         {
             Vehicle newVehicle = null;
             eVehicleType vehicleType;
@@ -161,7 +162,7 @@ namespace GarageLogic
 
             if (isParsed)
             {
-                newVehicle = CreateVehicle(i_LicencePlate, vehicleType);
+                newVehicle = CreateVehicle(i_LicensePlate, vehicleType);
                 sr_VehicleCollection.AddNewVehicle(newVehicle, eVehicelStatus.InRepair);
             }
             else

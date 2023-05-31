@@ -18,8 +18,8 @@ namespace GarageLogic.SupportedVehicles
         internal eLoadType m_IsHazmatTransporter { get; set; }
         internal float m_CurrentCargoVolume { get; set; }
 
-        internal Truck(string i_LicensePlate)
-            : base(i_LicensePlate) { }
+        internal Truck(string i_LicensePlate, VehicleBuilder.eVehicleType i_VehicleType)
+            : base(i_LicensePlate, i_VehicleType) { }
 
         internal override Dictionary<string, string[]> GetRequiredProperties()
         {
@@ -68,6 +68,14 @@ namespace GarageLogic.SupportedVehicles
             {
                 throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
+        }
+
+        public override string ToString()
+        {
+            return string.Format(@"{0}
+Unique Properties:
+Current Cargo Volume: {1}
+Cargo Type: {2}", base.ToString(), m_CurrentCargoVolume, m_IsHazmatTransporter.ToString());
         }
     }
 }

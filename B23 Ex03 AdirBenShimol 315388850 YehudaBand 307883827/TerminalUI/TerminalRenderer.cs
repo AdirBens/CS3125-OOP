@@ -59,7 +59,7 @@ namespace ConsoleUI
             vehicleList.AppendLine(UIMessages.k_VehicleListHeader);
             for (int i = 0; i < filteredList.Count; i++)
             {
-                vehicleList.AppendLine(string.Format(UIMessages.k_VehicleRecordLine, filteredList[i], i + 1));
+                vehicleList.AppendLine(string.Format(UIMessages.k_VehicleRecordLine, i + 1, filteredList[i]));
             }
             Console.WriteLine(vehicleList.ToString());
         }
@@ -82,6 +82,7 @@ namespace ConsoleUI
                     vehicleDetailsBuilder.Append(k_MidLineSymnol, repeatCount: k_IndentationCount - property.Length);
                 if (property == "wheels")
                 {
+                    /// TODO:
                     //int numOfWheels = vehicleProperty; MISIIIINGGGGG
                     vehicleDetailsBuilder.AppendLine(string.Format(""));
 

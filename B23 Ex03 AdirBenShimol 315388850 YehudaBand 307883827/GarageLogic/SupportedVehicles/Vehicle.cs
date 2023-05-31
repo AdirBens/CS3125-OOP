@@ -1,25 +1,24 @@
 ﻿using GarageLogic.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Reflection;
 
 namespace GarageLogic
 {
-
     public abstract class Vehicle
     {
+        internal VehicleBuilder.eVehicleType m_VehicleType { get; private set; }
         internal string m_LicensePlate { get; set; }
         internal string m_ModelName { get; set; }
-        internal GarageAgent.eVehicelStatus m_VehicleStatus;
+        internal GarageAgent.eVehicelStatus m_VehicleStatus { get; set; }
         internal EnergySource m_EnergySource;
         internal List<Wheel> m_Wheels;
         internal ClientRecord m_ClientRecord;
 
-        internal Vehicle(string i_LicensePlate)
+        internal Vehicle(string i_LicensePlate, VehicleBuilder.eVehicleType i_VehicleType)
         {
             m_LicensePlate = i_LicensePlate;
+            m_VehicleType =  i_VehicleType;
         }
 
         internal abstract Dictionary<string, string[]> GetRequiredProperties();
@@ -56,7 +55,7 @@ namespace GarageLogic
                 {
                     m_ClientRecord.m_ClientName = propertyValue;
                 }
-                else if (propertyValue == "m_ClientRecord.m_PhoneNumber")
+                else if (propertyName == "m_ClientRecord.m_PhoneNumber")
                 {
                     m_ClientRecord.m_PhoneNumber = propertyValue;
                 }
@@ -77,8 +76,19 @@ namespace GarageLogic
 
         public override string ToString()
         {
-            string toString = string.Format("[{0}]]", m_LicensePlate);
-            return toString;
+            return string.Format(@"
+[{0}] {1} | {2}
+Current Status: {3}
+{4}
+{5}
+
+Wheels: 
+  [>] {6} X {7}
+", m_LicensePlate, m_VehicleType.ToString(), m_ModelName, 
+   m_VehicleStatus, 
+   m_ClientRecord.ToString(), 
+   m_EnergySource.ToString(), 
+   m_Wheels.Count, m_Wheels.First().ToString());
         }
 
         public override int GetHashCode()

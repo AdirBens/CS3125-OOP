@@ -25,5 +25,14 @@ namespace GarageLogic
                     0, r_MaxCapacity - m_CurrentLevel);
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format(@"
+EnergyUnit: 
+  [>] {0}
+  [>] Current Capacity: {1}
+  [>] Max Capacity: {2}", this.GetType().Name, m_CurrentLevel ,r_MaxCapacity);
+        }
     }
 }
