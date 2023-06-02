@@ -71,27 +71,12 @@ namespace ConsoleUI
             renderMultiChoiceRequest(tireInflationOptions, UIMessages.k_InflateTiresChoiceRequest);
         }
 
-        internal static void renderVehicleDetails(Dictionary<string, string> i_VehicleDetails)
+        internal static void renderVehicleDetails(string i_VehicleDetails, string i_LicensePlate)
         {
-            const int k_IndentationCount = 25;
             StringBuilder vehicleDetailsBuilder = new StringBuilder();
-            foreach (KeyValuePair<string, string> vehicleProperty in i_VehicleDetails)
-            {
-                string property = parsePropertyToDisplayedProperty(vehicleProperty.Key);
-                    vehicleDetailsBuilder.Append(property);
-                    vehicleDetailsBuilder.Append(k_MidLineSymnol, repeatCount: k_IndentationCount - property.Length);
-                if (property == "wheels")
-                {
-                    /// TODO:
-                    //int numOfWheels = vehicleProperty; MISIIIINGGGGG
-                    vehicleDetailsBuilder.AppendLine(string.Format(""));
+            vehicleDetailsBuilder.AppendLine(asTitleString(string.Format(UIMessages.k_VehicleDetailsPresentedTitle, i_LicensePlate)));
+            vehicleDetailsBuilder.AppendLine(i_VehicleDetails);
 
-                }
-                else
-                {
-                    vehicleDetailsBuilder.AppendLine(vehicleProperty.Value);
-                }
-            }
             Console.WriteLine(vehicleDetailsBuilder.ToString());
         }
 
@@ -123,8 +108,9 @@ namespace ConsoleUI
 
         internal static void renderEndProgramScreen()
         {
-            Console.WriteLine(UIMessages.k_GoodbyeMessage);
-            Console.ReadLine();
+            
+            Console.WriteLine(asTitleString(UIMessages.k_GoodbyeMessage));
+            renderToContinueMessage();
         }
 
         internal static void renderToContinueMessage()

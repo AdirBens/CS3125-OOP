@@ -36,8 +36,10 @@ namespace GarageLogic
 
         public override string ToString()
         {
-            return string.Format(@"{0}
-  [>] Fuel Type: {1}", base.ToString(), r_FuelType.ToString());
+            return string.Format(@"
+{0}: 
+  [>] Current Battery Level: {1} L
+  [>] Max Capacity: {2} L", this.GetType().Name, m_CurrentLevel, r_MaxCapacity);
         }
     }
 }

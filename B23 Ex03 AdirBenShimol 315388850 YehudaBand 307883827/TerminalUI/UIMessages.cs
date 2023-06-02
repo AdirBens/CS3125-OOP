@@ -20,6 +20,8 @@ namespace ConsoleUI
         internal const string k_FuelVehicleTitle = "FUEL VEHICLE";
         internal const string k_ChargeBatteryTitle = "CHARGE BATTERY";
         internal const string k_VehicleDetailsTitle = "VEHICLE DETAILS";
+        internal const string k_VehicleDetailsPresentedTitle = "DETAILS OF: {0}";
+
 
         internal const string k_ActionListHeaderRequest = "Please choose your desired action by entering the corresponding number:";
 
@@ -60,5 +62,7 @@ namespace ConsoleUI
 
         internal const string k_FormatExceptionNumParse = "Input entered is not a valid number";
         internal const string k_ArgumentExceptionRange = "{0} is invalid!";
+        internal const string k_ValueOutOfRange = "Choice must be in the range of {0} to {1}";
+
     }
 }

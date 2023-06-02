@@ -12,5 +12,13 @@ namespace GarageLogic
             
             setCurrentLevel(levelAfterReCharge);
         }
+
+        public override string ToString()
+        {
+            return string.Format(@"
+{0}: 
+  [>] Current Battery Level: {1} Hr
+  [>] Max Capacity: {2} Hr", this.GetType().Name, m_CurrentLevel, r_MaxCapacity);
+        }
     }
 }

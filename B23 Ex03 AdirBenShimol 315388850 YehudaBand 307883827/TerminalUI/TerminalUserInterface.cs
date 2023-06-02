@@ -49,6 +49,7 @@ namespace ConsoleUI
                                 showVehicleDetails();
                                 break;
                             case eUserAction.ExitProgram:
+                                TerminalRenderer.renderEndProgramScreen();
                                 break;
                         }
                         actionFinished = true;
@@ -102,7 +103,10 @@ namespace ConsoleUI
                 {
                     TerminalRenderer.renderExceptionMessage(ex.Message);
                 }
-                catch (BackSignalRaiseException) { }
+                catch (BackSignalRaiseException)
+                {
+                    Console.Clear() ;
+                }
             }
         }
 
@@ -267,8 +271,9 @@ namespace ConsoleUI
         {
             TerminalRenderer.renderTitle(UIMessages.k_VehicleDetailsTitle);
             string licensePlate = getLicensePlateFromUser();
-            TerminalRenderer.renderMessage(GarageAgent.GetVehicleProfile(licensePlate));
-            TerminalRenderer.renderToContinueMessage();
+            Console.Clear();
+            TerminalRenderer.renderVehicleDetails(GarageAgent.GetVehicleProfile(licensePlate), licensePlate);
+            TerminalRenderer.renderSuccsfulActionMessage();
         }
 
         private void displayStartUpScreen()
@@ -281,9 +286,10 @@ namespace ConsoleUI
 
         private static void validateInput(int userNumChoice, Type typeOfEnum)
         {
-            if (userNumChoice <= 0 || userNumChoice >= Enum.GetValues(typeOfEnum).Length)
+            int numOfChoices = Enum.GetValues(typeOfEnum).Length;
+            if (userNumChoice <= 0 || userNumChoice >= numOfChoices)
             {
-                throw new ArgumentException(UIMessages.k_ArgumentExceptionRange);
+                throw new ArgumentException(string.Format(UIMessages.k_ValueOutOfRange, 1, numOfChoices));
             }
         }
 
