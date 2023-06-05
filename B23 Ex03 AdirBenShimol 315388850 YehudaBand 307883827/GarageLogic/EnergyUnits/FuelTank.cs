@@ -38,7 +38,7 @@ namespace GarageLogic
         {
             return string.Format(@"
 {0}: 
-  [>] Current Battery Level: {1} L
+  [>] Current Fuel Level: {1} L
   [>] Max Capacity: {2} L", this.GetType().Name, m_CurrentLevel, r_MaxCapacity);
         }
     }

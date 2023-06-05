@@ -44,7 +44,6 @@
     <Compile Include="Exceptions\ValueOutOfRangeException.cs" />
     <Compile Include="EnergyUnits\FuelTank.cs" />
     <Compile Include="GarageAgent.cs" />
-    <Compile Include="GarageLogicBaseStrings.cs" />
     <Compile Include="GarageVehicleCollection.cs" />
     <Compile Include="SupportedVehicles\Car.cs" />
     <Compile Include="EnergyUnits\EnergySource.cs" />
