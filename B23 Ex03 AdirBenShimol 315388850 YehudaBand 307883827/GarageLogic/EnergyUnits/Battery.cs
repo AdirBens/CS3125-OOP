@@ -17,7 +17,8 @@ namespace GarageLogic
 {0}:
   [>] Battery Percentage: {1:0.00} %
   [>] Current Battery Level: {2:0.00} Hr
-  [>] Max Capacity: {3} Hr", this.GetType().Name, EnergyLevelPercentage, CurrentEnergyLevel, r_MaxCapacity);
+  [>] Max Capacity: {3} Hr", this.GetType().Name, EnergyLevelPercentage, 
+                             CurrentEnergyLevel, r_MaxCapacity);
         }
     }
 }

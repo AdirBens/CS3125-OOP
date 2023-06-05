@@ -1,28 +1,27 @@
-﻿using GarageLogic.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GarageLogic.Exceptions;
 using static GarageLogic.VehicleBuilder;
 using static GarageLogic.GarageAgent;
+
 
 namespace GarageLogic
 {
     public abstract class Vehicle
     {
+        protected readonly Dictionary<string, string[]> r_RequiredProperties;
         internal readonly eVehicleType r_VehicleType;
         internal readonly string r_LicensePlate;
-        internal string ModelName { get; private set; }
-        internal eVehicelStatus VehicleStatus { get; set; }
         internal EnergyUnit m_EnergySource;
         internal WheelsCollection m_Wheels;
         internal ClientRecord m_ClientRecord;
-
-        protected readonly Dictionary<string, string[]> r_RequiredProperties;
+        internal string ModelName { get; private set; }
+        internal eVehicelStatus VehicleStatus { get; set; }
 
         internal Vehicle(string i_LicensePlate, eVehicleType i_VehicleType)
         {
             r_LicensePlate = i_LicensePlate;
             r_VehicleType =  i_VehicleType;
-
             r_RequiredProperties = new Dictionary<string, string[]>
             {
                 { "ModelName" , null },
@@ -34,9 +33,7 @@ namespace GarageLogic
             };
         }
 
-        internal abstract Dictionary<string, string[]> GetRequiredProperties();
-        internal abstract void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict);
-        protected bool setBaseProperties(Dictionary<string, string> i_PropertiesValuesDict)
+        protected bool SetBaseProperties(Dictionary<string, string> i_PropertiesValuesDict)
         {
             bool isAllPass = true;
             string firstFailure = string.Empty;
@@ -44,8 +41,9 @@ namespace GarageLogic
             foreach (string propertyName in i_PropertiesValuesDict.Keys)
             {
                 string propertyValue = i_PropertiesValuesDict[propertyName];
-                
+
                 isAllPass &= propertyValue != null;
+
                 if (propertyName == "ModelName")
                 {
                     ModelName = propertyValue;
@@ -53,7 +51,7 @@ namespace GarageLogic
                 else if (propertyName == "CurrentEnergyLevel")
                 {
                     isAllPass &= float.TryParse(propertyValue, out float energyLevel);
-                    m_EnergySource.setCurrentLevel(energyLevel);
+                    m_EnergySource.SetCurrentLevel(energyLevel);
                 }
                 else if (propertyName == "CurrentTirePressure")
                 {
@@ -81,21 +79,35 @@ namespace GarageLogic
 
             if (!isAllPass)
             {
-                throw new ArgumentException(paramName: firstFailure, 
+                throw new ArgumentException(paramName: firstFailure,
                     message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
 
             return isAllPass;
         }
 
+        internal abstract Dictionary<string, string[]> GetRequiredProperties();
+
+        internal abstract void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict);
+
         public override int GetHashCode()
         {
             return r_LicensePlate.GetHashCode();
         }
+
         public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            bool equals = false;
+            Vehicle vehicle = obj as Vehicle;
+
+            if (vehicle != null)
+            {
+                equals = GetHashCode() == vehicle.GetHashCode();
+            }
+
+            return equals;
         }
+
         public override string ToString()
         {
             return string.Format(@"[{0}] {1} | {2}

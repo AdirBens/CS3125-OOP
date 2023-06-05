@@ -1,5 +1,6 @@
-﻿using GarageLogic.Exceptions;
-using System;
+﻿using System;
+using GarageLogic.Exceptions;
+
 
 namespace GarageLogic
 {
@@ -7,7 +8,7 @@ namespace GarageLogic
     {
         internal enum eFuelType
         {
-            Empty = 0,
+            Empty,
             Diesel,
             Octane95,
             Octane96,
@@ -41,7 +42,8 @@ namespace GarageLogic
 {0}: 
   [>] Fuel Tank Percentage: {1:0.00} %
   [>] Current Fuel Level: {2:0.00} L
-  [>] Max Capacity: {3} L", this.GetType().Name, EnergyLevelPercentage, CurrentEnergyLevel, r_MaxCapacity);
+  [>] Max Capacity: {3} L", this.GetType().Name, EnergyLevelPercentage, 
+                            CurrentEnergyLevel, r_MaxCapacity);
         }
     }
 }

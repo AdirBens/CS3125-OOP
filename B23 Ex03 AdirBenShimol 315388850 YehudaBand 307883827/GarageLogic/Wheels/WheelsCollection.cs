@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+
 namespace GarageLogic
 {
     internal class WheelsCollection
@@ -9,7 +10,7 @@ namespace GarageLogic
 
         internal WheelsCollection(int i_NumWheels, float i_RecommendedTirePressure)
         {
-            for (int i = 0;  i < i_NumWheels; i++)
+            for (int i = 0;  i < i_NumWheels ; i++)
             {
                 r_Wheels.Add(new Wheel(i_RecommendedTirePressure));
             }
@@ -26,6 +27,7 @@ namespace GarageLogic
         internal void InflateAllTiresToMax()
         {
             bool isInflateToMax = true;
+
             foreach (Wheel wheel in r_Wheels)
             {
                 wheel.InflateTire(i_InflateToMax: isInflateToMax);
@@ -43,6 +45,7 @@ namespace GarageLogic
         public override string ToString()
         {
             Wheel representativeWheel = r_Wheels.First();
+
             return string.Format(@"
 Wheels:
   [>] {0} x {1}", r_Wheels.Count, representativeWheel.ToString());

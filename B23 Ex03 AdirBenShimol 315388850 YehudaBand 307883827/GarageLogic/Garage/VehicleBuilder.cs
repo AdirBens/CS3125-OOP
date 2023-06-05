@@ -1,7 +1,8 @@
-﻿using GarageLogic.Exceptions;
-using GarageLogic.SupportedVehicles;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GarageLogic.Exceptions;
+using GarageLogic.SupportedVehicles;
+
 
 namespace GarageLogic
 {
@@ -9,7 +10,7 @@ namespace GarageLogic
     {
         internal enum eVehicleType
         {
-            Empty = 0,
+            Empty,
             ElectricCar,
             ElectricMotorcycle,
             FuelCar,
@@ -18,7 +19,7 @@ namespace GarageLogic
         }
 
         private static readonly Dictionary<eVehicleType, int> sr_WheelsNumber = 
-            new Dictionary<eVehicleType, int>()
+            new Dictionary<eVehicleType, int>
         {
             { eVehicleType.ElectricCar, 5 },
             { eVehicleType.ElectricMotorcycle, 2 },
@@ -28,7 +29,7 @@ namespace GarageLogic
         };
 
         private static readonly Dictionary<eVehicleType, float> sr_WheelsAirPressure =
-            new Dictionary<eVehicleType, float>()
+            new Dictionary<eVehicleType, float>
         {
             { eVehicleType.ElectricCar, 31 },
             { eVehicleType.ElectricMotorcycle, 33 },
@@ -38,7 +39,7 @@ namespace GarageLogic
         };
 
         private static readonly Dictionary<eVehicleType, FuelTank.eFuelType> sr_FuelType =
-            new Dictionary<eVehicleType, FuelTank.eFuelType>()
+            new Dictionary<eVehicleType, FuelTank.eFuelType>
         {
             { eVehicleType.FuelCar, FuelTank.eFuelType.Octane95 },
             { eVehicleType.FuelMotorcycle, FuelTank.eFuelType.Octane98 },
@@ -46,7 +47,7 @@ namespace GarageLogic
         };
 
         private static readonly Dictionary<eVehicleType, float> sr_EnergySourceCapacity =
-            new Dictionary<eVehicleType, float>()
+            new Dictionary<eVehicleType, float>
         {
             { eVehicleType.ElectricCar, 5.2f },
             { eVehicleType.ElectricMotorcycle, 2.6f },
@@ -58,6 +59,7 @@ namespace GarageLogic
         internal static Vehicle CreateVehicle(string i_LicensePlate, eVehicleType i_VehicleType)
         {
             Vehicle assembledVehicle;
+
             switch (i_VehicleType)
             {
                 case eVehicleType.FuelCar:
@@ -104,6 +106,7 @@ namespace GarageLogic
                     case eVehicleType.FuelMotorcycle:
                     case eVehicleType.FuelTruck:
                         FuelTank.eFuelType fuelType;
+
                         if (sr_FuelType.TryGetValue(i_VehicleType, out fuelType))
                         {
                             energyUnit = new FuelTank(fuelType, capacity);

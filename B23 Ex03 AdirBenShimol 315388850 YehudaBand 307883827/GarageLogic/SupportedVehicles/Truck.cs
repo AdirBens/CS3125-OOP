@@ -1,6 +1,7 @@
-﻿using GarageLogic.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GarageLogic.Exceptions;
+
 
 namespace GarageLogic.SupportedVehicles
 {
@@ -8,7 +9,7 @@ namespace GarageLogic.SupportedVehicles
     {
         internal enum eCargoType
         {
-            Empty = 0,
+            Empty,
             HazmatCargo,
             RegularCargo
         }
@@ -32,7 +33,8 @@ namespace GarageLogic.SupportedVehicles
             bool isAllPass = true;
             string firstFailure = string.Empty;
 
-            isAllPass &= setBaseProperties(i_PropertiesDict);
+            isAllPass &= SetBaseProperties(i_PropertiesDict);
+
             foreach (string propertyName in i_PropertiesDict.Keys)
             {
                 string propertyValue = i_PropertiesDict[propertyName];

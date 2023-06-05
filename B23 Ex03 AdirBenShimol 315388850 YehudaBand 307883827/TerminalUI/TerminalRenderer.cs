@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 
+
 namespace ConsoleUI
 {
     internal class TerminalRenderer
@@ -17,7 +18,6 @@ namespace ConsoleUI
 
             welcomeScreen.AppendLine(asTitleString(UIMessages.k_ProgramTitle));
             welcomeScreen.AppendLine(UIMessages.k_WelcomeMessage);
-
             Console.WriteLine(welcomeScreen.ToString());
         }
 
@@ -27,8 +27,6 @@ namespace ConsoleUI
 
             pageHeader.Append(asTitleString(i_Title));
             pageHeader.AppendLine(UIMessages.k_BackSignalMessage);
-
-
             Console.WriteLine(pageHeader.ToString());
         }
 
@@ -40,31 +38,33 @@ namespace ConsoleUI
         internal static void RenderFilterByStatusRequest(string[] i_VehicleStatusListFromAgent)
         {
             StringBuilder filterRequest = new StringBuilder();
-            
+
             filterRequest.AppendLine(UIMessages.k_FilterByStatusMessage);
             filterRequest.AppendLine(UIMessages.k_NoFilterOption);
             filterRequest.Append(convertChoiceArrayToDisplay(i_VehicleStatusListFromAgent));
-            
             Console.WriteLine(filterRequest.ToString());
         }
 
         internal static void RenderShowVehicleList(List<string> i_FilteredList)
         {
             StringBuilder vehicleList = new StringBuilder();
+            
             vehicleList.AppendLine(UIMessages.k_VehicleListHeader);
-            for (int i = 0; i < i_FilteredList.Count; i++)
+
+            for (int i = 0 ; i < i_FilteredList.Count ; i++)
             {
                 vehicleList.AppendLine(string.Format(UIMessages.k_VehicleRecordLine, i + 1, i_FilteredList[i]));
             }
+
             Console.WriteLine(vehicleList.ToString());
         }
 
         internal static void RenderVehicleDetails(string i_VehicleDetails, string i_LicensePlate)
         {
             StringBuilder vehicleDetailsBuilder = new StringBuilder();
+
             vehicleDetailsBuilder.AppendLine(asTitleString(string.Format(UIMessages.k_VehicleDetailsPresentedTitle, i_LicensePlate)));
             vehicleDetailsBuilder.AppendLine(i_VehicleDetails);
-
             Console.WriteLine(vehicleDetailsBuilder.ToString());
         }
 
@@ -74,7 +74,6 @@ namespace ConsoleUI
 
             messageBuilder.AppendLine(i_Message);
             messageBuilder.Append(UIMessages.k_RedirectionToMainScreen);
-
             Console.WriteLine(messageBuilder.ToString());
             RenderToContinueMessage();
         }
@@ -90,13 +89,11 @@ namespace ConsoleUI
 
             choiceRequest.AppendLine(AsActionString(i_ChoiceHeader));
             choiceRequest.Append(convertChoiceArrayToDisplay(i_ChoiceArray));
-
             Console.WriteLine(choiceRequest.ToString());
         }
 
         internal static void RenderEndProgramScreen()
         {
-            
             Console.WriteLine(asTitleString(UIMessages.k_GoodbyeMessage));
             RenderToContinueMessage();
         }
@@ -106,7 +103,6 @@ namespace ConsoleUI
             Console.WriteLine();
             Console.WriteLine(AsActionString(UIMessages.k_ToContinueMessage));
             Console.ReadLine();
-
         }
 
         internal static void RenderExceptionMessage(string i_ExceptionMessage)
@@ -128,8 +124,8 @@ namespace ConsoleUI
         internal static string ParsePropertyToDisplayedProperty(string i_Property)
         {
             string withoutPrefix = i_Property.Replace("m_", string.Empty).Replace(".", string.Empty);
-
             StringBuilder newString = new StringBuilder();
+
             foreach (char character in withoutPrefix)
             {
                 if (char.IsUpper(character))
@@ -157,6 +153,7 @@ namespace ConsoleUI
 
             return titledString.ToString();
         }
+
         private static string convertChoiceArrayToDisplay(string[] i_ChoiceList)
         {
             StringBuilder listToDisplay = new StringBuilder();

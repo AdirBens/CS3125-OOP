@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using ConsoleUI;
 using GarageLogic;
 using GarageLogic.Exceptions;
+
 
 namespace ConsoleUI
 {
@@ -10,15 +10,15 @@ namespace ConsoleUI
     {
         private enum eUserAction
         {
-            Empty = 0,
-            RegisterNewVehicle = 1,
-            ShowVehicleList = 2,
-            ChangeVehicleStatus = 3,
-            InfalteTires = 4,
-            FillFuel = 5,
-            ChargeBattery = 6,
-            ShowVehicleDetails = 7,
-            ExitProgram = 8
+            Empty,
+            RegisterNewVehicle,
+            ShowVehicleList,
+            ChangeVehicleStatus,
+            InfalteTires,
+            FillFuel,
+            ChargeBattery,
+            ShowVehicleDetails,
+            ExitProgram
         }
 
         private const string k_BackSignalFromUser = "B";
@@ -26,6 +26,7 @@ namespace ConsoleUI
         internal void RunProgram()
         {
             eUserAction userAction = eUserAction.Empty;
+
             displayStartUpScreen();
 
             while (userAction != eUserAction.ExitProgram)
@@ -65,6 +66,7 @@ namespace ConsoleUI
                                 TerminalRenderer.RenderEndProgramScreen();
                                 break;
                         }
+
                         actionFinished = true;
                     }
                     catch (FormatException fe)
@@ -97,10 +99,9 @@ namespace ConsoleUI
                 try
                 {
                     string[] actionChoices = typeof(eUserAction).GetEnumNames();
-
                     TerminalRenderer.RenderTitle(UIMessages.k_MainMenuTitle);
+                    
                     TerminalRenderer.RenderMultiChoiceRequest(actionChoices, UIMessages.k_ActionListHeaderRequest);
-
                     int userNumChoice = readInputAsInt();
                     validateInput(userNumChoice, typeof(eUserAction));
 
@@ -127,7 +128,6 @@ namespace ConsoleUI
         {
             TerminalRenderer.RenderTitle(UIMessages.k_RegisterNewVehicleTitle);
             string licensePlate = getLicensePlateFromUser();
-
             bool isVehicleInSystem = GarageAgent.LookUpLicensePlate(licensePlate);
 
             if (!isVehicleInSystem)
@@ -179,17 +179,15 @@ namespace ConsoleUI
         private void showVehicleList()
         {
             TerminalRenderer.RenderTitle(UIMessages.k_ShowVehicleListTitle);
-
             TerminalRenderer.RenderFilterByStatusRequest(GarageAgent.GetVehicleStatusTypes());
 
             int vehicleStatusID = readInputAsInt();
-
             List<string> filteredList = GarageAgent.GetVehiclesByStatus(vehicleStatusID);
 
             if (filteredList.Count > 0)
             {
-            TerminalRenderer.RenderShowVehicleList(filteredList);
-            TerminalRenderer.RenderSuccsfulActionMessage();
+                TerminalRenderer.RenderShowVehicleList(filteredList);
+                TerminalRenderer.RenderSuccsfulActionMessage();
             }
             else
             {
@@ -201,16 +199,12 @@ namespace ConsoleUI
         private void modifyVehicleStatus()
         {
             TerminalRenderer.RenderTitle(UIMessages.k_ModifyVehicelStatusTitle);
-
             int vehicleStatusAsNumber;
             string licensePlate = getLicensePlateFromUser();
-
             string[] vehicleStatusTypes = GarageAgent.GetVehicleStatusTypes();
 
             TerminalRenderer.RenderMultiChoiceRequest(vehicleStatusTypes, UIMessages.k_SetVehicleStatusRequest);
-
             vehicleStatusAsNumber = readInputAsInt();
-
             GarageAgent.UpdateVehicleStatus(licensePlate, vehicleStatusAsNumber);
 
             TerminalRenderer.RenderSuccsfulActionMessage();
@@ -219,6 +213,7 @@ namespace ConsoleUI
         private string getLicensePlateFromUser()
         {
             string enterLicensePlateMessage = TerminalRenderer.AsActionString(UIMessages.k_LicensePlateRequest);
+
             return readInputLine(enterLicensePlateMessage);
         }
 
@@ -278,6 +273,7 @@ namespace ConsoleUI
         private static void validateInput(int i_UserNumChoice, Type i_TypeOfEnum)
         {
             int numOfChoices = Enum.GetValues(i_TypeOfEnum).Length;
+            
             if (i_UserNumChoice <= 0 || i_UserNumChoice >= numOfChoices)
             {
                 throw new ArgumentException(string.Format(UIMessages.k_ValueOutOfRange, 1, numOfChoices));

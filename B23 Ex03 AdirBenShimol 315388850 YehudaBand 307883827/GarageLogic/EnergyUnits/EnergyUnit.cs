@@ -1,5 +1,6 @@
 ﻿using GarageLogic.Exceptions;
 
+
 namespace GarageLogic
 {
     internal abstract class EnergyUnit
@@ -17,7 +18,7 @@ namespace GarageLogic
             CurrentEnergyLevel = 0;
         }
 
-        internal void setCurrentLevel(float i_CurrentLevel)
+        internal void SetCurrentLevel(float i_CurrentLevel)
         {
             if (i_CurrentLevel <=  r_MaxCapacity)
             {
@@ -35,7 +36,7 @@ namespace GarageLogic
         {
             if (i_EnergyToAdd >= 0)
             {
-                setCurrentLevel(i_EnergyToAdd + CurrentEnergyLevel);
+                SetCurrentLevel(i_EnergyToAdd + CurrentEnergyLevel);
             }
             else
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 namespace GarageLogic.Exceptions
 {
     public class ValueOutOfRangeException: Exception

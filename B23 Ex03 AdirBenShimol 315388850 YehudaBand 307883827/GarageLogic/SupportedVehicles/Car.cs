@@ -1,6 +1,7 @@
-﻿using GarageLogic.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GarageLogic.Exceptions;
+
 
 namespace GarageLogic.SupportedVehicles
 {
@@ -8,15 +9,16 @@ namespace GarageLogic.SupportedVehicles
     {
         internal enum eBodyColour
         {
-            Empty = 0,
+            Empty,
             White,
             Black,
             Yellow,
             Red
         }
+
         internal enum eNumOfDoors
         {
-            Empty = 0,
+            Empty,
             Two,
             Three,
             Four,
@@ -42,10 +44,12 @@ namespace GarageLogic.SupportedVehicles
             bool isAllPass = true;
             string firstFailure = string.Empty;
 
-            isAllPass &= setBaseProperties(i_PropertiesDict);
+            isAllPass &= SetBaseProperties(i_PropertiesDict);
+
             foreach (string propertyName in i_PropertiesDict.Keys)
             {
-                string propertyValue = i_PropertiesDict[propertyName];                
+                string propertyValue = i_PropertiesDict[propertyName];     
+                
                 if (propertyName == "BodyColour")
                 {
                     isAllPass &= Enum.TryParse(propertyValue, out eBodyColour colour) &&

@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace GarageLogic
 {
     internal class ClientRecord
@@ -10,12 +9,21 @@ namespace GarageLogic
         public override int GetHashCode()
         {
             string nameAndPhone = ClientName + PhoneNumber;
+
             return nameAndPhone.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            bool equals = false;
+            ClientRecord clientRecord = obj as ClientRecord;
+
+            if (clientRecord != null)
+            {
+                equals = this.GetHashCode() == clientRecord.GetHashCode(); 
+            }
+
+            return equals;
         }
 
         public override string ToString()

@@ -1,7 +1,7 @@
-﻿using GarageLogic.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GarageLogic.Exceptions;
 using static GarageLogic.VehicleBuilder;
 
 
@@ -61,12 +61,14 @@ namespace GarageLogic
         public static string GetVehicleDetails(string i_LicensePlate)
         {
             s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
+
             return s_CurrentVehicleHandle.vehicle.ToString();
         }
 
         public static Dictionary<string, string[]> GetRequireadDetails(string i_LicensePlate, int i_VehicleTypeNumber)
         {
             createNewVehicle(i_LicensePlate, i_VehicleTypeNumber);
+
             return s_PendingVehicle.GetRequiredProperties();
         }
 
@@ -140,6 +142,7 @@ namespace GarageLogic
             {
                 s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
                 FuelTank fuelEnergyUnit = s_CurrentVehicleHandle.vehicle.m_EnergySource as FuelTank;
+
                 if (fuelEnergyUnit != null)
                 {
                     fuelEnergyUnit.Refuel(i_NumLiters, fuelType);

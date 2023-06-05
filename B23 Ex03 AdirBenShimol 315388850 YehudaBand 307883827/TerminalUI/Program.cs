@@ -1,5 +1,4 @@
-﻿using ConsoleUI;
-
+﻿
 namespace ConsoleUI
 {
     public class Program

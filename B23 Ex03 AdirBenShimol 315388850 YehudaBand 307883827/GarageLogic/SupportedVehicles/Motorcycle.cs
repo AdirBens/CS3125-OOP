@@ -1,6 +1,7 @@
-﻿using GarageLogic.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GarageLogic.Exceptions;
+
 
 namespace GarageLogic.SupportedVehicles
 {
@@ -8,12 +9,13 @@ namespace GarageLogic.SupportedVehicles
     {
         internal enum eLicenseClass
         {
-            Empty = 0,
+            Empty,
             A1,
             A2,
             AA,
             B1
         }
+
         internal eLicenseClass LicenseClass { get; private set; }
         internal int EngineDisplacement { get; private set; }
 
@@ -33,7 +35,8 @@ namespace GarageLogic.SupportedVehicles
             bool isAllPass = true;
             string firstFailure = string.Empty;
 
-            isAllPass &= setBaseProperties(i_PropertiesDict);
+            isAllPass &= SetBaseProperties(i_PropertiesDict);
+
             foreach (string propertyName in i_PropertiesDict.Keys)
             {
                 string propertyValue = i_PropertiesDict[propertyName];
@@ -59,7 +62,8 @@ namespace GarageLogic.SupportedVehicles
 
             if (!isAllPass)
             {
-                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
+                throw new ArgumentException(paramName: firstFailure, 
+                                            message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
         }
 

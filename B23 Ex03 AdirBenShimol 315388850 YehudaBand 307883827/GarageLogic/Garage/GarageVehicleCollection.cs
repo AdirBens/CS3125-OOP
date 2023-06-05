@@ -1,18 +1,20 @@
-﻿using GarageLogic.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GarageLogic.Exceptions;
+using static GarageLogic.GarageAgent;
+
 
 namespace GarageLogic
 {
     internal class GarageVehicleCollection
     {
-        private readonly Dictionary<GarageAgent.eVehicelStatus, Dictionary<string, Vehicle>> r_Collection;
+        private readonly Dictionary<eVehicelStatus, Dictionary<string, Vehicle>> r_Collection;
         private Dictionary<string, Vehicle> m_InnerPartitionPointer;
 
         internal GarageVehicleCollection()
         {
-            r_Collection = new Dictionary<GarageAgent.eVehicelStatus, Dictionary<string, Vehicle>>
+            r_Collection = new Dictionary<eVehicelStatus, Dictionary<string, Vehicle>>
             {
                 { GarageAgent.eVehicelStatus.InRepair, new Dictionary<string, Vehicle>() },
                 { GarageAgent.eVehicelStatus.Repaired, new Dictionary<string, Vehicle>() },
@@ -20,9 +22,10 @@ namespace GarageLogic
             };
         }
         
-        internal void AddNewVehicle(Vehicle i_Vehicle, GarageAgent.eVehicelStatus i_VehicleStatus)
+        internal void AddNewVehicle(Vehicle i_Vehicle, eVehicelStatus i_VehicleStatus)
         {
             string licensePlate = i_Vehicle.r_LicensePlate;
+            
             if (!IsVehicleExists(licensePlate))
             {
                 setInnerPartitionPointer(i_VehicleStatus);
@@ -39,10 +42,11 @@ namespace GarageLogic
         {
             bool isExists = false;
 
-            foreach(GarageAgent.eVehicelStatus statusPartition in r_Collection.Keys)
+            foreach(eVehicelStatus statusPartition in r_Collection.Keys)
             {
                 setInnerPartitionPointer(statusPartition);
                 isExists = m_InnerPartitionPointer.ContainsKey(i_LicensePlate);
+
                 if (isExists)
                 {
                     break;
@@ -52,23 +56,25 @@ namespace GarageLogic
             return isExists;
         }
 
-        internal (Vehicle vehicle, GarageAgent.eVehicelStatus status) GetVehicleByLicensePlate(string i_LicensePlate)
+        internal (Vehicle vehicle, eVehicelStatus status) GetVehicleByLicensePlate(string i_LicensePlate)
         {
             Vehicle requestedVehicle = null;
-            GarageAgent.eVehicelStatus currentStatus = GarageAgent.eVehicelStatus.Empty;
+            eVehicelStatus currentStatus = GarageAgent.eVehicelStatus.Empty;
 
             if (IsVehicleExists(i_LicensePlate))
             {
-                foreach (GarageAgent.eVehicelStatus statusPartition in r_Collection.Keys)
+                foreach (eVehicelStatus statusPartition in r_Collection.Keys)
                 {
                     setInnerPartitionPointer(statusPartition);
                     m_InnerPartitionPointer.TryGetValue(i_LicensePlate, out requestedVehicle);
+
                     if (requestedVehicle != null)
                     {
                         currentStatus = statusPartition;
                         break;
                     }
                 }
+
                 requestedVehicle.VehicleStatus = currentStatus;
             }
             else
@@ -80,15 +86,17 @@ namespace GarageLogic
             return (requestedVehicle, currentStatus);
         }
 
-        internal Dictionary<string, Vehicle> GetVehiclesByStatus(GarageAgent.eVehicelStatus i_VehicleStatus)
+        internal Dictionary<string, Vehicle> GetVehiclesByStatus(eVehicelStatus i_VehicleStatus)
         {
             setInnerPartitionPointer(i_VehicleStatus);
+
             return m_InnerPartitionPointer;
         }
 
-        internal void UpdateVehicleStaus(string i_LicensePlate, GarageAgent.eVehicelStatus i_UpdatedStatus)
+        internal void UpdateVehicleStaus(string i_LicensePlate, eVehicelStatus i_UpdatedStatus)
         {
-            (Vehicle vehicle, GarageAgent.eVehicelStatus status) vehicleRecord = GetVehicleByLicensePlate(i_LicensePlate);
+            (Vehicle vehicle, eVehicelStatus status) vehicleRecord = GetVehicleByLicensePlate(i_LicensePlate);
+
             if (i_UpdatedStatus != GarageAgent.eVehicelStatus.Empty)
             {
                 removeRecord(i_LicensePlate, vehicleRecord.status);
@@ -101,7 +109,7 @@ namespace GarageLogic
         {
             List<string> allVehicles = new List<string>();
 
-            foreach (GarageAgent.eVehicelStatus statusPartition in r_Collection.Keys)
+            foreach (eVehicelStatus statusPartition in r_Collection.Keys)
             {
                 setInnerPartitionPointer(statusPartition);
                 allVehicles.AddRange(m_InnerPartitionPointer.Keys.ToList());
@@ -110,19 +118,19 @@ namespace GarageLogic
             return allVehicles;
         }
 
-        private void removeRecord(string i_LicensePlate, GarageAgent.eVehicelStatus i_InnerPartition)
+        private void removeRecord(string i_LicensePlate, eVehicelStatus i_InnerPartition)
         {
             setInnerPartitionPointer(i_InnerPartition);
             m_InnerPartitionPointer.Remove(i_LicensePlate);
         }
 
-        private void addRecord(string i_LicensePlate, Vehicle i_Vehicle, GarageAgent.eVehicelStatus i_InnerPartition)
+        private void addRecord(string i_LicensePlate, Vehicle i_Vehicle, eVehicelStatus i_InnerPartition)
         {
             setInnerPartitionPointer(i_InnerPartition);
             m_InnerPartitionPointer.Add(i_LicensePlate, i_Vehicle);
         }
 
-        private void setInnerPartitionPointer(GarageAgent.eVehicelStatus i_StatusPartition)
+        private void setInnerPartitionPointer(eVehicelStatus i_StatusPartition)
         {
             bool isStatusValid = r_Collection.TryGetValue(i_StatusPartition, out m_InnerPartitionPointer);
             
@@ -134,8 +142,35 @@ namespace GarageLogic
         }
 
         public override string ToString()
+        { 
+            int inRepair = r_Collection[GarageAgent.eVehicelStatus.InRepair].Count;
+            int alreadyRepaired = r_Collection[GarageAgent.eVehicelStatus.Repaired].Count; 
+            int alreadyPaid = r_Collection[GarageAgent.eVehicelStatus.Paid].Count;
+            int totalVehiclesStores = inRepair + alreadyRepaired + alreadyPaid;
+
+            return string.Format(@"[ Garage Vehicles Collection ]
+  [>] Total Vehicles: {0}
+  [>] Vehicles in Repair: {1}
+  [>] Vehicles Repaired: {2}
+  [>] Vehicles Payed: {3}", totalVehiclesStores, inRepair, alreadyRepaired, alreadyPaid);
+        }
+
+        public override int GetHashCode()
         {
-            return base.ToString();
+            return r_Collection.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+            GarageVehicleCollection collection = obj as GarageVehicleCollection;
+
+            if (collection  != null)
+            {
+                equals = this.GetHashCode() == collection.GetHashCode();
+            }
+
+            return equals;
         }
     }
 }
