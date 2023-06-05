@@ -3,7 +3,7 @@ using System;
 
 namespace GarageLogic
 {
-    internal class FuelTank : EnergySource
+    internal class FuelTank : EnergyUnit
     {
         internal enum eFuelType
         {
@@ -14,7 +14,8 @@ namespace GarageLogic
             Octane98,
         }
 
-        internal readonly eFuelType r_FuelType;
+        private readonly eFuelType r_FuelType;
+        
         internal FuelTank(eFuelType i_FuelType, float i_MaxCapacity)
             : base(i_MaxCapacity)
         {
@@ -23,23 +24,24 @@ namespace GarageLogic
 
         internal void Refuel(float i_NumLiters, eFuelType i_FuelType)
         {
-            float levelAfterRefuel = i_NumLiters + m_CurrentLevel;
-
             if (r_FuelType != i_FuelType)
             {
                 throw new ArgumentException(paramName: ExceptionsMessageStrings.k_FuelTypeArg,
                                               message: ExceptionsMessageStrings.k_WrongFuelTypeMessage);
             }
-
-            setCurrentLevel(levelAfterRefuel);
+            else
+            {
+                AddEnergy(i_NumLiters);
+            }
         }
 
         public override string ToString()
         {
             return string.Format(@"
 {0}: 
-  [>] Current Fuel Level: {1} L
-  [>] Max Capacity: {2} L", this.GetType().Name, m_CurrentLevel, r_MaxCapacity);
+  [>] Fuel Tank Percentage: {1:0.00} %
+  [>] Current Fuel Level: {2:0.00} L
+  [>] Max Capacity: {3} L", this.GetType().Name, EnergyLevelPercentage, CurrentEnergyLevel, r_MaxCapacity);
         }
     }
 }

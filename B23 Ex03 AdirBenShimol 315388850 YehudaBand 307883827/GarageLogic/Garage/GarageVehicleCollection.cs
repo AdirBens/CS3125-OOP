@@ -16,13 +16,13 @@ namespace GarageLogic
             {
                 { GarageAgent.eVehicelStatus.InRepair, new Dictionary<string, Vehicle>() },
                 { GarageAgent.eVehicelStatus.Repaired, new Dictionary<string, Vehicle>() },
-                { GarageAgent.eVehicelStatus.Payed, new Dictionary<string, Vehicle>() }
+                { GarageAgent.eVehicelStatus.Paid, new Dictionary<string, Vehicle>() }
             };
         }
         
         internal void AddNewVehicle(Vehicle i_Vehicle, GarageAgent.eVehicelStatus i_VehicleStatus)
         {
-            string licensePlate = i_Vehicle.m_LicensePlate;
+            string licensePlate = i_Vehicle.r_LicensePlate;
             if (!IsVehicleExists(licensePlate))
             {
                 setInnerPartitionPointer(i_VehicleStatus);
@@ -69,7 +69,7 @@ namespace GarageLogic
                         break;
                     }
                 }
-                requestedVehicle.m_VehicleStatus = currentStatus;
+                requestedVehicle.VehicleStatus = currentStatus;
             }
             else
             {
@@ -93,7 +93,7 @@ namespace GarageLogic
             {
                 removeRecord(i_LicensePlate, vehicleRecord.status);
                 addRecord(i_LicensePlate, vehicleRecord.vehicle, i_UpdatedStatus);
-                vehicleRecord.vehicle.m_VehicleStatus = i_UpdatedStatus;
+                vehicleRecord.vehicle.VehicleStatus = i_UpdatedStatus;
             }
         }
 
@@ -135,7 +135,6 @@ namespace GarageLogic
 
         public override string ToString()
         {
-            /// TODO: Implement TOSTRING
             return base.ToString();
         }
     }

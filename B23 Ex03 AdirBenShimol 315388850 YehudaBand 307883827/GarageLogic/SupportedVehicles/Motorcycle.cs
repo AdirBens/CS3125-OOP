@@ -1,7 +1,6 @@
 ﻿using GarageLogic.Exceptions;
 using System;
 using System.Collections.Generic;
-using static GarageLogic.SupportedVehicles.Car;
 
 namespace GarageLogic.SupportedVehicles
 {
@@ -15,32 +14,18 @@ namespace GarageLogic.SupportedVehicles
             AA,
             B1
         }
-
-        internal eLicenseClass m_LicenseClass
-        {
-            get; set;
-        }
-        internal int m_EngineDisplacement
-        {
-            get; set;
-        }
+        internal eLicenseClass LicenseClass { get; private set; }
+        internal int EngineDisplacement { get; private set; }
 
         internal Motorcycle(string i_LicensePlate, VehicleBuilder.eVehicleType i_VehicleType)
             : base(i_LicensePlate, i_VehicleType) { }
 
         internal override Dictionary<string, string[]> GetRequiredProperties()
         {
-            return new Dictionary<string, string[]>
-            {
-                { "m_ModelName" , null },
-                { "m_EnergySource.m_CurrentLevel", null },
-                { "m_Wheels.m_CurrentTirePressure", null },
-                { "m_Wheels.m_TireManufacturer", null },
-                { "m_ClientRecord.m_ClientName", null },
-                { "m_ClientRecord.m_PhoneNumber", null},
-                { "m_LicenseClass", typeof(eLicenseClass).GetEnumNames() },
-                { "m_EngineDisplacement", null }
-            };
+            r_RequiredProperties.Add("LicenseClass", typeof(eLicenseClass).GetEnumNames());
+            r_RequiredProperties.Add("EngineDisplacement", null);
+            
+            return r_RequiredProperties;
         }
 
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
@@ -53,16 +38,17 @@ namespace GarageLogic.SupportedVehicles
             {
                 string propertyValue = i_PropertiesDict[propertyName];
 
-                if (propertyName == "m_LicenseClass")
+                if (propertyName == "LicenseClass")
                 {
-                    eLicenseClass licenseClass;
-                    isAllPass &= Enum.TryParse(propertyValue, out licenseClass);
-                    m_LicenseClass = licenseClass;
+                    isAllPass &= Enum.TryParse(propertyValue, out eLicenseClass licenseClass) &&
+                                 Enum.IsDefined(typeof(eLicenseClass), licenseClass);
+                    LicenseClass = licenseClass;
                 }
-                else if (propertyName == "m_EngineDisplacement")
+                else if (propertyName == "EngineDisplacement")
                 {
-                    isAllPass &= int.TryParse(propertyValue, out int engineDisplacement);
-                    m_EngineDisplacement = engineDisplacement;
+                    isAllPass &= int.TryParse(propertyValue, out int engineDisplacement) &&
+                                 engineDisplacement >= 0;
+                    EngineDisplacement = engineDisplacement;
                 }
                 
                 if (!isAllPass && firstFailure == string.Empty)
@@ -81,8 +67,8 @@ namespace GarageLogic.SupportedVehicles
         {
             return string.Format(@"{0}
 Unique Properties:
-Engine Displacement: {1} L
-License Class: {2}", base.ToString(), m_EngineDisplacement, m_LicenseClass.ToString());
+  [>] Engine Displacement: {1} L
+  [>] License Class: {2}", base.ToString(), EngineDisplacement, LicenseClass.ToString());
         }
     }
 }

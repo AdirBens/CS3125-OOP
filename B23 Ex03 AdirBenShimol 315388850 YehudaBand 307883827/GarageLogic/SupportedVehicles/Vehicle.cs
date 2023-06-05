@@ -1,24 +1,37 @@
 ﻿using GarageLogic.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using static GarageLogic.VehicleBuilder;
+using static GarageLogic.GarageAgent;
 
 namespace GarageLogic
 {
     public abstract class Vehicle
     {
-        internal VehicleBuilder.eVehicleType m_VehicleType { get; private set; }
-        internal string m_LicensePlate { get; set; }
-        internal string m_ModelName { get; set; }
-        internal GarageAgent.eVehicelStatus m_VehicleStatus { get; set; }
-        internal EnergySource m_EnergySource;
-        internal List<Wheel> m_Wheels;
+        internal readonly eVehicleType r_VehicleType;
+        internal readonly string r_LicensePlate;
+        internal string ModelName { get; private set; }
+        internal eVehicelStatus VehicleStatus { get; set; }
+        internal EnergyUnit m_EnergySource;
+        internal WheelsCollection m_Wheels;
         internal ClientRecord m_ClientRecord;
 
-        internal Vehicle(string i_LicensePlate, VehicleBuilder.eVehicleType i_VehicleType)
+        protected readonly Dictionary<string, string[]> r_RequiredProperties;
+
+        internal Vehicle(string i_LicensePlate, eVehicleType i_VehicleType)
         {
-            m_LicensePlate = i_LicensePlate;
-            m_VehicleType =  i_VehicleType;
+            r_LicensePlate = i_LicensePlate;
+            r_VehicleType =  i_VehicleType;
+
+            r_RequiredProperties = new Dictionary<string, string[]>
+            {
+                { "ModelName" , null },
+                { "CurrentEnergyLevel", null },
+                { "CurrentTirePressure", null },
+                { "TireManufacturer", null },
+                { "ClientName", null },
+                { "PhoneNumber", null}
+            };
         }
 
         internal abstract Dictionary<string, string[]> GetRequiredProperties();
@@ -33,31 +46,31 @@ namespace GarageLogic
                 string propertyValue = i_PropertiesValuesDict[propertyName];
                 
                 isAllPass &= propertyValue != null;
-                if (propertyName == "m_ModelName")
+                if (propertyName == "ModelName")
                 {
-                    m_ModelName = propertyValue;
+                    ModelName = propertyValue;
                 }
-                else if (propertyName == "m_EnergySource.m_CurrentLevel")
+                else if (propertyName == "CurrentEnergyLevel")
                 {
                     isAllPass &= float.TryParse(propertyValue, out float energyLevel);
                     m_EnergySource.setCurrentLevel(energyLevel);
                 }
-                else if (propertyName == "m_Wheels.m_CurrentTirePressure")
+                else if (propertyName == "CurrentTirePressure")
                 {
                     isAllPass &= float.TryParse(propertyValue, out float airPressure);
-                    m_Wheels.ForEach(wheel => wheel.InflateTire(airPressure));
+                    m_Wheels.InflateAllTires(airPressure);
                 }
-                else if (propertyName == "m_Wheels.m_TireManufacturer")
+                else if (propertyName == "TireManufacturer")
                 {
-                    m_Wheels.ForEach(wheel => wheel.m_TireManufacturer = propertyValue);
+                    m_Wheels.SetWheelsManufacture(propertyValue);
                 }
-                else if (propertyName == "m_ClientRecord.m_ClientName")
+                else if (propertyName == "ClientName")
                 {
-                    m_ClientRecord.m_ClientName = propertyValue;
+                    m_ClientRecord.ClientName = propertyValue;
                 }
-                else if (propertyName == "m_ClientRecord.m_PhoneNumber")
+                else if (propertyName == "PhoneNumber")
                 {
-                    m_ClientRecord.m_PhoneNumber = propertyValue;
+                    m_ClientRecord.PhoneNumber = propertyValue;
                 }
 
                 if (!isAllPass && firstFailure == string.Empty)
@@ -68,38 +81,33 @@ namespace GarageLogic
 
             if (!isAllPass)
             {
-                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
+                throw new ArgumentException(paramName: firstFailure, 
+                    message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
 
             return isAllPass;
         }
 
+        public override int GetHashCode()
+        {
+            return r_LicensePlate.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
         public override string ToString()
         {
-            return string.Format(@"
-[{0}] {1} | {2}
+            return string.Format(@"[{0}] {1} | {2}
 Current Status: {3}
 {4}
 {5}
-
-Wheels: 
-  [>] {6} X {7}
-", m_LicensePlate, m_VehicleType.ToString(), m_ModelName, 
-   m_VehicleStatus, 
-   m_ClientRecord.ToString(), 
-   m_EnergySource.ToString(), 
-   m_Wheels.Count, m_Wheels.First().ToString());
+{6}
+", r_LicensePlate, VehicleStatus.ToString(), ModelName,
+   VehicleStatus,
+   m_ClientRecord.ToString(),
+   m_EnergySource.ToString(),
+   m_Wheels.ToString());
         }
-
-        public override int GetHashCode()
-        {
-            return m_LicensePlate.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return true;
-        }
-        // TODO: Implement ==, != operators
     }
 }

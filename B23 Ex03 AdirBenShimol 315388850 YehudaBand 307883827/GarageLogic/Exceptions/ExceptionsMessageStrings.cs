@@ -5,6 +5,12 @@ namespace GarageLogic.Exceptions
     {
         internal const string k_InvalidPropertyValueMessage = "Invalid Property Value Passed";
 
+        internal const string k_CurrentCargoVol = "Current Cargo Volume";
+        internal const string k_CurrentCargoVolMessage = "Cargo Volume Must be a positive number";
+
+        internal const string k_EngineDisplacement = "Engine Displacement";
+        internal const string k_EngineDisplacementMessage = "Engine Displacement Must be a positive integer";
+         
         internal const string k_FuelTypeArg = "Fuel Type";
         internal const string k_WrongFuelTypeMessage = "Wrong Fuel Type";
         internal const string k_UnsupportedFuelTypeMessage = "Unsupported Fuel Type";

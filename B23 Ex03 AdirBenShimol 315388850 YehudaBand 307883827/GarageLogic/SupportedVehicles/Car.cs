@@ -1,7 +1,6 @@
 ﻿using GarageLogic.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GarageLogic.SupportedVehicles
 {
@@ -15,7 +14,6 @@ namespace GarageLogic.SupportedVehicles
             Yellow,
             Red
         }
-
         internal enum eNumOfDoors
         {
             Empty = 0,
@@ -25,25 +23,18 @@ namespace GarageLogic.SupportedVehicles
             Five
         }
 
-        internal eBodyColour m_BodyColour { get; private set; }
-        internal eNumOfDoors m_DoorsNumber { get; private set; }
+        internal eBodyColour BodyColour { get; private set; }
+        internal eNumOfDoors DoorsNumber { get; private set; }
 
         internal Car(string i_LicensePlate, VehicleBuilder.eVehicleType i_VehicleType)
             : base(i_LicensePlate, i_VehicleType) { }
 
         internal override Dictionary<string, string[]> GetRequiredProperties()
         {
-            return new Dictionary<string, string[]>
-            {
-                { "m_ModelName" , null },
-                { "m_EnergySource.m_CurrentLevel", null },
-                { "m_Wheels.m_CurrentTirePressure", null },
-                { "m_Wheels.m_TireManufacturer", null },
-                { "m_BodyColour", typeof(eBodyColour).GetEnumNames() },
-                { "m_DoorsNumber", typeof(eNumOfDoors).GetEnumNames() },
-                { "m_ClientRecord.m_ClientName", null },
-                { "m_ClientRecord.m_PhoneNumber", null}
-            };
+            r_RequiredProperties.Add("BodyColour", typeof(eBodyColour).GetEnumNames());
+            r_RequiredProperties.Add("DoorsNumber", typeof(eNumOfDoors).GetEnumNames());
+            
+            return r_RequiredProperties;
         }
 
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
@@ -55,17 +46,17 @@ namespace GarageLogic.SupportedVehicles
             foreach (string propertyName in i_PropertiesDict.Keys)
             {
                 string propertyValue = i_PropertiesDict[propertyName];                
-                if (propertyName == "m_BodyColour")
+                if (propertyName == "BodyColour")
                 {
-                    eBodyColour colour;
-                    isAllPass &= Enum.TryParse(propertyValue, out colour);
-                    m_BodyColour = colour;
+                    isAllPass &= Enum.TryParse(propertyValue, out eBodyColour colour) &&
+                                 Enum.IsDefined(typeof(eBodyColour), colour);
+                    BodyColour = colour;
                 }
-                else if (propertyName == "m_DoorsNumber")
+                else if (propertyName == "DoorsNumber")
                 {
-                    eNumOfDoors doorsNumber;
-                    isAllPass &= Enum.TryParse(propertyValue, out doorsNumber);
-                    m_DoorsNumber = doorsNumber;
+                    isAllPass &= Enum.TryParse(propertyValue, out eNumOfDoors doorsNumber) &&
+                                 Enum.IsDefined(typeof(eNumOfDoors), doorsNumber);
+                    DoorsNumber = doorsNumber;
                 }
 
                 if (!isAllPass && firstFailure == string.Empty)
@@ -76,7 +67,8 @@ namespace GarageLogic.SupportedVehicles
             
             if (!isAllPass)
             {
-                throw new ArgumentException(paramName: firstFailure, message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
+                throw new ArgumentException(paramName: firstFailure, 
+                    message: ExceptionsMessageStrings.k_InvalidPropertyValueMessage);
             }
         }
 
@@ -85,7 +77,7 @@ namespace GarageLogic.SupportedVehicles
             return string.Format(@"{0}
 Unique Properties:
   [>] Body Color: {1}
-  [>] Number Of Doors: {2}", base.ToString(), m_BodyColour.ToString(), m_DoorsNumber.ToString());
+  [>] Number Of Doors: {2}", base.ToString(), BodyColour.ToString(), DoorsNumber.ToString());
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TerminalUI
+namespace ConsoleUI
 {
     internal class BackSignalRaiseException : Exception
     {

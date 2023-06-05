@@ -1,13 +1,9 @@
-﻿
-using System;
-using System.Collections.Generic;
-
-namespace ConsoleUI
+﻿namespace ConsoleUI
 {
     internal class UIMessages
     {
         internal const string k_ToContinueMessage = "To Continue Press the [Enter] key.";
-
+        
         internal const string k_ProgramTitle = "GARAGE MANAGEMENT SYSTEM";
         internal const string k_WelcomeMessage = "Welcome to the Garage management system!";
         internal const string k_BackSignalMessage = "Hit \"B\" at any stage to go back to the main menu.";
@@ -16,7 +12,7 @@ namespace ConsoleUI
         internal const string k_RegisterNewVehicleTitle = "REGISTER NEW VEHICLE";
         internal const string k_ShowVehicleListTitle = "VEHICLE LIST";
         internal const string k_ModifyVehicelStatusTitle = "VEHICLE STATUS";
-        internal const string k_InflateTiresTitle = "INFLATE TIRES";
+        internal const string k_InflateTiresTitle = "INFLATE TIRES TO MAX";
         internal const string k_FuelVehicleTitle = "FUEL VEHICLE";
         internal const string k_ChargeBatteryTitle = "CHARGE BATTERY";
         internal const string k_VehicleDetailsTitle = "VEHICLE DETAILS";
@@ -32,7 +28,7 @@ namespace ConsoleUI
         internal const string k_VehicleDetailRequestMultiChoice = "Please enter{0} by entering the corresponding number:";
         internal const string k_VehicleDetailRequest = "Please enter{0}:";
 
-        internal const string k_VehicleExistsMessage = "Vehicle is already in the system.";
+        internal const string k_VehicleExistsMessage = "Vehicle is already in the system. Vehicle Status Change to InRepair";
         internal const string k_VehicleAddedMessage = "Your vehicel has been added to the system succefully.";
 
         internal const string k_FilterByStatusMessage = "To filter the vehicle list please choose list filtering:";
@@ -63,6 +59,6 @@ namespace ConsoleUI
         internal const string k_FormatExceptionNumParse = "Input entered is not a valid number";
         internal const string k_ArgumentExceptionRange = "{0} is invalid!";
         internal const string k_ValueOutOfRange = "Choice must be in the range of {0} to {1}";
-
+        internal const string k_EmptyInputIsNotAllowed = "Empty input is not allowed!";
     }
 }

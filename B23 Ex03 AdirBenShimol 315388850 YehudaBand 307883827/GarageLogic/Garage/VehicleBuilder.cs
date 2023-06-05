@@ -58,24 +58,24 @@ namespace GarageLogic
         internal static Vehicle CreateVehicle(string i_LicensePlate, eVehicleType i_VehicleType)
         {
             Vehicle assembledVehicle;
-
-            if (i_VehicleType == eVehicleType.FuelCar ||
-                i_VehicleType == eVehicleType.ElectricCar)
+            switch (i_VehicleType)
             {
-                assembledVehicle = new Car(i_LicensePlate, i_VehicleType);
-            }
-            else if (i_VehicleType == eVehicleType.FuelMotorcycle ||
-                     i_VehicleType == eVehicleType.ElectricMotorcycle)
-            {
-                assembledVehicle = new Motorcycle(i_LicensePlate, i_VehicleType);
-            }
-            else if (i_VehicleType == eVehicleType.FuelTruck)
-            {
-                assembledVehicle = new Truck(i_LicensePlate, i_VehicleType);
-            }
-            else
-            {
-                throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleTypeArg,
+                case eVehicleType.FuelCar:
+                case eVehicleType.ElectricCar:
+                    assembledVehicle = new Car(i_LicensePlate, i_VehicleType);
+                    break;
+                
+                case eVehicleType.FuelMotorcycle:
+                case eVehicleType.ElectricMotorcycle:
+                    assembledVehicle = new Motorcycle(i_LicensePlate, i_VehicleType);
+                    break;
+                
+                case eVehicleType.FuelTruck:
+                    assembledVehicle = new Truck(i_LicensePlate, i_VehicleType);
+                    break;
+                
+                default:
+                    throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleTypeArg,
                     message: ExceptionsMessageStrings.k_UnsupportedVehicleTypeMessage);
             }
 
@@ -91,48 +91,50 @@ namespace GarageLogic
             return new ClientRecord();
         }
 
-        private static EnergySource buildEnergyUnit(eVehicleType i_VehicleType)
+        private static EnergyUnit buildEnergyUnit(eVehicleType i_VehicleType)
         {
-            EnergySource energyUnit = null;
+            EnergyUnit energyUnit = null;
             float capacity;
-            
-            if (sr_EnergySourceCapacity.TryGetValue(i_VehicleType, out capacity))
+
+            if (sr_EnergySourceCapacity.TryGetValue(i_VehicleType, out capacity) == true)
             {
-                if (i_VehicleType == eVehicleType.FuelCar ||
-                    i_VehicleType == eVehicleType.FuelMotorcycle ||
-                    i_VehicleType == eVehicleType.FuelTruck)
+                switch (i_VehicleType)
                 {
-                    FuelTank.eFuelType fuelType;
-                    if (sr_FuelType.TryGetValue(i_VehicleType, out fuelType))
-                    {
-                        energyUnit = new FuelTank(fuelType, capacity);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(paramName: ExceptionsMessageStrings.k_FuelTypeArg,
-                                            message: ExceptionsMessageStrings.k_UnsupportedFuelTypeMessage);
-                    }
-                }
-                else if (i_VehicleType == eVehicleType.ElectricCar ||
-                         i_VehicleType == eVehicleType.ElectricMotorcycle)
-                {
-                    energyUnit = new Battery(capacity);
+                    case eVehicleType.FuelCar:
+                    case eVehicleType.FuelMotorcycle:
+                    case eVehicleType.FuelTruck:
+                        FuelTank.eFuelType fuelType;
+                        if (sr_FuelType.TryGetValue(i_VehicleType, out fuelType))
+                        {
+                            energyUnit = new FuelTank(fuelType, capacity);
+                        }
+                        else
+                        {
+                            throw new ArgumentException(paramName: ExceptionsMessageStrings.k_FuelTypeArg,
+                                                message: ExceptionsMessageStrings.k_UnsupportedFuelTypeMessage);
+                        }
+                        break;
+
+                    case eVehicleType.ElectricCar:
+                    case eVehicleType.ElectricMotorcycle:
+                        energyUnit = new Battery(capacity);
+                        break;
                 }
             }
 
             return energyUnit;
         }
 
-        private static List<Wheel> buildWheels(eVehicleType i_VehicleType)
+        private static WheelsCollection buildWheels(eVehicleType i_VehicleType)
         {
-            List<Wheel> wheels = null;
+            WheelsCollection wheels = null;
             float airPressure;
-            int wheelNumber;
+            int wheelsNumber;
 
             if (sr_WheelsAirPressure.TryGetValue(i_VehicleType, out airPressure) && 
-                sr_WheelsNumber.TryGetValue(i_VehicleType, out wheelNumber))
+                sr_WheelsNumber.TryGetValue(i_VehicleType, out wheelsNumber))
             {
-                wheels = Wheel.CreateWheelsCollection(wheelNumber, airPressure);
+                wheels = new WheelsCollection(wheelsNumber, airPressure);
             }
 
             return wheels;

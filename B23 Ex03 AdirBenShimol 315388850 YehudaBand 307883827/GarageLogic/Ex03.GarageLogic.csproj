@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F75387D3-766E-4087-B12D-8A84D89B5B62}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>TerminalUI</RootNamespace>
-    <AssemblyName>TerminalUI</AssemblyName>
+    <ProjectGuid>{85D1070D-6A03-415E-8FEF-66F1395FA848}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GarageLogic</RootNamespace>
+    <AssemblyName>GarageLogic</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,25 +33,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackSignalRaiseException.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="TerminalRenderer.cs" />
-    <Compile Include="TerminalUserInterface.cs" />
-    <Compile Include="Testing.cs" />
-    <Compile Include="UIMessages.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GarageLogic\GarageLogic.csproj">
-      <Project>{85d1070d-6a03-415e-8fef-66f1395fa848}</Project>
-      <Name>GarageLogic</Name>
-    </ProjectReference>
+    <Compile Include="EnergyUnits\Battery.cs" />
+    <Compile Include="Exceptions\ExceptionsMessageStrings.cs" />
+    <Compile Include="Exceptions\ValueOutOfRangeException.cs" />
+    <Compile Include="EnergyUnits\FuelTank.cs" />
+    <Compile Include="Garage\GarageAgent.cs" />
+    <Compile Include="Garage\GarageVehicleCollection.cs" />
+    <Compile Include="SupportedVehicles\Car.cs" />
+    <Compile Include="EnergyUnits\EnergyUnit.cs" />
+    <Compile Include="Garage\ClientRecord.cs" />
+    <Compile Include="SupportedVehicles\Motorcycle.cs" />
+    <Compile Include="SupportedVehicles\Truck.cs" />
+    <Compile Include="SupportedVehicles\Vehicle.cs" />
+    <Compile Include="Garage\VehicleBuilder.cs" />
+    <Compile Include="Wheels\Wheel.cs" />
+    <Compile Include="Wheels\WheelsCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

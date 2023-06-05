@@ -14,16 +14,18 @@ namespace GarageLogic
             Empty = 0,
             InRepair,
             Repaired,
-            Payed
+            Paid
         }
 
         private static readonly GarageVehicleCollection sr_VehicleCollection = new GarageVehicleCollection();
         private static (Vehicle vehicle, eVehicelStatus status) s_CurrentVehicleHandle;
+        private static Vehicle s_PendingVehicle;
 
         public static string[] GetVehicleStatusTypes()
         {
             return typeof(eVehicelStatus).GetEnumNames();
         }
+
         public static string[] GetFuelTypes()
         {
             return typeof(FuelTank.eFuelType).GetEnumNames();
@@ -56,7 +58,7 @@ namespace GarageLogic
             return vehiclesFiltered;
         }
 
-        public static string GetVehicleProfile(string i_LicensePlate)
+        public static string GetVehicleDetails(string i_LicensePlate)
         {
             s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
             return s_CurrentVehicleHandle.vehicle.ToString();
@@ -64,14 +66,14 @@ namespace GarageLogic
 
         public static Dictionary<string, string[]> GetRequireadDetails(string i_LicensePlate, int i_VehicleTypeNumber)
         {
-            Vehicle newVehicleSkeleton = createNewVehicle(i_LicensePlate, i_VehicleTypeNumber);
-            return newVehicleSkeleton.GetRequiredProperties();
+            createNewVehicle(i_LicensePlate, i_VehicleTypeNumber);
+            return s_PendingVehicle.GetRequiredProperties();
         }
 
-        public static void SetRequireadDetails(string i_LicensePlate, Dictionary<string, string> i_PropertiesDict)
+        public static void SetRequireadDetails(Dictionary<string, string> i_PropertiesDict)
         {
-            s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
-            s_CurrentVehicleHandle.vehicle.SetRequiredProperties(i_PropertiesDict);
+            s_PendingVehicle.SetRequiredProperties(i_PropertiesDict);
+            sr_VehicleCollection.AddNewVehicle(s_PendingVehicle, eVehicelStatus.InRepair);
         }
 
         public static bool LookUpLicensePlate(string i_LicensePlate)
@@ -102,17 +104,13 @@ namespace GarageLogic
             }
         }
 
-        public static void InflateTires(string i_LicensePlate, float i_AirPressureToSet = 0, bool i_InflateToMax = false)
+        public static void InflateTiresToMax(string i_LicensePlate)
         {
             s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
-            
-            foreach(Wheel wheel in s_CurrentVehicleHandle.vehicle.m_Wheels)
-            {
-                wheel.InflateTire(i_AirPressureToSet, i_InflateToMax);
-            }
+            s_CurrentVehicleHandle.vehicle.m_Wheels.InflateAllTiresToMax();
         }
 
-        public static void ReChargeBattery(string i_LicensePlate, float i_ChargingDuration)
+        public static void ReChargeVehicle(string i_LicensePlate, float i_ChargingDuration)
         {
             s_CurrentVehicleHandle = sr_VehicleCollection.GetVehicleByLicensePlate(i_LicensePlate);
             Battery electricEnergyUnit = s_CurrentVehicleHandle.vehicle.m_EnergySource as Battery;
@@ -127,8 +125,8 @@ namespace GarageLogic
                                     message: ExceptionsMessageStrings.k_VehicleTypeNotSupportMethodMessage);
             }
         }
-
-        public static void ReFuel(string i_LicensePlate, int i_FuelType, float i_NumLiters)
+        
+        public static void ReFuelVehicle(string i_LicensePlate, int i_FuelType, float i_NumLiters)
         {
             FuelTank.eFuelType fuelType;
             bool isValidEnumName = Enum.TryParse(i_FuelType.ToString(), out fuelType);
@@ -154,24 +152,20 @@ namespace GarageLogic
             }
         }
         
-        private static Vehicle createNewVehicle(string i_LicensePlate, int i_VehicleType)
+        private static void createNewVehicle(string i_LicensePlate, int i_VehicleType)
         {
-            Vehicle newVehicle = null;
             eVehicleType vehicleType;
             bool isParsed = Enum.TryParse(i_VehicleType.ToString(), out vehicleType);
 
             if (isParsed)
             {
-                newVehicle = CreateVehicle(i_LicensePlate, vehicleType);
-                sr_VehicleCollection.AddNewVehicle(newVehicle, eVehicelStatus.InRepair);
+                s_PendingVehicle = CreateVehicle(i_LicensePlate, vehicleType);   
             }
             else
             {
                 throw new ArgumentException(paramName: ExceptionsMessageStrings.k_VehicleTypeArg,
                                     message: ExceptionsMessageStrings.k_UnsupportedVehicleTypeMessage);
             }
-
-            return newVehicle;
         }
     }
 }

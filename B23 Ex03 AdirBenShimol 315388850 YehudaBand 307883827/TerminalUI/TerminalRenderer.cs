@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace ConsoleUI
 {
     internal class TerminalRenderer
     {
         private const char k_HorizontalBorder = '=';
-        private const char k_VerticalBorder = '|';
-        private const char k_MidLineSymnol = '-';
         private const char k_EmptySymbol = ' ';
-        private const char k_LeftMarkSymbol = '(';
-        private const char k_RightMarkSymbol = ')';
-        private const string k_BulletSymbol = "[*] ";
         private const string k_ActionSymbol = "[>] ";
         private const string k_WarningSymbol = "[Invalid!] ";
-        internal static void renderStartUpScreen()
+
+        internal static void RenderStartUpScreen()
         {
             StringBuilder welcomeScreen = new StringBuilder();
 
@@ -26,7 +21,7 @@ namespace ConsoleUI
             Console.WriteLine(welcomeScreen.ToString());
         }
 
-        internal static void renderTitle(string i_Title)
+        internal static void RenderTitle(string i_Title)
         {
             StringBuilder pageHeader = new StringBuilder();
 
@@ -37,12 +32,12 @@ namespace ConsoleUI
             Console.WriteLine(pageHeader.ToString());
         }
 
-        internal static void renderMessage(string i_Message)
+        internal static void RenderMessage(string i_Message)
         {
             Console.WriteLine(i_Message);
         }
 
-        internal static void renderFilterByStatusRequest(string[] i_VehicleStatusListFromAgent)
+        internal static void RenderFilterByStatusRequest(string[] i_VehicleStatusListFromAgent)
         {
             StringBuilder filterRequest = new StringBuilder();
             
@@ -53,25 +48,18 @@ namespace ConsoleUI
             Console.WriteLine(filterRequest.ToString());
         }
 
-        internal static void renderShowVehicleList(List<string> filteredList)
+        internal static void RenderShowVehicleList(List<string> i_FilteredList)
         {
             StringBuilder vehicleList = new StringBuilder();
             vehicleList.AppendLine(UIMessages.k_VehicleListHeader);
-            for (int i = 0; i < filteredList.Count; i++)
+            for (int i = 0; i < i_FilteredList.Count; i++)
             {
-                vehicleList.AppendLine(string.Format(UIMessages.k_VehicleRecordLine, i + 1, filteredList[i]));
+                vehicleList.AppendLine(string.Format(UIMessages.k_VehicleRecordLine, i + 1, i_FilteredList[i]));
             }
             Console.WriteLine(vehicleList.ToString());
         }
 
-        internal static void renderInflateTiresRequest()
-        {
-            string[] tireInflationOptions = typeof(TerminalUserInterface.eTireInflationOptions).GetEnumNames();
-
-            renderMultiChoiceRequest(tireInflationOptions, UIMessages.k_InflateTiresChoiceRequest);
-        }
-
-        internal static void renderVehicleDetails(string i_VehicleDetails, string i_LicensePlate)
+        internal static void RenderVehicleDetails(string i_VehicleDetails, string i_LicensePlate)
         {
             StringBuilder vehicleDetailsBuilder = new StringBuilder();
             vehicleDetailsBuilder.AppendLine(asTitleString(string.Format(UIMessages.k_VehicleDetailsPresentedTitle, i_LicensePlate)));
@@ -80,7 +68,7 @@ namespace ConsoleUI
             Console.WriteLine(vehicleDetailsBuilder.ToString());
         }
 
-        internal static void renderMessageAndRedirect(string i_Message)
+        internal static void RenderMessageAndRedirect(string i_Message)
         {
             StringBuilder messageBuilder = new StringBuilder();
 
@@ -88,89 +76,71 @@ namespace ConsoleUI
             messageBuilder.Append(UIMessages.k_RedirectionToMainScreen);
 
             Console.WriteLine(messageBuilder.ToString());
-            renderToContinueMessage();
+            RenderToContinueMessage();
         }
 
-        internal static void renderSuccsfulActionMessage()
+        internal static void RenderSuccsfulActionMessage()
         {
-            renderMessageAndRedirect(UIMessages.k_ActionSuccesful);
+            RenderMessageAndRedirect(UIMessages.k_ActionSuccesful);
         }
 
-        internal static void renderMultiChoiceRequest (string[] i_ChoiceArray, string i_ChoiceHeader = null)
+        internal static void RenderMultiChoiceRequest (string[] i_ChoiceArray, string i_ChoiceHeader = null)
         {
             StringBuilder choiceRequest = new StringBuilder();
 
-            choiceRequest.AppendLine(asActionString(i_ChoiceHeader));
+            choiceRequest.AppendLine(AsActionString(i_ChoiceHeader));
             choiceRequest.Append(convertChoiceArrayToDisplay(i_ChoiceArray));
 
             Console.WriteLine(choiceRequest.ToString());
         }
 
-        internal static void renderEndProgramScreen()
+        internal static void RenderEndProgramScreen()
         {
             
             Console.WriteLine(asTitleString(UIMessages.k_GoodbyeMessage));
-            renderToContinueMessage();
+            RenderToContinueMessage();
         }
 
-        internal static void renderToContinueMessage()
+        internal static void RenderToContinueMessage()
         {
             Console.WriteLine();
-            Console.WriteLine(asActionString(UIMessages.k_ToContinueMessage));
+            Console.WriteLine(AsActionString(UIMessages.k_ToContinueMessage));
             Console.ReadLine();
 
         }
 
-        internal static void renderExceptionMessage(string i_ExceptionMessage)
+        internal static void RenderExceptionMessage(string i_ExceptionMessage)
         {
-            Console.WriteLine(asWarningString(i_ExceptionMessage));
+            Console.WriteLine(AsWarningString(i_ExceptionMessage));
             Console.ReadLine();
         }
 
-        private static string convertChoiceArrayToDisplay(string[] i_ChoiceList)
-        {
-            StringBuilder listToDisplay = new StringBuilder();
-
-            for (int i = 1; i < i_ChoiceList.Length; i++)
-            {
-                string choice = parsePropertyToDisplayedProperty(i_ChoiceList[i]);
-                listToDisplay.AppendLine(string.Format($"   [{i}] {choice}"));
-            }
-
-            return listToDisplay.ToString();
-        }
-
-        internal static List<string> convertStringListToDisplayList(List<string> i_StringList)
-        {
-            List<string> displayList = new List<string>();
-
-            foreach (string str in i_StringList)
-            {
-                displayList.Add(parsePropertyToDisplayedProperty(str));
-            }
-
-            return displayList;
-        }
-
-        internal static string asActionString(string i_Message)
+        internal static string AsActionString(string i_Message)
         {
             return k_ActionSymbol + i_Message;
         }
 
-        internal static string asWarningString(string i_Message)
+        internal static string AsWarningString(string i_Message)
         {
             return k_WarningSymbol + i_Message;
         }
 
-        internal static string asMarkedString(string i_String)
+        internal static string ParsePropertyToDisplayedProperty(string i_Property)
         {
-            StringBuilder markedString = new StringBuilder();
+            string withoutPrefix = i_Property.Replace("m_", string.Empty).Replace(".", string.Empty);
 
-            markedString.Append(k_LeftMarkSymbol);
-            markedString.Append(i_String);
-            markedString.Append(k_RightMarkSymbol);
+            StringBuilder newString = new StringBuilder();
+            foreach (char character in withoutPrefix)
+            {
+                if (char.IsUpper(character))
+                {
+                    newString.Append(' ');
+                }
 
-            return markedString.ToString();
+                newString.Append(character);
+            }
+
+            return newString.ToString();
         }
 
         private static string asTitleString(string i_String)
@@ -187,23 +157,17 @@ namespace ConsoleUI
 
             return titledString.ToString();
         }
-
-        internal static string parsePropertyToDisplayedProperty(string i_Property)
+        private static string convertChoiceArrayToDisplay(string[] i_ChoiceList)
         {
-            string withoutPrefix = i_Property.Replace("m_", string.Empty).Replace(".", string.Empty);
+            StringBuilder listToDisplay = new StringBuilder();
 
-            StringBuilder newString = new StringBuilder();
-            foreach (char character in withoutPrefix)
+            for (int i = 1; i < i_ChoiceList.Length; i++)
             {
-                if (char.IsUpper(character))
-                {
-                    newString.Append(' ');
-                }
-
-                newString.Append(character);
+                string choice = ParsePropertyToDisplayedProperty(i_ChoiceList[i]);
+                listToDisplay.AppendLine(string.Format($"   [{i}] {choice}"));
             }
 
-            return newString.ToString();
+            return listToDisplay.ToString();
         }
     }
 }

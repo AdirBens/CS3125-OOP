@@ -1,11 +1,10 @@
 ﻿using ConsoleUI;
-using System;
 
-namespace TerminalUI
+namespace ConsoleUI
 {
     public class Program
     {
-        private static void Main()
+        public static void Main()
         {
             TerminalUserInterface userInterface = new TerminalUserInterface();
             userInterface.RunProgram();

@@ -1,39 +1,30 @@
 ﻿using GarageLogic.Exceptions;
 using System;
 using System.Collections.Generic;
-using static GarageLogic.SupportedVehicles.Motorcycle;
-using static GarageLogic.SupportedVehicles.Truck;
 
 namespace GarageLogic.SupportedVehicles
 {
     internal class Truck: Vehicle
     {
-        internal enum eLoadType
+        internal enum eCargoType
         {
             Empty = 0,
-            HazmatLoad,
-            RegularLoad
+            HazmatCargo,
+            RegularCargo
         }
 
-        internal eLoadType m_IsHazmatTransporter { get; set; }
-        internal float m_CurrentCargoVolume { get; set; }
+        internal eCargoType CargoType { get; private set; }
+        internal float CurrentCargoVolume { get; private set; }
 
         internal Truck(string i_LicensePlate, VehicleBuilder.eVehicleType i_VehicleType)
             : base(i_LicensePlate, i_VehicleType) { }
 
         internal override Dictionary<string, string[]> GetRequiredProperties()
         {
-            return new Dictionary<string, string[]>
-            {
-                { "m_ModelName" , null },
-                { "m_EnergySource.m_CurrentLevel", null },
-                { "m_Wheels.m_CurrentTirePressure", null },
-                { "m_Wheels.m_TireManufacturer", null },
-                { "m_IsHazmatTransporter", typeof(eLoadType).GetEnumNames() },
-                { "m_CurrentCargoVolume", null },
-                { "m_ClientRecord.m_ClientName", null },
-                { "m_ClientRecord.m_PhoneNumber", null}
-            };
+            r_RequiredProperties.Add("CargoType", typeof(eCargoType).GetEnumNames());
+            r_RequiredProperties.Add("CurrentCargoVolume", null);
+
+            return r_RequiredProperties;
         }
 
         internal override void SetRequiredProperties(Dictionary<string, string> i_PropertiesDict)
@@ -46,16 +37,17 @@ namespace GarageLogic.SupportedVehicles
             {
                 string propertyValue = i_PropertiesDict[propertyName];
 
-                if (propertyName == "m_IsHazmatTransporter")
+                if (propertyName == "CargoType")
                 {
-                    eLoadType loadType;
-                    isAllPass &= Enum.TryParse(propertyValue, out loadType);
-                    m_IsHazmatTransporter = loadType;
+                    isAllPass &= Enum.TryParse(propertyValue, out eCargoType loadType) &&
+                                 Enum.IsDefined(typeof(eCargoType), loadType);
+                    CargoType = loadType;
                 }
-                else if (propertyName == "m_CurrentCargoVolume")
+                else if (propertyName == "CurrentCargoVolume")
                 {
-                    isAllPass &= float.TryParse(propertyValue, out float cargoVolume);
-                    m_CurrentCargoVolume = cargoVolume;
+                    isAllPass &= float.TryParse(propertyValue, out float cargoVolume) &&
+                                 cargoVolume >= 0;
+                    CurrentCargoVolume = cargoVolume;
                 }
 
                 if (!isAllPass && firstFailure == string.Empty)
@@ -74,8 +66,8 @@ namespace GarageLogic.SupportedVehicles
         {
             return string.Format(@"{0}
 Unique Properties:
-Current Cargo Volume: {1}
-Cargo Type: {2}", base.ToString(), m_CurrentCargoVolume, m_IsHazmatTransporter.ToString());
+  [>] Current Cargo Volume: {1}
+  [>] Cargo Type: {2}", base.ToString(), CurrentCargoVolume, CargoType.ToString());
         }
     }
 }
