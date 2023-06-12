@@ -1,5 +1,5 @@
 ﻿
-namespace Ex04.Menus.Test
+namespace Ex04.Menus.Test.InterfacesApproach
 {
     internal class InterfacesMainMenu
     {
