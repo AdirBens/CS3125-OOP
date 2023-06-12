@@ -1,7 +1,7 @@
 ﻿
 namespace Ex04.Menus.Test
 {
-    internal class DelegateMainMenu
+    internal class DelegatesMainMenu
     {
     }
 }

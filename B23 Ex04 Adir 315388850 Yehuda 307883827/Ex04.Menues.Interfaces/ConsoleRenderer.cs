@@ -5,6 +5,10 @@ namespace Ex04.Menues.Interfaces
 {
     internal class ConsoleRenderer
     {
+        private const string k_UnderlineChar = "=";
+        private const string k_ListItemBullet = "->";
+        private const string k_InputPromptCursor = ">>";
+
         internal static void AsTitle(string i_TitleString)
         {
 
