@@ -1,14 +1,13 @@
 ﻿
-namespace Ex04.Menus.Test.DelegatesApproach
+namespace Ex04.Menus.Test.InterfacesApproach
 {
-    using Ex04.Menus.Events;
-    using Ex04.Menus.Test.TestUtils;
+    using Ex04.Menus.Interfaces;
 
-    internal class DelegatesMainMenu
+    internal class InterfacesMainMenu
     {
-        private static readonly MainMenu sr_MainMenu = new MainMenu("Delegates Main Menu");
+        private static readonly MainMenu sr_MainMenu = new MainMenu("Interfaces Main Menu");
 
-        internal static MainMenu GetDelegatesMainMenu()
+        internal static MainMenu GetInterfacesMainMenu()
         {
             setupDateTimeMenu();
             setupVersionAndCapitals();
@@ -22,8 +21,8 @@ namespace Ex04.Menus.Test.DelegatesApproach
             MenuItem showDateItem = new MenuItem("Show Date");
             MenuItem showTimeItem = new MenuItem("Show Time");
 
-            showDateItem.ItemSelected += DateTimeAgent.ShowDate;
-            showTimeItem.ItemSelected += DateTimeAgent.ShowTime;
+            showDateItem.AttachObserver(new ShowDateActionable());
+            showTimeItem.AttachObserver(new ShowTimeActionable());
 
             sr_MainMenu.AddMenuItem(dateTimeMenu);
             dateTimeMenu.AddChildren(showDateItem);
@@ -36,8 +35,8 @@ namespace Ex04.Menus.Test.DelegatesApproach
             MenuItem showVersionItem = new MenuItem("Show Version");
             MenuItem countCapitalsItem = new MenuItem("Count Capitals");
 
-            showVersionItem.ItemSelected += VersionAndCapitalsAgent.ShowVersion;
-            countCapitalsItem.ItemSelected += VersionAndCapitalsAgent.CountCapitals;
+            showVersionItem.AttachObserver(new ShowVersionActionable());
+            countCapitalsItem.AttachObserver(new ShowUpperCountActionable());
 
             sr_MainMenu.AddMenuItem(versionAndCapitalsMenu);
             versionAndCapitalsMenu.AddChildren(showVersionItem);

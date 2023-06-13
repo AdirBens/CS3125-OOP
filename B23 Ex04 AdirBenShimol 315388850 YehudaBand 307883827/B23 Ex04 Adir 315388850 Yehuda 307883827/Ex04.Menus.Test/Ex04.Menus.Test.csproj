@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{03723A04-7CDE-447C-B6A4-E1E4C599EC7A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Ex04.Menus.Interfaces</RootNamespace>
-    <AssemblyName>Ex04.Menues.Interfaces</AssemblyName>
+    <ProjectGuid>{9E8C67C7-4198-4CF0-BB0F-1FBB4262FDA4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Ex04.Menus.Test</RootNamespace>
+    <AssemblyName>Ex04.Menus.Test</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,19 +32,29 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleUtils.cs" />
-    <Compile Include="MainMenu.cs" />
-    <Compile Include="MenuItem.cs" />
+    <Compile Include="DelegatesApproach\DelegatesMainMenu.cs" />
+    <Compile Include="InterfacesApproach\InterfacesmainMenu.cs" />
+    <Compile Include="InterfacesApproach\ShowDateActionable.cs" />
+    <Compile Include="InterfacesApproach\ShowTimeActionable.cs" />
+    <Compile Include="InterfacesApproach\ShowUpperCountActionable.cs" />
+    <Compile Include="InterfacesApproach\ShowVersionActionable.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="TestUtils\DateTimeAgent.cs" />
+    <Compile Include="TestUtils\VersionAndCapitalsAgent.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <ProjectReference Include="..\Ex04.Menus.Events\Ex04.Menus.Events.csproj">
+      <Project>{b121fdc6-4be6-465a-9ce7-69c3bf7ddf1a}</Project>
+      <Name>Ex04.Menus.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ex04.Menus.Interfaces\Ex04.Menus.Interfaces.csproj">
+      <Project>{0dacf493-abe9-4fb3-9fe1-ae4ed4b7338d}</Project>
+      <Name>Ex04.Menus.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

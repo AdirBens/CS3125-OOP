@@ -1,21 +1,22 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ex04.Menus.Interfaces
+namespace Ex04.Menus.Events
 {
     internal class ConsoleUtils
     {
         private const char k_UnderlineChar = '-';
 
         internal static void RenderMenu(MenuItem i_MenuItem)
-        {   
+        {
             StringBuilder menuBuilder = new StringBuilder();
-            
+
             menuBuilder.Append(asTitle(i_MenuItem.Name));
             menuBuilder.AppendLine(buildOptionsString(i_MenuItem));
-            
+
             Console.Clear();
             Console.WriteLine(menuBuilder.ToString());
         }
@@ -65,7 +66,7 @@ namespace Ex04.Menus.Interfaces
         private static string asError(string i_String)
         {
             StringBuilder errorString = new StringBuilder();
-            
+
             errorString.Append("[!] Invalid Input!");
             errorString.AppendLine();
             errorString.AppendLine(i_String);
@@ -89,7 +90,7 @@ namespace Ex04.Menus.Interfaces
 
             return optionsBuilder.ToString();
         }
-        
+
         private static string asTitle(string i_TitleString)
         {
             StringBuilder titleBuilder = new StringBuilder();
@@ -104,10 +105,10 @@ namespace Ex04.Menus.Interfaces
         private static string getBoarder()
         {
             StringBuilder boarderBuilder = new StringBuilder();
-            
+
             boarderBuilder.Append(k_UnderlineChar, repeatCount: 32);
             boarderBuilder.AppendLine();
-            
+
             return boarderBuilder.ToString();
         }
     }

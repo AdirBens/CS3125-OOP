@@ -4,11 +4,11 @@ using Ex04.Menus.Test.TestUtils;
 
 namespace Ex04.Menus.Test.InterfacesApproach
 {
-    internal class ShowUpperCountActionable : ISelectedObservers
+    internal class ShowTimeActionable : ISelectedObservers
     {
         public void NotifyItemSelected()
         {
-            VersionAndCapitalsAgent.CountCapitals();
+            DateTimeAgent.ShowTime();
         }
     }
 }

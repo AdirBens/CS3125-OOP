@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-namespace Ex04.Menus.Interfaces
+namespace Ex04.Menus.Events
 {
     public class MainMenu
     {

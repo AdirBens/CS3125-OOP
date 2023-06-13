@@ -16,8 +16,8 @@ namespace Ex04.Menus.Test.TestUtils
             Console.WriteLine("[Count Capitals] Please enter your sentence:");
             Console.Write(">> ");
             string userSentence = Console.ReadLine();
-            int numCapitals = userSentence.Count(c  => char.IsUpper(c));
-            Console.WriteLine(string.Format("[Count Capitals] There are {0} capitals in your sentence.", 
+            int numCapitals = userSentence.Count(c => char.IsUpper(c));
+            Console.WriteLine(string.Format("[Count Capitals] There are {0} capitals in your sentence.",
                 numCapitals));
         }
     }

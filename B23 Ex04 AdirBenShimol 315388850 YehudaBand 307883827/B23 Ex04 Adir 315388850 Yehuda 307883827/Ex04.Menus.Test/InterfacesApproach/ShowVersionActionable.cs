@@ -4,11 +4,11 @@ using Ex04.Menus.Test.TestUtils;
 
 namespace Ex04.Menus.Test.InterfacesApproach
 {
-    public class ShowDateActionable : ISelectedObservers
+    internal class ShowVersionActionable : ISelectedObservers
     {
         public void NotifyItemSelected()
         {
-            DateTimeAgent.ShowDate();
+            VersionAndCapitalsAgent.ShowVersion();
         }
     }
 }
