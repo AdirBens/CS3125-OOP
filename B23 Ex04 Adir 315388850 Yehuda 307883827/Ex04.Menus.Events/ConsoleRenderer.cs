@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-namespace Ex04.Menues.Interfaces
+namespace Ex04.Menus.Events
 {
     internal class ConsoleRenderer
     {
