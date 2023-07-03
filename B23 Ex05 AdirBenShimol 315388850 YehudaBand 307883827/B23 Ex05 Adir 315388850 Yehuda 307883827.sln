@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic", "GameLogic\GameLogic.csproj", "{12DBD287-E41D-4F79-B266-5DA7D55F1A12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameUI", "TGameUI\GameUI.csproj", "{303CCD3A-8DAC-41D9-9F48-9A3CA0BDA83C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameGUI", "GameGUI\GameGUI.csproj", "{DD6519BC-6CAB-4E08-B7B8-BF6D15E8FED9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{12DBD287-E41D-4F79-B266-5DA7D55F1A12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12DBD287-E41D-4F79-B266-5DA7D55F1A12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12DBD287-E41D-4F79-B266-5DA7D55F1A12}.Release|Any CPU.Build.0 = Release|Any CPU
-		{303CCD3A-8DAC-41D9-9F48-9A3CA0BDA83C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{303CCD3A-8DAC-41D9-9F48-9A3CA0BDA83C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{303CCD3A-8DAC-41D9-9F48-9A3CA0BDA83C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{303CCD3A-8DAC-41D9-9F48-9A3CA0BDA83C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD6519BC-6CAB-4E08-B7B8-BF6D15E8FED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD6519BC-6CAB-4E08-B7B8-BF6D15E8FED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD6519BC-6CAB-4E08-B7B8-BF6D15E8FED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD6519BC-6CAB-4E08-B7B8-BF6D15E8FED9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

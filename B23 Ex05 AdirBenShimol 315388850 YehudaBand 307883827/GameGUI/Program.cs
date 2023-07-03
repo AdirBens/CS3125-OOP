@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace GameGUI
 {
-    internal class Program
+    public class Program
     {
+        public static void Main()
+        {
+            FormGameSettings settings = new FormGameSettings();
+            settings.ShowDialog();
+        }
     }
 }

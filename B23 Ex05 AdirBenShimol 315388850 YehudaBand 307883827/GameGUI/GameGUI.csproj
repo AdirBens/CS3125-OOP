@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DD6519BC-6CAB-4E08-B7B8-BF6D15E8FED9}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>GameGUI</RootNamespace>
     <AssemblyName>GameGUI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -32,8 +32,44 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FormGameFinishedDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGameFinishedDialog.Designer.cs">
+      <DependentUpon>FormGameFinishedDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormGameBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGameBoard.Designer.cs">
+      <DependentUpon>FormGameBoard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormGameSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormGameSettings.Designer.cs">
+      <DependentUpon>FormGameSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormGameSettings.resx">
+      <DependentUpon>FormGameSettings.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
