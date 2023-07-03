@@ -8,13 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GameUI
+namespace GameGUI
 {
-    public partial class Form1 : Form
+    public partial class FormGameSettings : Form
     {
-        public Form1()
+        public FormGameSettings()
         {
             InitializeComponent();
+        }
+
+        private void FormGameSettings_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
