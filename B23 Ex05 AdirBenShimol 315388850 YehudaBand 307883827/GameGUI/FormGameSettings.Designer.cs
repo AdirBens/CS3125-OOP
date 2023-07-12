@@ -53,7 +53,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(56, 9);
+            this.label1.Location = new System.Drawing.Point(67, 6);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(166, 25);
@@ -74,7 +74,7 @@
             this.PlayersBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.PlayersBox.Name = "PlayersBox";
             this.PlayersBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.PlayersBox.Size = new System.Drawing.Size(222, 96);
+            this.PlayersBox.Size = new System.Drawing.Size(229, 96);
             this.PlayersBox.TabIndex = 1;
             this.PlayersBox.TabStop = false;
             this.PlayersBox.Text = "Players:";
@@ -84,21 +84,19 @@
             this.textBoxPlayer2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPlayer2.Enabled = false;
-            this.textBoxPlayer2.Location = new System.Drawing.Point(88, 60);
+            this.textBoxPlayer2.Location = new System.Drawing.Point(98, 60);
             this.textBoxPlayer2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxPlayer2.MaxLength = 15;
             this.textBoxPlayer2.Name = "textBoxPlayer2";
-            this.textBoxPlayer2.Size = new System.Drawing.Size(111, 20);
+            this.textBoxPlayer2.Size = new System.Drawing.Size(108, 20);
             this.textBoxPlayer2.TabIndex = 3;
             this.textBoxPlayer2.Text = "[ COMPUTER ]";
             this.textBoxPlayer2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // checkBoxPlayer2
             // 
-            this.checkBoxPlayer2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxPlayer2.AutoSize = true;
-            this.checkBoxPlayer2.Location = new System.Drawing.Point(15, 62);
+            this.checkBoxPlayer2.Location = new System.Drawing.Point(21, 61);
             this.checkBoxPlayer2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.checkBoxPlayer2.Name = "checkBoxPlayer2";
             this.checkBoxPlayer2.Size = new System.Drawing.Size(67, 17);
@@ -114,20 +112,18 @@
             this.textBoxPlayer1.AccessibleName = "";
             this.textBoxPlayer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxPlayer1.Location = new System.Drawing.Point(88, 27);
+            this.textBoxPlayer1.Location = new System.Drawing.Point(98, 27);
             this.textBoxPlayer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxPlayer1.MaxLength = 15;
             this.textBoxPlayer1.Name = "textBoxPlayer1";
-            this.textBoxPlayer1.Size = new System.Drawing.Size(111, 20);
+            this.textBoxPlayer1.Size = new System.Drawing.Size(108, 20);
             this.textBoxPlayer1.TabIndex = 1;
             this.textBoxPlayer1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(31, 28);
+            this.label2.Location = new System.Drawing.Point(29, 27);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(51, 13);
@@ -148,7 +144,7 @@
             this.BoardSizeBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.BoardSizeBox.Name = "BoardSizeBox";
             this.BoardSizeBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.BoardSizeBox.Size = new System.Drawing.Size(222, 70);
+            this.BoardSizeBox.Size = new System.Drawing.Size(229, 70);
             this.BoardSizeBox.TabIndex = 2;
             this.BoardSizeBox.TabStop = false;
             this.BoardSizeBox.Text = "Board Size:";
@@ -194,7 +190,7 @@
             0,
             0});
             this.numericBoxCols.Name = "numericBoxCols";
-            this.numericBoxCols.Size = new System.Drawing.Size(36, 20);
+            this.numericBoxCols.Size = new System.Drawing.Size(43, 20);
             this.numericBoxCols.TabIndex = 1;
             this.numericBoxCols.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericBoxCols.Value = new decimal(new int[] {
@@ -221,7 +217,7 @@
             0,
             0});
             this.numericBoxRows.Name = "numericBoxRows";
-            this.numericBoxRows.Size = new System.Drawing.Size(36, 20);
+            this.numericBoxRows.Size = new System.Drawing.Size(43, 20);
             this.numericBoxRows.TabIndex = 1;
             this.numericBoxRows.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericBoxRows.Value = new decimal(new int[] {
@@ -240,7 +236,7 @@
             this.StartGameButton.Location = new System.Drawing.Point(71, 256);
             this.StartGameButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.StartGameButton.Name = "StartGameButton";
-            this.StartGameButton.Size = new System.Drawing.Size(125, 27);
+            this.StartGameButton.Size = new System.Drawing.Size(133, 27);
             this.StartGameButton.TabIndex = 3;
             this.StartGameButton.Text = "Start!";
             this.StartGameButton.UseVisualStyleBackColor = true;
@@ -254,7 +250,7 @@
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(269, 306);
+            this.ClientSize = new System.Drawing.Size(277, 306);
             this.Controls.Add(this.StartGameButton);
             this.Controls.Add(this.BoardSizeBox);
             this.Controls.Add(this.PlayersBox);
@@ -266,6 +262,7 @@
             this.MinimizeBox = false;
             this.Name = "FormGameSettings";
             this.Text = "ToeTacTic: Game Settings";
+            this.Load += new System.EventHandler(this.FormGameSettings_Load);
             this.PlayersBox.ResumeLayout(false);
             this.PlayersBox.PerformLayout();
             this.BoardSizeBox.ResumeLayout(false);

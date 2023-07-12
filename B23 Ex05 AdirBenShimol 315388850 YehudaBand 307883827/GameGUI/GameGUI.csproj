@@ -39,6 +39,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoardEntry.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormGameFinishedDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,9 +70,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormGameBoard.resx">
+      <DependentUpon>FormGameBoard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormGameSettings.resx">
       <DependentUpon>FormGameSettings.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GameLogic\GameLogic.csproj">
+      <Project>{12dbd287-e41d-4f79-b266-5da7d55f1a12}</Project>
+      <Name>GameLogic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

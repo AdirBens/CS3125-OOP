@@ -1,7 +1,7 @@
 ﻿
 namespace GameLogic
 {
-    internal class GameEngine
+    public class GameEngine
     {
     }
 }

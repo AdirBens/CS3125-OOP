@@ -117,5 +117,10 @@ namespace GameGUI
 
             return isPlayersValid;
         }
+
+        private void FormGameSettings_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
