@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIStrategy\RandomMoves.cs" />
+    <Compile Include="GameConfig.cs" />
     <Compile Include="GameEngine.cs" />
     <Compile Include="GameUtils\GameBoard\BoardEntry.cs" />
     <Compile Include="GameUtils\GameBoard\GameBoard.cs" />

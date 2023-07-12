@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GameGUI
+namespace GameGUI.GUI
 {
     internal class BoardEntry : Button
     {
@@ -15,8 +11,8 @@ namespace GameGUI
 
         public BoardEntry(int i_Row, int i_Col)
         {
-            this.Width = k_Size;
-            this.Height = k_Size;
+            Width = k_Size;
+            Height = k_Size;
             setEntryLocation(i_Row, i_Col);
             setEntryStyle();
         }
@@ -25,26 +21,26 @@ namespace GameGUI
         {
             int entryTop = i_Row * (k_Size + k_Margin) + k_Margin;
             int entryStart = i_Col * (k_Size + k_Margin) + k_Margin;
-            
-            this.Location = new System.Drawing.Point(entryTop, entryStart); ;
+
+            Location = new Point(entryTop, entryStart); ;
         }
 
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            if (this.Text == string.Empty)
+            if (Text == string.Empty)
             {
-                this.Text = "X";
+                Text = "X";
             }
         }
 
         private void setEntryStyle()
         {
-            Color textColor = Color.CadetBlue;
-            
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ForeColor = textColor;
+            Color textColor = Color.RoyalBlue;
+
+            Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            TextAlign = ContentAlignment.MiddleCenter;
+            ForeColor = textColor;
         }
     }
 }

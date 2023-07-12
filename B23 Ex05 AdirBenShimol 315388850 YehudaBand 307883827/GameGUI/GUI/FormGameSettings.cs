@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GameGUI
@@ -27,14 +20,14 @@ namespace GameGUI
             get { return textBoxPlayer2.Text; }
         }
 
-        public decimal BoardNumRows
+        public int BoardNumRows
         {
-            get { return numericBoxRows.Value; }
+            get { return (int) numericBoxRows.Value; }
         }
 
-        public decimal BoardNumCols
+        public int BoardNumCols
         {
-            get { return numericBoxCols.Value; }
+            get { return (int) numericBoxCols.Value; }
         }
 
         private void player2CheckBox_Check(object sender, EventArgs e)
@@ -55,11 +48,13 @@ namespace GameGUI
         private void onPlayer2CheckBoxCheckChange(object sender)
         {
             CheckBox checkBox = (sender as CheckBox);
+            
             if (checkBox.Checked == true)
             {
                 textBoxPlayer2.Text = string.Empty;
                 textBoxPlayer2.Enabled = true;
             }
+
             else
             {
                 textBoxPlayer2.Text = "[ COMPUTER ]";
@@ -108,17 +103,28 @@ namespace GameGUI
 
         private bool isPlayersValid()
         {
-            bool isPlayersValid = textBoxPlayer1.Text != string.Empty;
+            bool isPlayersValid = !string.IsNullOrWhiteSpace(textBoxPlayer1.Text);
 
             if ( checkBoxPlayer2.Checked )
             {
-                isPlayersValid &= textBoxPlayer2.Text != string.Empty;
+                isPlayersValid &= !string.IsNullOrWhiteSpace(textBoxPlayer2.Text);
+                isPlayersValid &= !textBoxPlayer2.Text.Equals(textBoxPlayer1.Text);
             }
 
             return isPlayersValid;
         }
 
         private void FormGameSettings_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PlayersBox_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxPlayer2_TextChanged(object sender, EventArgs e)
         {
 
         }

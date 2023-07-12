@@ -20,7 +20,8 @@ namespace GameGUI
         {
             FormGameSettings settings = new FormGameSettings();
             settings.ShowDialog();
-            FormGameBoard gameBoard = new FormGameBoard(7);
+
+            FormGameBoard gameBoard = new FormGameBoard(settings);
             gameBoard.ShowDialog();
         }
     }

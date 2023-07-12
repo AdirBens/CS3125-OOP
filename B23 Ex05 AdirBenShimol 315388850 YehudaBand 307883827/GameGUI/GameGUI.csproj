@@ -39,27 +39,22 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoardEntry.cs">
+    <Compile Include="GUI\BoardEntry.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FormGameFinishedDialog.cs">
+    <Compile Include="GUI\FormGameBoard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGameFinishedDialog.Designer.cs">
-      <DependentUpon>FormGameFinishedDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormGameBoard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormGameBoard.Designer.cs">
+    <Compile Include="GUI\FormGameBoard.Designer.cs">
       <DependentUpon>FormGameBoard.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormGameSettings.cs">
+    <Compile Include="GUI\FormGameSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormGameSettings.Designer.cs">
+    <Compile Include="GUI\FormGameSettings.Designer.cs">
       <DependentUpon>FormGameSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="ReverseTicTacToe.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,10 +65,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormGameBoard.resx">
+    <EmbeddedResource Include="GUI\FormGameBoard.resx">
       <DependentUpon>FormGameBoard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormGameSettings.resx">
+    <EmbeddedResource Include="GUI\FormGameSettings.resx">
       <DependentUpon>FormGameSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
