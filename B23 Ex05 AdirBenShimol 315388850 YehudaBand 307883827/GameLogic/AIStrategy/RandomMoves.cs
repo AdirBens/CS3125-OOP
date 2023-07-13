@@ -10,7 +10,6 @@ namespace GameLogic.AIStrategy
         public static (int row, int col) GetAIMove(GameBoard i_GameBoard)
         {
             BoardEntry[] emptyEntries = getEmptyEntriesArray(i_GameBoard);
-
             Random rnd = new Random();
             int entryIndex = rnd.Next(emptyEntries.Length);
             BoardEntry chosenEntry = emptyEntries[entryIndex];

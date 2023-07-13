@@ -10,7 +10,6 @@ namespace GameLogic.GameUtils
             Empty,
             InProgress,
             Tie,
-            Win,
             Player1Won,
             Player2Won
         }
@@ -22,7 +21,6 @@ namespace GameLogic.GameUtils
             eGameStatus currentStatus = eGameStatus.InProgress;
 
             checkForWinningStreak(i_GameBoard, i_LastMovePlayed);
-
             if (s_WinningStreak.Count() > 0)
             {
                 if (s_WinningStreak.Last().m_Player.m_Symbol == Player.ePlayerSymbol.PlayerOne)
@@ -62,21 +60,28 @@ namespace GameLogic.GameUtils
             if (CheckIfOnMainDiagonal(i_LastMovePlayed) == true)
             {
                 IEnumerable<BoardEntry> diagonalElements = i_GameBoard.GetMainDiagonalIterator();
+
                 hasWinner |= checkForStreak(diagonalElements);
             }
+
             if (!hasWinner && CheckIfOnCounterDiagonal(i_GameBoard.m_BoardSize, i_LastMovePlayed) == true)
             {
                 IEnumerable<BoardEntry> counterDiagonalElements = i_GameBoard.GetCounterDiagonalIterator();
+
                 hasWinner |= checkForStreak(counterDiagonalElements);
             }
+
             if (!hasWinner)
             {
                 IEnumerable<BoardEntry> columnElements = i_GameBoard.GetColumnIterator(i_LastMovePlayed.col);
+
                 hasWinner |= checkForStreak(columnElements);
             }
+
             if (!hasWinner)
             {
                 IEnumerable<BoardEntry> rowElements = i_GameBoard.GetRowIterator(i_LastMovePlayed.row);
+
                 checkForStreak(rowElements);
             }
 

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGameSettings));
-            this.label1 = new System.Windows.Forms.Label();
+            this.SettingsTitle = new System.Windows.Forms.Label();
             this.PlayersBox = new System.Windows.Forms.GroupBox();
             this.textBoxPlayer2 = new System.Windows.Forms.TextBox();
             this.checkBoxPlayer2 = new System.Windows.Forms.CheckBox();
@@ -41,26 +41,26 @@
             this.numericBoxCols = new System.Windows.Forms.NumericUpDown();
             this.numericBoxRows = new System.Windows.Forms.NumericUpDown();
             this.StartGameButton = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
+            this.SettingsRules = new System.Windows.Forms.Label();
             this.PlayersBox.SuspendLayout();
             this.BoardSizeBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericBoxCols)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericBoxRows)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // SettingsTitle
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.SettingsTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Kristen ITC", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(85, 9);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(176, 29);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Game Settings";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SettingsTitle.AutoSize = true;
+            this.SettingsTitle.Font = new System.Drawing.Font("Kristen ITC", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsTitle.Location = new System.Drawing.Point(69, 9);
+            this.SettingsTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.SettingsTitle.Name = "SettingsTitle";
+            this.SettingsTitle.Size = new System.Drawing.Size(196, 33);
+            this.SettingsTitle.TabIndex = 0;
+            this.SettingsTitle.Text = "Game Settings";
+            this.SettingsTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // PlayersBox
             // 
@@ -253,16 +253,16 @@
             this.StartGameButton.UseVisualStyleBackColor = true;
             this.StartGameButton.Click += new System.EventHandler(this.startButton_Click);
             // 
-            // label5
+            // SettingsRules
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("MS Reference Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(87, 51);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(172, 32);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Reverse Tic-Tac-Toe Game\r\nDo Not Complete a line!";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.SettingsRules.AutoSize = true;
+            this.SettingsRules.Font = new System.Drawing.Font("MS Reference Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsRules.Location = new System.Drawing.Point(72, 58);
+            this.SettingsRules.Name = "SettingsRules";
+            this.SettingsRules.Size = new System.Drawing.Size(189, 32);
+            this.SettingsRules.TabIndex = 4;
+            this.SettingsRules.Text = "Reverse Tic-Tac-Toe Game\r\nDo Not Complete a line!";
+            this.SettingsRules.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormGameSettings
             // 
@@ -273,11 +273,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(334, 361);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.SettingsRules);
             this.Controls.Add(this.StartGameButton);
             this.Controls.Add(this.BoardSizeBox);
             this.Controls.Add(this.PlayersBox);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.SettingsTitle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -298,7 +298,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label SettingsTitle;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -310,6 +310,6 @@
         private System.Windows.Forms.NumericUpDown numericBoxCols;
         private System.Windows.Forms.NumericUpDown numericBoxRows;
         private System.Windows.Forms.Button StartGameButton;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label SettingsRules;
     }
 }

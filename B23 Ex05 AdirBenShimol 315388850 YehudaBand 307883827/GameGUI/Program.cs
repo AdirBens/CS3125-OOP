@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GameLogic;
-
-namespace GameGUI
+﻿namespace GameGUI
 {
     public class Program
     {
         public static void Main()
         {
-            ReverseTicTacToe game = new ReverseTicTacToe();
-            game.RunGame();
+            ReverseTicTacToe reverseTicTacToe = new ReverseTicTacToe();
+
+            reverseTicTacToe.RunGame();
         }
     }
 }

@@ -1,14 +1,12 @@
-﻿using GameLogic.GameUtils;
-using System;
+﻿using System;
 using System.Windows.Forms;
-using static GameLogic.GameUtils.Player.eStrategy;
-
+using static GameLogic.GameUtils.Player;
 
 namespace GameGUI
 {
     internal partial class FormGameSettings : Form
     {
-        private bool isSettingsValid = false;
+        private bool m_isSettingsValid = false;
         internal string Player1Name
         {
             get { return textBoxPlayer1.Text; }
@@ -24,38 +22,38 @@ namespace GameGUI
             get { return (int) numericBoxCols.Value; }
         }
 
-        internal Player.eStrategy OpponentType
+        internal eStrategy OpponentType
         {
-            get { return checkBoxPlayer2.Checked == true ? HumanPlayer : AIPlayer; }
+            get { return checkBoxPlayer2.Checked == true ? eStrategy.HumanPlayer : eStrategy.AIPlayer; }
         }
 
         internal bool IsSettingsValid
         {
-            get { return isSettingsValid; }
+            get { return m_isSettingsValid; }
         }
 
         internal FormGameSettings(int i_MinBoardSize, int i_MaxBoardSize)
         {
             InitializeComponent();
-            setBoardSizeLimits(i_MinBoardSize, i_MaxBoardSize);
+            alignControlsAndLabels(i_MinBoardSize, i_MaxBoardSize);
         }
 
         private void player2CheckBox_Checked(object sender, EventArgs e)
         {
-            onPlayer2CheckBoxCheckChange(sender);
+            OnPlayer2CheckBoxCheckChange(sender);
         }
 
         private void boardSizeBox_ValueChanged(object sender, EventArgs e)
         {
-            onBoardSizeBoxChange(sender);
+            OnBoardSizeBoxChange(sender);
         }
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            onStartClicked();
+            OnStartClicked();
         }
 
-        private void onPlayer2CheckBoxCheckChange(object sender)
+        private void OnPlayer2CheckBoxCheckChange(object sender)
         {
             CheckBox checkBox = (sender as CheckBox);
             
@@ -64,7 +62,6 @@ namespace GameGUI
                 textBoxPlayer2.Text = string.Empty;
                 textBoxPlayer2.Enabled = true;
             }
-
             else
             {
                 textBoxPlayer2.Text = "[ COMPUTER ]";
@@ -72,31 +69,36 @@ namespace GameGUI
             }
         }
 
-        private void onBoardSizeBoxChange(object sender)
+        private void OnBoardSizeBoxChange(object sender)
         {
             NumericUpDown currentBox = (sender as NumericUpDown);
-
             NumericUpDown otherBox = currentBox.Name == "numericBoxRows"? 
                 numericBoxCols : numericBoxRows;
 
             otherBox.Value = currentBox.Value;
         }
 
-        private void onStartClicked()
+        private void OnStartClicked()
         {
-            if (isFormValid())
+            if (isPlayersValid())
             {
-                isSettingsValid = true;
+                m_isSettingsValid = true;
                 Close();
             }
-        }
+            else
+            {
+                string message = string.IsNullOrWhiteSpace(Player1Name) ? 
+                    UIStrings.k_Player1EmptyNameMessage : UIStrings.k_Player2EmptyNameMessage;
 
-        // TODO: Change validation to Events (need to read officDocs)
-        private bool isFormValid()
-        {
-            bool isFormValid = isPlayersValid();
-            
-            return isFormValid;
+               switch (GuiUtils.ShowErrorDialog(message, UIStrings.k_InvalidFormDialogCaption))
+                {
+                    case DialogResult.Retry:
+                        break;
+                    case DialogResult.Cancel:
+                        Close();
+                        break;
+                }
+            }
         }
 
         private bool isPlayersValid()
@@ -106,7 +108,6 @@ namespace GameGUI
             if ( checkBoxPlayer2.Checked )
             {
                 isPlayersValid &= !string.IsNullOrWhiteSpace(textBoxPlayer2.Text);
-                isPlayersValid &= !textBoxPlayer2.Text.Equals(textBoxPlayer1.Text);
             }
 
             return isPlayersValid;
@@ -120,6 +121,19 @@ namespace GameGUI
             numericBoxRows.Maximum = i_MaxBoardSize;
             numericBoxCols.Value = i_MinBoardSize;
             numericBoxRows.Value = i_MinBoardSize;
+        }
+
+        private void alignToHorizontalCenter()
+        {
+            GuiUtils.HorizontalCentralizeObject(this, SettingsTitle);
+            GuiUtils.HorizontalCentralizeObject(this, SettingsRules);
+            GuiUtils.HorizontalCentralizeObject(this, StartGameButton);
+        }
+
+        private void alignControlsAndLabels(int i_MinBoardSize, int i_MaxBoardSize)
+        {
+            setBoardSizeLimits(i_MinBoardSize, i_MaxBoardSize);
+            alignToHorizontalCenter();
         }
     }
 }

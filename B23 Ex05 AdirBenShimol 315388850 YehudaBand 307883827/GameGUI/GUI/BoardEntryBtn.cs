@@ -1,7 +1,6 @@
-﻿using static GameLogic.GameUtils.Player;
-using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using static GameLogic.GameUtils.Player;
 
 namespace GameGUI.GUI
 {
@@ -9,6 +8,8 @@ namespace GameGUI.GUI
     {
         private const int k_Size = 64;
         private const int k_Margin = 10;
+        private const string k_OMark= "O";
+        private const string k_XMark = "X";
         internal int RowIndex
         {
             get; private set;
@@ -29,21 +30,6 @@ namespace GameGUI.GUI
             setEntryStyle();
         }
 
-        private void setEntryLocation(int i_Row, int i_Col)
-        {
-            int entryTop = i_Row * (k_Size + k_Margin) + k_Margin;
-            int entryStart = i_Col * (k_Size + k_Margin) + k_Margin;
-
-            Location = new Point(entryTop, entryStart); ;
-        }
-
-        private void setEntryStyle()
-        {
-            Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            TextAlign = ContentAlignment.MiddleCenter;
-            BackColor = Color.GhostWhite;
-        }
-
         internal void HighlightEntry()
         {
             BackColor = Color.LightYellow;
@@ -61,15 +47,30 @@ namespace GameGUI.GUI
             {
                 case ePlayerSymbol.PlayerOne:
                     ForeColor = Color.RoyalBlue;
-                    Text = "X";
+                    Text = k_XMark;
                     break;
                 case ePlayerSymbol.PlayerTwo:
                     ForeColor = Color.Crimson;
-                    Text = "O";
+                    Text = k_OMark;
                     break;
                 case ePlayerSymbol.Empty: 
                     break;
             }
+        }
+
+        private void setEntryLocation(int i_Row, int i_Col)
+        {
+            int entryTop = i_Row * (k_Size + k_Margin) + k_Margin;
+            int entryStart = i_Col * (k_Size + k_Margin) + k_Margin;
+
+            Location = new Point(entryTop, entryStart); ;
+        }
+
+        private void setEntryStyle()
+        {
+            Font = new Font("Microsoft Sans Serif", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            TextAlign = ContentAlignment.MiddleCenter;
+            BackColor = Color.GhostWhite;
         }
     }
 }

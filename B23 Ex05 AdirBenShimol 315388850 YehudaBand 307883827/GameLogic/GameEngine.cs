@@ -40,20 +40,20 @@ namespace GameLogic
             m_GameStatus = eGameStatus.InProgress;
         }
 
-        private void setOpponentType(Player.eStrategy i_OpponentType)
+        private void setOpponentType(eStrategy i_OpponentType)
         {
-            if (i_OpponentType != Player.eStrategy.Empty)
+            if (i_OpponentType != eStrategy.Empty)
             {
-                r_Players[0] = new Player(Player.ePlayerSymbol.PlayerOne, i_Strategy: Player.eStrategy.HumanPlayer);
-                r_Players[1] = new Player(Player.ePlayerSymbol.PlayerTwo, i_Strategy: i_OpponentType);
+                r_Players[0] = new Player(ePlayerSymbol.PlayerOne, i_Strategy: eStrategy.HumanPlayer);
+                r_Players[1] = new Player(ePlayerSymbol.PlayerTwo, i_Strategy: i_OpponentType);
             }
         }
 
         public void SetNextMove((int row, int col) i_Coordinate)
         {
-            m_GameStatus = eGameStatus.Empty;
             Player currentPlayer = r_Players[m_NumTurnsPlayed % r_Players.Length];
-
+            
+            m_GameStatus = eGameStatus.Empty;
             if (r_GameBoard.SetEntry(currentPlayer, i_Coordinate.row, i_Coordinate.col) == true)
             {
                 m_LastMovePlayed = i_Coordinate;

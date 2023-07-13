@@ -1,5 +1,4 @@
-﻿
-namespace GameLogic.GameUtils
+﻿namespace GameLogic.GameUtils
 {
     public struct BoardEntry
     {

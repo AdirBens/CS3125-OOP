@@ -47,7 +47,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.BoardTitle.AutoSize = true;
             this.BoardTitle.Font = new System.Drawing.Font("Kristen ITC", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BoardTitle.Location = new System.Drawing.Point(101, 19);
+            this.BoardTitle.Location = new System.Drawing.Point(130, 20);
             this.BoardTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.BoardTitle.Name = "BoardTitle";
             this.BoardTitle.Size = new System.Drawing.Size(245, 29);
@@ -60,7 +60,7 @@
             this.BoardPanel.AutoSize = true;
             this.BoardPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BoardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.BoardPanel.Location = new System.Drawing.Point(35, 100);
+            this.BoardPanel.Location = new System.Drawing.Point(19, 71);
             this.BoardPanel.Margin = new System.Windows.Forms.Padding(35, 35, 70, 70);
             this.BoardPanel.Name = "BoardPanel";
             this.BoardPanel.Padding = new System.Windows.Forms.Padding(10);
