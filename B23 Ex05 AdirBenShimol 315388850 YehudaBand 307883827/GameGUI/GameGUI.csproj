@@ -39,7 +39,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\BoardEntry.cs">
+    <Compile Include="GUI\BoardEntryBtn.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GUI\FormGameBoard.cs">

@@ -5,6 +5,8 @@ namespace GameLogic.GameUtils
 {
     public class GameBoard
     {
+        private int m_NumEmptyEntries;
+        private static Player s_VoidPlayer = new Player(Player.ePlayerSymbol.Empty, Player.eStrategy.Empty);
         public BoardEntry[,] m_Board
         {
             get; private set;
@@ -13,9 +15,6 @@ namespace GameLogic.GameUtils
         {
             get; private set;
         }
-        private int m_NumEmptyEntries;
-        private static Player s_VoidPlayer = new Player(Player.ePlayerSymbol.Empty,
-                                                        Player.eStrategy.Empty);
 
         public GameBoard(int i_BoardSize)
         {

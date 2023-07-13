@@ -1,36 +1,46 @@
-﻿using System;
+﻿using GameLogic.GameUtils;
+using System;
 using System.Windows.Forms;
+using static GameLogic.GameUtils.Player.eStrategy;
+
 
 namespace GameGUI
 {
-    public partial class FormGameSettings : Form
+    internal partial class FormGameSettings : Form
     {
-        public FormGameSettings()
-        {
-            InitializeComponent();
-        }
-
-        public string Player1Name
+        private bool isSettingsValid = false;
+        internal string Player1Name
         {
             get { return textBoxPlayer1.Text; }
         }
 
-        public string Player2Name
+        internal string Player2Name
         {
             get { return textBoxPlayer2.Text; }
         }
 
-        public int BoardNumRows
-        {
-            get { return (int) numericBoxRows.Value; }
-        }
-
-        public int BoardNumCols
+        internal int BoardSize
         {
             get { return (int) numericBoxCols.Value; }
         }
 
-        private void player2CheckBox_Check(object sender, EventArgs e)
+        internal Player.eStrategy OpponentType
+        {
+            get { return checkBoxPlayer2.Checked == true ? HumanPlayer : AIPlayer; }
+        }
+
+        internal bool IsSettingsValid
+        {
+            get { return isSettingsValid; }
+        }
+
+        internal FormGameSettings(int i_MinBoardSize, int i_MaxBoardSize)
+        {
+            InitializeComponent();
+            setBoardSizeLimits(i_MinBoardSize, i_MaxBoardSize);
+        }
+
+        private void player2CheckBox_Checked(object sender, EventArgs e)
         {
             onPlayer2CheckBoxCheckChange(sender);
         }
@@ -76,29 +86,17 @@ namespace GameGUI
         {
             if (isFormValid())
             {
-                // TODO: need to send data to LOGIC
-                this.Close();
+                isSettingsValid = true;
+                Close();
             }
         }
-
 
         // TODO: Change validation to Events (need to read officDocs)
         private bool isFormValid()
         {
-            bool isFormValid = isBoardSizeValid();
-
-            isFormValid &= isPlayersValid();
+            bool isFormValid = isPlayersValid();
             
             return isFormValid;
-        }
-
-        private bool isBoardSizeValid()
-        {
-            bool isBoardSizeValid = numericBoxRows.Value == numericBoxCols.Value;
-            
-            isBoardSizeValid &=  numericBoxCols.Value >= 4 && numericBoxCols.Value <= 10;
-
-            return isBoardSizeValid;
         }
 
         private bool isPlayersValid()
@@ -114,19 +112,14 @@ namespace GameGUI
             return isPlayersValid;
         }
 
-        private void FormGameSettings_Load(object sender, EventArgs e)
+        private void setBoardSizeLimits(int i_MinBoardSize, int i_MaxBoardSize)
         {
-
-        }
-
-        private void PlayersBox_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBoxPlayer2_TextChanged(object sender, EventArgs e)
-        {
-
+            numericBoxCols.Minimum = i_MinBoardSize;
+            numericBoxRows.Minimum = i_MinBoardSize;
+            numericBoxCols.Maximum = i_MaxBoardSize;
+            numericBoxRows.Maximum = i_MaxBoardSize;
+            numericBoxCols.Value = i_MinBoardSize;
+            numericBoxRows.Value = i_MinBoardSize;
         }
     }
 }

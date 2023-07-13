@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormGameBoard));
             this.BoardTitle = new System.Windows.Forms.Label();
-            this.TurnIndicator = new System.Windows.Forms.Label();
             this.BoardPanel = new System.Windows.Forms.Panel();
             this.Player1Name = new System.Windows.Forms.Label();
             this.Player1Score = new System.Windows.Forms.Label();
@@ -55,18 +54,6 @@
             this.BoardTitle.TabIndex = 1;
             this.BoardTitle.Text = "Reverse Tic-Tac-Toe";
             this.BoardTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // TurnIndicator
-            // 
-            this.TurnIndicator.AutoSize = true;
-            this.TurnIndicator.Font = new System.Drawing.Font("MS Reference Sans Serif", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TurnIndicator.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.TurnIndicator.Location = new System.Drawing.Point(35, 70);
-            this.TurnIndicator.Name = "TurnIndicator";
-            this.TurnIndicator.Size = new System.Drawing.Size(149, 19);
-            this.TurnIndicator.TabIndex = 2;
-            this.TurnIndicator.Text = "Its Player Turn ..";
-            this.TurnIndicator.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // BoardPanel
             // 
@@ -196,13 +183,13 @@
             this.ClientSize = new System.Drawing.Size(491, 388);
             this.Controls.Add(this.ScoreBox);
             this.Controls.Add(this.BoardPanel);
-            this.Controls.Add(this.TurnIndicator);
             this.Controls.Add(this.BoardTitle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MinimizeBox = false;
             this.Name = "FormGameBoard";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tow-Tac-Tic";
             this.ScoreBox.ResumeLayout(false);
             this.ScoreBox.PerformLayout();
@@ -214,7 +201,6 @@
         #endregion
 
         private System.Windows.Forms.Label BoardTitle;
-        private System.Windows.Forms.Label TurnIndicator;
         private System.Windows.Forms.Panel BoardPanel;
         private System.Windows.Forms.Label Player1Name;
         private System.Windows.Forms.Label Player1Score;

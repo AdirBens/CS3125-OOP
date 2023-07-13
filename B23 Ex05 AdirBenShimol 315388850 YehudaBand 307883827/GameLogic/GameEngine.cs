@@ -2,128 +2,96 @@
 using System.Collections.Generic;
 using static GameLogic.GameUtils.GameStatusChecker;
 using static GameLogic.AIStrategy.RandomMoves;
+using static GameLogic.GameUtils.Player;
 
 namespace GameLogic
 {
     public class GameEngine
     {
-        public class GameResponse
+        private readonly GameBoard r_GameBoard;
+        private readonly Player[] r_Players = new Player[GameConfig.k_NumPlayers];
+        private (int row, int col) m_LastMovePlayed;
+        private int m_NumTurnsPlayed = 0;
+        private eGameStatus m_GameStatus;
+        public eGameStatus GameStatus
         {
-            public eGameStatus m_Status
-            {
-                get; set;
-            }
+            get { return m_GameStatus; }
+        }
 
-            public GameBoard mGameBoard
-            {
-                get; private set;
-            }
+        public BoardEntry[,] GameBoard
+        {
+            get { return r_GameBoard.m_Board; }
+        }
 
-            public GameResponse(eGameStatus i_Status, GameBoard i_Board)
+        public (ePlayerSymbol symbol, int row, int col) LastMovePlayed
+        {
+            get 
             {
-                m_Status = i_Status;
-                mGameBoard = i_Board;
+                ePlayerSymbol symbol = r_GameBoard.m_Board[m_LastMovePlayed.row, m_LastMovePlayed.col].m_Player.m_Symbol;
+
+                return (symbol, m_LastMovePlayed.row, m_LastMovePlayed.col); 
             }
         }
 
-        public static List<BoardEntry> s_WinningStreak
+        public GameEngine(int i_BoardSize, eStrategy i_OpponentType)
         {
-            get; private set;
+            r_GameBoard = new GameBoard(i_BoardSize);
+            setOpponentType(i_OpponentType);
+            m_GameStatus = eGameStatus.InProgress;
         }
 
-        public static (int row, int col) s_LastMovePlayed
+        private void setOpponentType(Player.eStrategy i_OpponentType)
         {
-            get; private set;
-        }
-
-        private const int k_NumOfPlayers = 2;
-        private const int k_MinBoardSize = 4;
-        private const int k_MaxBoardSize = 10;
-        private static GameBoard s_GameBoard;
-        private static Player[] s_Players = new Player[k_NumOfPlayers];
-        private static int s_NumTurnsPlayed = 0;
-
-        public static GameResponse SetBoardSize(int i_BoardSize)
-        {
-            eGameStatus gameStatus = eGameStatus.Empty;
-
-            if (s_GameBoard == null)
-            {
-                if (k_MinBoardSize <= i_BoardSize && i_BoardSize <= k_MaxBoardSize)
-                {
-                    s_GameBoard = new GameBoard(i_BoardSize);
-                    gameStatus = eGameStatus.InProgress;
-                }
-            }
-
-            return new GameResponse(gameStatus, s_GameBoard);
-        }
-
-        public static GameResponse SetOpponentType(Player.eStrategy i_OpponentType)
-        {
-            eGameStatus gameStatus = eGameStatus.Empty;
-
             if (i_OpponentType != Player.eStrategy.Empty)
             {
-                gameStatus = eGameStatus.InProgress;
-                s_Players[0] = new Player(Player.ePlayerSymbol.PlayerOne, i_Strategy: Player.eStrategy.HumanPlayer);
-                s_Players[1] = new Player(Player.ePlayerSymbol.PlayerTwo, i_Strategy: i_OpponentType);
+                r_Players[0] = new Player(Player.ePlayerSymbol.PlayerOne, i_Strategy: Player.eStrategy.HumanPlayer);
+                r_Players[1] = new Player(Player.ePlayerSymbol.PlayerTwo, i_Strategy: i_OpponentType);
             }
-
-            return new GameResponse(gameStatus, s_GameBoard);
         }
 
-        public static GameResponse SetNextMove((int row, int col) i_Coordinate)
+        public void SetNextMove((int row, int col) i_Coordinate)
         {
-            eGameStatus gameStatus = eGameStatus.Empty;
-            Player currentPlayer = s_Players[s_NumTurnsPlayed % k_NumOfPlayers];
+            m_GameStatus = eGameStatus.Empty;
+            Player currentPlayer = r_Players[m_NumTurnsPlayed % r_Players.Length];
 
-            if (s_GameBoard.SetEntry(currentPlayer, i_Coordinate.row, i_Coordinate.col) == true)
+            if (r_GameBoard.SetEntry(currentPlayer, i_Coordinate.row, i_Coordinate.col) == true)
             {
-                s_LastMovePlayed = i_Coordinate;
-                gameStatus = GetGameStatus(s_GameBoard, s_LastMovePlayed);
-                s_NumTurnsPlayed++;
-                currentPlayer = s_Players[s_NumTurnsPlayed % k_NumOfPlayers];
+                m_LastMovePlayed = i_Coordinate;
+                m_GameStatus = GetGameStatus(r_GameBoard, m_LastMovePlayed);
+                m_NumTurnsPlayed++;
+                currentPlayer = r_Players[m_NumTurnsPlayed % r_Players.Length];
 
-                if ((gameStatus == eGameStatus.InProgress) &&
-                    currentPlayer.m_Strategy == Player.eStrategy.AIPlayer)
+                if ((m_GameStatus == eGameStatus.InProgress) &&
+                    currentPlayer.m_Strategy == eStrategy.AIPlayer)
                 {
-                    gameStatus = playAIPlayerMove();
-                    s_NumTurnsPlayed++;
+                    m_GameStatus = playAIPlayerMove();
+                    m_NumTurnsPlayed++;
                 }
             }
-
-            return new GameResponse(gameStatus, s_GameBoard);
         }
 
-        public static GameResponse SetRematchGame()
+        public void SetRematchGame()
         {
-            s_GameBoard.ClearBoard();
-            s_NumTurnsPlayed = 0;
-
-            return new GameResponse(eGameStatus.InProgress, s_GameBoard);
+            r_GameBoard.ClearBoard();
+            m_NumTurnsPlayed = 0;
+            m_GameStatus = eGameStatus.InProgress;
         }
 
-        public static (int minSize, int maxSize) GetBoardSizeRange()
-        {
-            return (k_MinBoardSize, k_MaxBoardSize);
-        }
-
-        public static List<BoardEntry> GetWinStreakEntries()
+        public List<BoardEntry> GetWinStreakEntries()
         {
             List<BoardEntry> winningStreak = GetWinningStreak();
 
             return winningStreak;
         }
 
-        private static eGameStatus playAIPlayerMove()
+        private eGameStatus playAIPlayerMove()
         {
-            Player AIPlayer = s_Players[k_NumOfPlayers - 1];
-            (int row, int col) aiMove = GetAIMove(s_GameBoard);
+            Player AIPlayer = r_Players[r_Players.Length - 1];
+            (int row, int col) aiMove = GetAIMove(r_GameBoard);
 
-            s_GameBoard.SetEntry(AIPlayer, aiMove.row, aiMove.col);
+            r_GameBoard.SetEntry(AIPlayer, aiMove.row, aiMove.col);
 
-            return GetGameStatus(s_GameBoard, aiMove);
+            return GetGameStatus(r_GameBoard, aiMove);
         }
     }
 }

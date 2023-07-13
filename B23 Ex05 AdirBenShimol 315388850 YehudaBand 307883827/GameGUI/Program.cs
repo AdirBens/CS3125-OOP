@@ -11,18 +11,8 @@ namespace GameGUI
     {
         public static void Main()
         {
-            GameEngine gameEngine = new GameEngine();
-            
-            RunGame();
-        }
-
-        private static void RunGame()
-        {
-            FormGameSettings settings = new FormGameSettings();
-            settings.ShowDialog();
-
-            FormGameBoard gameBoard = new FormGameBoard(settings);
-            gameBoard.ShowDialog();
+            ReverseTicTacToe game = new ReverseTicTacToe();
+            game.RunGame();
         }
     }
 }
