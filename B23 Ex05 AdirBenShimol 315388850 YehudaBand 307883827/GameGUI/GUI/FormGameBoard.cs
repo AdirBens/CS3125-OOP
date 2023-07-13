@@ -87,7 +87,6 @@ namespace GameGUI
                     rematchOK_Click(this, null);
                     break;
                 case DialogResult.No:
-                    ResetGameBoard();
                     Close();
                     break;
             }
