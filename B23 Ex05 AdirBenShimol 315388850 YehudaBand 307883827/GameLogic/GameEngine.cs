@@ -122,9 +122,9 @@ namespace GameLogic
             GameFinishedTie?.Invoke();
         }
 
-        private void onGameFinishedWin(Player i_Winner, List<BoardEntry> i_WinningStreak)
+        private void onGameFinishedWin(Player i_Winner, List<BoardEntry> i_LosingStreak)
         {
-            GameFinishedWin?.Invoke(i_Winner, i_WinningStreak);
+            GameFinishedWin?.Invoke(i_Winner, i_LosingStreak);
         }
 
         private void onGameMoveConfirmed(GameMove i_ConfiremdGameMove)

@@ -48,10 +48,10 @@ namespace GameGUI
             m_GameBoard.ShowTerminalDialog(UIStrings.k_TieMessage);
         }
 
-        private void gameEngine_GameFinishedWin(Player i_WinnerPlayer, List<BoardEntry> i_WinningStreak)
+        private void gameEngine_GameFinishedWin(Player i_WinnerPlayer, List<BoardEntry> i_LosingStreak)
         {
             m_GameBoard.UpdatePlayerScore(i_WinnerPlayer.PlayerSymbol, i_WinnerPlayer.Score);
-            m_GameBoard.HighlighStreak(i_WinningStreak);
+            m_GameBoard.HighlighStreak(i_LosingStreak);
             m_GameBoard.ShowTerminalDialog(i_WinnerPlayer.PlayerSymbol);
         }
 

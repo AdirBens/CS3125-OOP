@@ -14,16 +14,16 @@ namespace GameLogic.GameUtils
             Player2Won
         }
 
-        private static List<BoardEntry> s_WinningStreak = new List<BoardEntry>();
+        private static List<BoardEntry> s_LosingStreak = new List<BoardEntry>();
 
         internal static eGameStatus GetGameStatus(GameBoard i_GameBoard, GameMove i_LastMovePlayed)
         {
             eGameStatus currentStatus = eGameStatus.InProgress;
 
-            checkForWinningStreak(i_GameBoard, i_LastMovePlayed);
-            if (s_WinningStreak.Count() > 0)
+            checkForLosingStreak(i_GameBoard, i_LastMovePlayed);
+            if (s_LosingStreak.Count() > 0)
             {
-                if (s_WinningStreak.Last().Player.PlayerSymbol == Player.ePlayerSymbol.PlayerOne)
+                if (s_LosingStreak.Last().Player.PlayerSymbol == Player.ePlayerSymbol.PlayerOne)
                 {
                     currentStatus = eGameStatus.Player2Won;
                 }
@@ -42,7 +42,7 @@ namespace GameLogic.GameUtils
 
         internal static List<BoardEntry> GetLosingStreak()
         {
-            return s_WinningStreak;
+            return s_LosingStreak;
         }
 
         internal static bool CheckIfOnMainDiagonal(GameMove i_GameMove)
@@ -55,7 +55,7 @@ namespace GameLogic.GameUtils
             return i_GameMove.RowIndex + i_GameMove.ColumnIndex == i_GameBoardSize - 1;
         }
 
-        private static bool checkForWinningStreak(GameBoard i_GameBoard,
+        private static bool checkForLosingStreak(GameBoard i_GameBoard,
             GameMove i_LastMovePlayed)
         {
             bool hasWinner = false;
@@ -97,19 +97,19 @@ namespace GameLogic.GameUtils
 
             foreach (BoardEntry entry in i_BoardEntryIterator)
             {
-                if (s_WinningStreak.Count == 0)
+                if (s_LosingStreak.Count == 0)
                 {
-                    s_WinningStreak.Add(entry);
+                    s_LosingStreak.Add(entry);
                 }
 
-                isStrike &= s_WinningStreak.Last().Player.PlayerSymbol == entry.Player.PlayerSymbol;
+                isStrike &= s_LosingStreak.Last().Player.PlayerSymbol == entry.Player.PlayerSymbol;
                 if (isStrike)
                 {
-                    s_WinningStreak.Add(entry);
+                    s_LosingStreak.Add(entry);
                 }
                 else
                 {
-                    s_WinningStreak.Clear();
+                    s_LosingStreak.Clear();
                     break;
                 }
             }
