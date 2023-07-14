@@ -1,6 +1,6 @@
 ﻿namespace GameLogic.GameUtils
 {
-    public struct Player
+    public class Player
     {
         public enum ePlayerSymbol
         {
@@ -13,23 +13,29 @@
         {
             Empty = 0,
             HumanPlayer,
-            AIPlayer
+            ComputerPlayer
         }
 
-        public ePlayerSymbol m_Symbol
+        public ePlayerSymbol PlayerSymbol
         {
             get; internal set;
         }
 
-        public eStrategy m_Strategy
+        public eStrategy Strategy
         {
             get; internal set;
         }
 
-        public Player(ePlayerSymbol i_Symbol, eStrategy i_Strategy)
+        public int Score
         {
-            m_Symbol = i_Symbol;
-            m_Strategy = i_Strategy;
+            get; internal set;
+        }
+
+        public Player(ePlayerSymbol i_Symbol = ePlayerSymbol.Empty, eStrategy i_Strategy = eStrategy.Empty)
+        {
+            PlayerSymbol = i_Symbol;
+            Strategy = i_Strategy;
+            Score = 0;
         }
     }
 }

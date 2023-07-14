@@ -24,7 +24,7 @@ namespace GameGUI
 
         internal eStrategy OpponentType
         {
-            get { return checkBoxPlayer2.Checked == true ? eStrategy.HumanPlayer : eStrategy.AIPlayer; }
+            get { return checkBoxPlayer2.Checked == true ? eStrategy.HumanPlayer : eStrategy.ComputerPlayer; }
         }
 
         internal bool IsSettingsValid

@@ -1,6 +1,6 @@
 ﻿using GameLogic;
-using static GameLogic.GameUtils.GameStatusChecker;
-using static GameLogic.GameUtils.Player;
+using GameLogic.GameUtils;
+using System.Collections.Generic;
 
 namespace GameGUI
 {
@@ -8,7 +8,6 @@ namespace GameGUI
     {
         private readonly GameEngine r_GameEngine;
         private readonly FormGameSettings r_GameSettings;
-        private readonly int[] r_PlayersScore = new int[GameConfig.k_NumPlayers];
         private FormGameBoard m_GameBoard;
 
         internal ReverseTicTacToe()
@@ -26,69 +25,48 @@ namespace GameGUI
         {
             m_GameBoard = new FormGameBoard(r_GameSettings);
 
-            setupGame();
-            if (r_GameEngine?.GameStatus == eGameStatus.InProgress)
+            if (r_GameEngine?.IsGameInProgress == true)
             {
+                setupGame();
                 m_GameBoard.ShowDialog();
             }
         }
 
-        private void setUserMove((int row, int col) i_Coordinate)
+        private void gameBoard_TurnPlayed((int row, int col) i_Coordinate)
         {
             r_GameEngine.SetNextMove(i_Coordinate);
-            m_GameBoard.UpdateGameBoard(r_GameEngine.GameBoard);
-            checkGameStatus();
         }
 
-        private void checkGameStatus()
-        {
-            updateGameStats();
-
-            switch (r_GameEngine.GameStatus)
-            {
-                case eGameStatus.Tie:
-                    m_GameBoard.ShowTerminalDialog(UIStrings.k_TieMessage);
-                    break;
-                case eGameStatus.Player1Won:
-                case eGameStatus.Player2Won:
-                    ePlayerSymbol winnerSymbol = (r_GameEngine.GameStatus == eGameStatus.Player1Won) ? 
-                                                 ePlayerSymbol.PlayerOne : ePlayerSymbol.PlayerTwo;
-
-                    m_GameBoard.HighlighStreak(r_GameEngine.GetWinStreakEntries());
-                    m_GameBoard.ShowTerminalDialog(winnerSymbol);
-                    break;
-                default: 
-                    break;
-            }
-        }
-
-        private void updateGameStats()
-        {
-            switch (r_GameEngine.GameStatus)
-            {
-                case eGameStatus.Player1Won:
-                    r_PlayersScore[0]++;
-                    break;
-                case eGameStatus.Player2Won:
-                    r_PlayersScore[1]++;
-                    break;
-                default:
-                    break;
-            }
-
-            m_GameBoard.UpdatePlayersScore(r_PlayersScore);
-        }
-
-        private void rematchGame()
+        private void gameBoard_RematchRequested()
         {
             r_GameEngine.SetRematchGame();
             m_GameBoard.ResetGameBoard();
         }
 
+        private void gameEngine_GameFinishedTie()
+        {
+            m_GameBoard.ShowTerminalDialog(UIStrings.k_TieMessage);
+        }
+
+        private void gameEngine_GameFinishedWin(Player i_WinnerPlayer, List<BoardEntry> i_WinningStreak)
+        {
+            m_GameBoard.UpdatePlayerScore(i_WinnerPlayer.PlayerSymbol, i_WinnerPlayer.Score);
+            m_GameBoard.HighlighStreak(i_WinningStreak);
+            m_GameBoard.ShowTerminalDialog(i_WinnerPlayer.PlayerSymbol);
+        }
+
+        private void gameEngine_MoveConfirmed(GameMove i_GameMove)
+        {
+            m_GameBoard.UpdateGameBoard(i_GameMove);
+        }
+
         private void setupGame()
         {
-            m_GameBoard.GameTurnPlayed += setUserMove;
-            m_GameBoard.RematchGameRequested += rematchGame;
+            m_GameBoard.GameTurnPlayed += gameBoard_TurnPlayed;
+            m_GameBoard.RematchGameRequested += gameBoard_RematchRequested;
+            r_GameEngine.GameFinishedTie += gameEngine_GameFinishedTie;
+            r_GameEngine.GameFinishedWin += gameEngine_GameFinishedWin;
+            r_GameEngine.GameMoveConfirmed += gameEngine_MoveConfirmed;
         }
     }
 }

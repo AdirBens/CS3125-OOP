@@ -1,27 +1,25 @@
 ﻿using GameLogic.GameUtils;
-using System.Collections.Generic;
 using System.Linq;
 using System;
 
 namespace GameLogic.AIStrategy
 {
-    public class RandomMoves
+    internal class RandomMoves
     {
-        public static (int row, int col) GetAIMove(GameBoard i_GameBoard)
+        internal static GameMove GetMove(Player i_ComputerPlayer, GameBoard i_GameBoard)
         {
-            BoardEntry[] emptyEntries = getEmptyEntriesArray(i_GameBoard);
-            Random rnd = new Random();
-            int entryIndex = rnd.Next(emptyEntries.Length);
-            BoardEntry chosenEntry = emptyEntries[entryIndex];
+            BoardEntry[] emptyEntries = i_GameBoard.GetEmptyCellsIterator().ToArray();
+            BoardEntry chosenEntry = getRandomEntry(emptyEntries);
 
-            return (chosenEntry.m_Row, chosenEntry.m_Col);
+            return new GameMove(i_ComputerPlayer, chosenEntry.RowIndex, chosenEntry.ColumnIndex);
         }
 
-        private static BoardEntry[] getEmptyEntriesArray(GameBoard i_GameBoard)
+        private static BoardEntry getRandomEntry(BoardEntry[] i_AvailableEntries)
         {
-            IEnumerable<BoardEntry> emptyEntries = i_GameBoard.GetEmptyCellsIterator();
+            Random rnd = new Random();
+            int entryIndex = rnd.Next(i_AvailableEntries.Length);
 
-            return emptyEntries.ToArray();
+            return i_AvailableEntries[entryIndex];
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace GameLogic.GameUtils
 {
-    public class GameStatusChecker
+    internal class GameStatusChecker
     {
-        public enum eGameStatus
+        internal enum eGameStatus
         {
             Empty,
             InProgress,
@@ -16,14 +16,14 @@ namespace GameLogic.GameUtils
 
         private static List<BoardEntry> s_WinningStreak = new List<BoardEntry>();
 
-        public static eGameStatus GetGameStatus(GameBoard i_GameBoard, (int row, int col) i_LastMovePlayed)
+        internal static eGameStatus GetGameStatus(GameBoard i_GameBoard, GameMove i_LastMovePlayed)
         {
             eGameStatus currentStatus = eGameStatus.InProgress;
 
             checkForWinningStreak(i_GameBoard, i_LastMovePlayed);
             if (s_WinningStreak.Count() > 0)
             {
-                if (s_WinningStreak.Last().m_Player.m_Symbol == Player.ePlayerSymbol.PlayerOne)
+                if (s_WinningStreak.Last().Player.PlayerSymbol == Player.ePlayerSymbol.PlayerOne)
                 {
                     currentStatus = eGameStatus.Player2Won;
                 }
@@ -40,20 +40,23 @@ namespace GameLogic.GameUtils
             return currentStatus;
         }
 
-        public static List<BoardEntry> GetWinningStreak()
+        internal static List<BoardEntry> GetLosingStreak()
         {
             return s_WinningStreak;
         }
 
-        public static bool IsStatusTerminal(eGameStatus i_GameStatus)
+        internal static bool CheckIfOnMainDiagonal(GameMove i_GameMove)
         {
-            return i_GameStatus == eGameStatus.Tie |
-                   i_GameStatus == eGameStatus.Player1Won |
-                   i_GameStatus == eGameStatus.Player2Won;
+            return i_GameMove.RowIndex == i_GameMove.ColumnIndex;
+        }
+
+        internal static bool CheckIfOnCounterDiagonal(int i_GameBoardSize, GameMove i_GameMove)
+        {
+            return i_GameMove.RowIndex + i_GameMove.ColumnIndex == i_GameBoardSize - 1;
         }
 
         private static bool checkForWinningStreak(GameBoard i_GameBoard,
-            (int row, int col) i_LastMovePlayed)
+            GameMove i_LastMovePlayed)
         {
             bool hasWinner = false;
 
@@ -64,7 +67,7 @@ namespace GameLogic.GameUtils
                 hasWinner |= checkForStreak(diagonalElements);
             }
 
-            if (!hasWinner && CheckIfOnCounterDiagonal(i_GameBoard.m_BoardSize, i_LastMovePlayed) == true)
+            if (!hasWinner && CheckIfOnCounterDiagonal(i_GameBoard.BoardSize, i_LastMovePlayed) == true)
             {
                 IEnumerable<BoardEntry> counterDiagonalElements = i_GameBoard.GetCounterDiagonalIterator();
 
@@ -73,14 +76,14 @@ namespace GameLogic.GameUtils
 
             if (!hasWinner)
             {
-                IEnumerable<BoardEntry> columnElements = i_GameBoard.GetColumnIterator(i_LastMovePlayed.col);
+                IEnumerable<BoardEntry> columnElements = i_GameBoard.GetColumnIterator(i_LastMovePlayed.ColumnIndex);
 
                 hasWinner |= checkForStreak(columnElements);
             }
 
             if (!hasWinner)
             {
-                IEnumerable<BoardEntry> rowElements = i_GameBoard.GetRowIterator(i_LastMovePlayed.row);
+                IEnumerable<BoardEntry> rowElements = i_GameBoard.GetRowIterator(i_LastMovePlayed.RowIndex);
 
                 checkForStreak(rowElements);
             }
@@ -99,7 +102,7 @@ namespace GameLogic.GameUtils
                     s_WinningStreak.Add(entry);
                 }
 
-                isStrike &= s_WinningStreak.Last().m_Player.m_Symbol == entry.m_Player.m_Symbol;
+                isStrike &= s_WinningStreak.Last().Player.PlayerSymbol == entry.Player.PlayerSymbol;
                 if (isStrike)
                 {
                     s_WinningStreak.Add(entry);
@@ -112,16 +115,6 @@ namespace GameLogic.GameUtils
             }
 
             return isStrike;
-        }
-
-        public static bool CheckIfOnMainDiagonal((int row, int col) i_Coordinate)
-        {
-            return i_Coordinate.row == i_Coordinate.col;
-        }
-
-        public static bool CheckIfOnCounterDiagonal(int i_GameBoardSize, (int row, int col) i_Coordinate)
-        {
-            return i_Coordinate.row + i_Coordinate.col == i_GameBoardSize - 1;
         }
     }
 }

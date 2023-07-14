@@ -23,10 +23,11 @@ namespace GameGUI
             setBoardLayout(i_GameSettings.BoardSize);
         }
 
-        internal void UpdatePlayersScore(int[] i_PlayersScore)
+        internal void UpdatePlayerScore(ePlayerSymbol i_PlayerSymbol, int i_PlayerScore)
         {
-            Player1Score.Text = i_PlayersScore[0].ToString();
-            Player2Score.Text = i_PlayersScore[1].ToString();
+            Label playerToUpdate = i_PlayerSymbol == ePlayerSymbol.PlayerOne ? Player1Score : Player2Score;
+
+            playerToUpdate.Text = i_PlayerScore.ToString();
         }
 
         internal void ResetGameBoard()
@@ -60,22 +61,16 @@ namespace GameGUI
             RematchGameRequested?.Invoke();
         }
 
-        internal void UpdateGameBoard(BoardEntry[,] i_GameBoardState)
+        internal void UpdateGameBoard(GameMove i_GameMove)
         {
-            for (int i = 0; i <  r_Board.GetLength(0); i++)
-            {
-                for (int j = 0; j < r_Board.GetLength(1); j++)
-                {
-                    r_Board[i, j].UpdateEntry(i_GameBoardState[i, j].m_Player.m_Symbol);
-                }
-            }
+            r_Board[i_GameMove.RowIndex, i_GameMove.ColumnIndex].UpdateEntry(i_GameMove.PlayerSymbol);
         }
 
         internal void HighlighStreak(List<BoardEntry> i_StreakEntries)
         {
             foreach (BoardEntry entry in i_StreakEntries)
             {
-                r_Board[entry.m_Row, entry.m_Col].HighlightEntry();
+                r_Board[entry.RowIndex, entry.ColumnIndex].HighlightEntry();
             }
         }
 

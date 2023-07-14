@@ -3,39 +3,45 @@ using System.Collections.Generic;
 using static GameLogic.GameUtils.GameStatusChecker;
 using static GameLogic.AIStrategy.RandomMoves;
 using static GameLogic.GameUtils.Player;
+using System;
 
 namespace GameLogic
 {
     public class GameEngine
     {
+        public event Action GameFinishedTie;
+        public event Action<Player, List<BoardEntry>> GameFinishedWin;
+        public event Action<GameMove> GameMoveConfirmed;
         private readonly GameBoard r_GameBoard;
-        private readonly Player[] r_Players = new Player[GameConfig.k_NumPlayers];
-        private (int row, int col) m_LastMovePlayed;
-        private int m_NumTurnsPlayed = 0;
+        private readonly Player[] r_Players;
+        private GameMove m_LastMovePlayed;
         private eGameStatus m_GameStatus;
-        public eGameStatus GameStatus
+        private int m_NumTurnsPlayed;
+        private Player m_CurrentPlayer
         {
-            get { return m_GameStatus; }
+            get { return r_Players[m_NumTurnsPlayed % r_Players.Length]; }
         }
 
-        public BoardEntry[,] GameBoard
+        private Player m_WinningPlayer
         {
-            get { return r_GameBoard.m_Board; }
+            get { return r_Players[(m_NumTurnsPlayed - 1) % r_Players.Length]; }
         }
 
-        public (ePlayerSymbol symbol, int row, int col) LastMovePlayed
+        public bool IsGameInProgress
         {
-            get 
-            {
-                ePlayerSymbol symbol = r_GameBoard.m_Board[m_LastMovePlayed.row, m_LastMovePlayed.col].m_Player.m_Symbol;
-
-                return (symbol, m_LastMovePlayed.row, m_LastMovePlayed.col); 
-            }
+            get { return m_GameStatus == eGameStatus.InProgress; }
         }
 
         public GameEngine(int i_BoardSize, eStrategy i_OpponentType)
         {
             r_GameBoard = new GameBoard(i_BoardSize);
+            r_Players = new Player[GameConfig.k_NumPlayers];
+            startGame(i_OpponentType);
+        }
+
+        private void startGame(eStrategy i_OpponentType)
+        {
+            m_NumTurnsPlayed = 0;
             setOpponentType(i_OpponentType);
             m_GameStatus = eGameStatus.InProgress;
         }
@@ -50,23 +56,14 @@ namespace GameLogic
         }
 
         public void SetNextMove((int row, int col) i_Coordinate)
-        {
-            Player currentPlayer = r_Players[m_NumTurnsPlayed % r_Players.Length];
-            
-            m_GameStatus = eGameStatus.Empty;
-            if (r_GameBoard.SetEntry(currentPlayer, i_Coordinate.row, i_Coordinate.col) == true)
-            {
-                m_LastMovePlayed = i_Coordinate;
-                m_GameStatus = GetGameStatus(r_GameBoard, m_LastMovePlayed);
-                m_NumTurnsPlayed++;
-                currentPlayer = r_Players[m_NumTurnsPlayed % r_Players.Length];
+        {           
+            GameMove playerMove = new GameMove(m_CurrentPlayer, i_Coordinate.row, i_Coordinate.col);
 
-                if ((m_GameStatus == eGameStatus.InProgress) &&
-                    currentPlayer.m_Strategy == eStrategy.AIPlayer)
-                {
-                    m_GameStatus = playAIPlayerMove();
-                    m_NumTurnsPlayed++;
-                }
+            applyGameMove(playerMove);
+            if ((m_GameStatus == eGameStatus.InProgress) &&
+                m_CurrentPlayer.Strategy == eStrategy.ComputerPlayer)
+            {
+                playComputerMove();
             }
         }
 
@@ -77,21 +74,62 @@ namespace GameLogic
             m_GameStatus = eGameStatus.InProgress;
         }
 
-        public List<BoardEntry> GetWinStreakEntries()
+        private eGameStatus playComputerMove()
         {
-            List<BoardEntry> winningStreak = GetWinningStreak();
+            GameMove computerMove = GetMove(m_CurrentPlayer, r_GameBoard);
 
-            return winningStreak;
+            applyGameMove(computerMove);
+
+            return GetGameStatus(r_GameBoard, computerMove);
         }
 
-        private eGameStatus playAIPlayerMove()
+        private void applyGameMove(GameMove i_GameMove)
         {
-            Player AIPlayer = r_Players[r_Players.Length - 1];
-            (int row, int col) aiMove = GetAIMove(r_GameBoard);
+            if (r_GameBoard.SetEntry(i_GameMove) == true)
+            {
+                m_NumTurnsPlayed++;
+                m_LastMovePlayed = i_GameMove;
+                onGameMoveConfirmed(i_GameMove);
+                m_GameStatus = GetGameStatus(r_GameBoard, m_LastMovePlayed);
+            }
+            else
+            {
+                m_GameStatus = eGameStatus.Empty;
+            }
 
-            r_GameBoard.SetEntry(AIPlayer, aiMove.row, aiMove.col);
+            checkForTerminalStatus();
+        }
 
-            return GetGameStatus(r_GameBoard, aiMove);
+        private void checkForTerminalStatus()
+        {
+            switch (m_GameStatus)
+            {
+                case eGameStatus.Tie:
+                    onGameFinishedTie();
+                    break;
+                case eGameStatus.Player1Won:
+                case eGameStatus.Player2Won:
+                    m_WinningPlayer.Score++;
+                    onGameFinishedWin(m_WinningPlayer, GetLosingStreak());
+                    break;
+                default: 
+                    break;
+            }
+        }
+
+        private void onGameFinishedTie()
+        {
+            GameFinishedTie?.Invoke();
+        }
+
+        private void onGameFinishedWin(Player i_Winner, List<BoardEntry> i_WinningStreak)
+        {
+            GameFinishedWin?.Invoke(i_Winner, i_WinningStreak);
+        }
+
+        private void onGameMoveConfirmed(GameMove i_ConfiremdGameMove)
+        {
+            GameMoveConfirmed?.Invoke(i_ConfiremdGameMove);
         }
     }
 }

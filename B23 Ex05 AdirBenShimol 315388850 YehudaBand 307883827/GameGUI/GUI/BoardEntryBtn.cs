@@ -38,22 +38,20 @@ namespace GameGUI.GUI
         internal void ResetEntry()
         {
             Text = string.Empty;
+            Enabled = true;
             setEntryStyle();
         }
 
         internal void UpdateEntry(ePlayerSymbol i_PlayerSymbol)
         {
+            Enabled = false;
             switch (i_PlayerSymbol)
             {
                 case ePlayerSymbol.PlayerOne:
-                    ForeColor = Color.RoyalBlue;
                     Text = k_XMark;
                     break;
                 case ePlayerSymbol.PlayerTwo:
-                    ForeColor = Color.Crimson;
                     Text = k_OMark;
-                    break;
-                case ePlayerSymbol.Empty: 
                     break;
             }
         }

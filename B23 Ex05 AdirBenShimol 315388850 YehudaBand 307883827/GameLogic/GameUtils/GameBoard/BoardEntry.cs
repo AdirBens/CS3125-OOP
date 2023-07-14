@@ -2,26 +2,26 @@
 {
     public struct BoardEntry
     {
-        public int m_Row
+        public int RowIndex
         {
             get; private set;
         }
 
-        public int m_Col
+        public int ColumnIndex
         {
             get; private set;
         }
 
-        public Player m_Player
+        public Player Player
         {
             get; internal set;
         }
 
         public BoardEntry(Player i_Player, int i_Row, int i_Col)
         {
-            m_Player = i_Player;
-            m_Row = i_Row;
-            m_Col = i_Col;
+            Player = i_Player;
+            RowIndex = i_Row;
+            ColumnIndex = i_Col;
         }
     }
 }
